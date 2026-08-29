@@ -374,6 +374,26 @@ a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accen
   line-height:1.9;color:var(--fg-mute);margin-top:12px}
 .panel .figure figcaption{color:#8A8A86}
 
+/* 写真グリッド（刺繍の仕上がりなど）。図版は 4:5 に揃える */
+.shots{display:grid;grid-template-columns:repeat(2,1fr);
+  gap:clamp(10px,1.2vw,18px);margin-top:clamp(20px,2.2vw,32px)}
+.shots figure{margin:0}
+.shots img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;
+  background:var(--bg-2);border:1px solid var(--line)}
+.panel .shots img{background:rgba(10,10,11,.05);border-color:rgba(10,10,11,.14)}
+.shots figcaption{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+  line-height:1.9;color:var(--fg-mute);margin-top:10px}
+.panel .shots figcaption{color:#8A8A86}
+
+/* 動画（作画・制作）。読み込みは再生するまで発生させない */
+.video{margin:clamp(26px,3vw,42px) 0 0}
+.video video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;
+  background:var(--bg-2);border:1px solid var(--line)}
+.panel .video video{background:rgba(10,10,11,.05);border-color:rgba(10,10,11,.14)}
+.video figcaption{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+  line-height:1.9;color:var(--fg-mute);margin-top:12px}
+.panel .video figcaption{color:#8A8A86}
+
 /* 地図の埋め込み */
 .map{margin:clamp(28px,3vw,48px) 0 0;border:1px solid var(--line);
   aspect-ratio:16/9;overflow:hidden;background:var(--bg-2)}
