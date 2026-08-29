@@ -1,0 +1,230 @@
+/**
+ * スカジャン絵師 横地広海知 — ご依頼フォームの受け口
+ * Google スプレッドシートに1行ずつ記録し、通知メールを送ります。
+ * 設定手順は同じフォルダの README.md を参照してください。
+ */
+
+// ===== 設定 ===============================================================
+const SHEET_ID   = 'ここにスプレッドシートのIDを入れる';  // URLの /d/ と /edit の間
+const SHEET_NAME = 'briefs';        // ご依頼フォーム（brief.html）
+const CONTACT_SHEET = 'contacts';   // お問い合わせフォーム（contact.html）
+const SECRET     = 'm5u0-yxSl-ByIk';   // build.py の FORM_SECRET と同じ文字列
+const NOTIFY_TO  = 'info@ichi-pj.com';   // 通知メールの宛先。空にすると送りません
+const AUTO_REPLY = true;                 // 送信者へ受付メールを自動で返すか
+const REPLY_NAME = 'スカジャン絵師 横地広海知 / 合同会社ICHI';
+// =========================================================================
+
+const HEADERS = [
+  '受信日時','書類番号','文書ハッシュ',
+  '会社名・お名前','ご担当者','メール',
+  'ご依頼の種類','用途','ご要望','着数','希望納期','ご予算',
+  '利用区分','地域','期間','媒体','商品ラインナップ',
+  '支給物・持込IP','備考','制作コンセプト（自動生成）','UA'
+];
+
+const CONTACT_HEADERS = [
+  '受信日時','お名前・会社名','メール',
+  'ご依頼の種類','着数','納品したい日','ご予算',
+  'デザインの状態','色数・柄の密度','刺繍箇所','ご相談内容','知ったきっかけ','UA'
+];
+
+function doPost(e) {
+  try {
+    const body = JSON.parse(e.postData.contents);
+    if (body.secret !== SECRET) return json({ ok: false, error: 'unauthorized' });
+
+    // お問い合わせフォーム（contact.html）はこちらで処理する
+    if (body.form === 'contact') return handleContact_(body);
+
+    const a = body.answers || {};
+    const d = body.doc || {};
+    const sh = sheet_();
+
+    sh.appendRow([
+      new Date(),
+      body.docNo || '',
+      body.hash || '',
+      a.company || '',
+      a.person || '',
+      a.email || '',
+      a.kind || '',
+      a.purpose || '',
+      a.desc || '',
+      a.qty || '',
+      a.due || '',
+      a.budget || '',
+      a.use || '',
+      a.area || '',
+      a.term || '',
+      (a.media || []).join(' / '),
+      a.lineup || '',
+      a.ip || '',
+      a.note || '',
+      d.s_concept || '',
+      body.ua || ''
+    ]);
+
+    if (NOTIFY_TO) {
+      MailApp.sendEmail({
+        to: NOTIFY_TO,
+        subject: '【ご依頼フォーム】' + (a.company || '名称未記入') + '／' + (body.docNo || ''),
+        body: [
+          '書類番号: ' + (body.docNo || ''),
+          '文書ハッシュ: ' + (body.hash || ''),
+          '',
+          '会社名・お名前: ' + (a.company || ''),
+          'ご担当者: ' + (a.person || ''),
+          'メール: ' + (a.email || ''),
+          'ご依頼の種類: ' + (a.kind || ''),
+          '用途: ' + (a.purpose || ''),
+          '着数: ' + (a.qty || ''),
+          '希望納期: ' + (a.due || ''),
+          'ご予算: ' + (a.budget || ''),
+          '利用区分: ' + (a.use || ''),
+          '地域: ' + (a.area || '') + ' / 期間: ' + (a.term || ''),
+          '媒体: ' + ((a.media || []).join(' / ')),
+          '商品ラインナップ: ' + (a.lineup || ''),
+          '',
+          '【ご要望】',
+          a.desc || '',
+          '',
+          '【支給物・持込IP】',
+          a.ip || '',
+          '',
+          '【備考】',
+          a.note || '',
+          '',
+          'スプレッドシート: https://docs.google.com/spreadsheets/d/' + SHEET_ID
+        ].join('\n')
+      });
+    }
+
+    return json({ ok: true, docNo: body.docNo });
+  } catch (err) {
+    return json({ ok: false, error: String(err) });
+  }
+}
+
+/** お問い合わせフォームを contacts シートに1行追加し、通知を送る */
+function handleContact_(body) {
+  const a = body.answers || {};
+  const sh = sheet_(CONTACT_SHEET, CONTACT_HEADERS);
+
+  sh.appendRow([
+    new Date(),
+    a.name || '', a.email || '',
+    a.kind || '', a.qty || '', a.due || '', a.budget || '',
+    a.art || '', a.colors || '', (a.place || []).join(' / '),
+    a.msg || '', a.source || '', body.ua || ''
+  ]);
+
+  // 送信者への受付メール。金額は書かない（自動見積りはしない）
+  if (AUTO_REPLY && a.email) {
+    MailApp.sendEmail({
+      to: a.email,
+      name: REPLY_NAME,
+      replyTo: NOTIFY_TO,
+      subject: 'お問い合わせを承りました｜スカジャン絵師 横地広海知',
+      body: [
+        (a.name || '') + ' 様',
+        '',
+        'お問い合わせいただきありがとうございます。以下の内容で承りました。',
+        '担当より、1営業日以内に概算のお見積りとおおよその日程をご返信します。',
+        '',
+        '──────────────',
+        'ご依頼の種類: ' + (a.kind || '未記入'),
+        '着数: ' + (a.qty || '未記入'),
+        '刺繍箇所: ' + ((a.place || []).join(' / ') || '未記入'),
+        '色数・柄の密度: ' + (a.colors || '未記入'),
+        '納品したい日: ' + (a.due || '未記入'),
+        'ご予算: ' + (a.budget || '未記入'),
+        '──────────────',
+        '',
+        'ご相談内容:',
+        a.msg || '（未記入）',
+        '',
+        '※ このメールは自動送信です。ご返信いただければ担当に届きます。',
+        '',
+        REPLY_NAME,
+        '神奈川県横須賀市本町3-11-7 アイ\'s ビル 1F',
+        'https://hiromichiyokochi.com/'
+      ].join('\n')
+    });
+  }
+
+  if (NOTIFY_TO) {
+    MailApp.sendEmail({
+      to: NOTIFY_TO,
+      replyTo: a.email || NOTIFY_TO,
+      subject: '【お問い合わせ】' + (a.name || '名称未記入') + '／' + (a.kind || ''),
+      body: [
+        'お名前・会社名: ' + (a.name || ''),
+        'メール: ' + (a.email || ''),
+        'ご依頼の種類: ' + (a.kind || ''),
+        '着数: ' + (a.qty || ''),
+        '納品したい日: ' + (a.due || ''),
+        'ご予算: ' + (a.budget || ''),
+        'デザインの状態: ' + (a.art || ''),
+        '色数・柄の密度: ' + (a.colors || ''),
+        '刺繍箇所: ' + ((a.place || []).join(' / ')),
+        '知ったきっかけ: ' + (a.source || ''),
+        '',
+        '【ご相談内容】',
+        a.msg || '',
+        '',
+        'スプレッドシート: https://docs.google.com/spreadsheets/d/' + SHEET_ID,
+        '',
+        '════════ 返信の下書き（金額を入れて送るだけ）════════',
+        '',
+        (a.name || '') + ' 様',
+        '',
+        'お問い合わせありがとうございます。いただいた内容で概算をお出しします。',
+        '',
+        '　ご依頼の種類: ' + (a.kind || ''),
+        '　着数: ' + (a.qty || ''),
+        '　刺繍箇所: ' + ((a.place || []).join(' / ')),
+        '　色数・柄の密度: ' + (a.colors || ''),
+        '',
+        '　概算: 　　　　　円（税込）',
+        '　納期の目安: 　　　　',
+        '',
+        '柄の内容によって前後します。正式なお見積りは、生地と縫製の手配先に',
+        '確認のうえ改めてお出しします。ご不明な点があればお知らせください。',
+        '',
+        REPLY_NAME,
+        '════════════════════════════════'
+      ].join('\n')
+    });
+  }
+  return json({ ok: true });
+}
+
+function doGet() {
+  return json({ ok: true, message: 'endpoint alive' });
+}
+
+function sheet_(name, headers) {
+  const nm = name || SHEET_NAME;
+  const hd = headers || HEADERS;
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  let sh = ss.getSheetByName(nm);
+  if (!sh) sh = ss.insertSheet(nm);
+  if (sh.getLastRow() === 0) {
+    sh.appendRow(hd);
+    sh.getRange(1, 1, 1, hd.length).setFontWeight('bold');
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
+
+function json(o) {
+  return ContentService.createTextOutput(JSON.stringify(o))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/** 動作確認用。エディタから実行してシートに1行入ることを確かめる */
+function testAppend() {
+  sheet_().appendRow([new Date(), 'TEST-0000', 'hash', 'テスト株式会社', '担当A',
+    'test@example.com', 'ブランド別注・量産', '販売用の商品', 'テスト送信', '100着以上',
+    '', '', '商用利用', '日本国内', '2年間', 'SNS / Webサイト', '', '', '', '', '']);
+}

@@ -1,0 +1,9 @@
+# ビルドの出力。push しない（GitHub Actions が毎回作り直す）
+dist/
+
+# macOS
+.DS_Store
+
+# エディタ
+.vscode/
+*.swp

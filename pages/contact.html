@@ -1,0 +1,201 @@
+<section class="hero">
+  <h1 class="hero__title">
+    <span class="kicker">Original sukajan &mdash; enquiry, studio visit, access</span>
+    <span class="en">CONTACT</span>
+    <span class="sub">スカジャンのご相談 — 作れるかどうか、先にお答えします</span>
+  </h1>
+  <p class="lead hero__lead">オリジナルスカジャンのオーダーメイド、スカジャンOEM・ブランド別注、柄のデザインのみ。どのご依頼でも、用途と希望納期をお知らせいただければ、可否とおおよその日程を最初にお伝えします。無理な場合はその場で申し上げます。</p>
+</section>
+
+<div class="panel">
+  <section class="band rise">
+    <div class="band__grid">
+      <div class="band__aside">
+        <p class="tag"><span class="tag__en">INQUIRY</span><span class="tag__ja">お問い合わせ</span></p>
+        <p>分かる範囲で構いません。</p>
+      </div>
+      <div class="band__main">
+        <h2>スカジャンのお問い合わせ</h2>
+        <form id="cform" novalidate>
+          <div class="field">
+            <label for="kind">ご依頼の種類</label>
+            <select id="kind" name="kind">
+              <option>フルオーダー（一着）</option>
+              <option>ブランド別注・量産</option>
+              <option>柄のデザインのみ</option>
+              <option>来店して相談したい</option>
+              <option>取材・その他</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="qty">おおよその着数</label>
+            <input id="qty" name="qty" type="text" placeholder="1着 / 30着 / 100着以上 など">
+          </div>
+          <div class="field">
+            <label for="due">納品したい日</label>
+            <input id="due" name="due" type="text" placeholder="2026年12月上旬 / 未定 など">
+          </div>
+          <div class="field">
+            <label for="budget">ご予算</label>
+            <input id="budget" name="budget" type="text" placeholder="上限があればお知らせください">
+          </div>
+          <div class="field">
+            <label for="art">デザインの状態</label>
+            <select id="art" name="art">
+              <option>デザインから依頼したい</option>
+              <option>ラフや資料がある</option>
+              <option>完成データがある</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>刺繍を入れたい箇所</label>
+            <div class="checks">
+              <label><input type="checkbox" name="place" value="背中">背中</label>
+              <label><input type="checkbox" name="place" value="右袖">右袖</label>
+              <label><input type="checkbox" name="place" value="左袖">左袖</label>
+              <label><input type="checkbox" name="place" value="右胸">右胸</label>
+              <label><input type="checkbox" name="place" value="左胸">左胸</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="colors">色数・柄の密度</label>
+            <select id="colors" name="colors">
+              <option value="">選択してください</option>
+              <option>シンプル（2〜3色・ワンポイント中心）</option>
+              <option>標準（4〜6色・背中に一図案）</option>
+              <option>複雑（7色以上・ぼかしや描き込みが多い）</option>
+              <option>まだ分からない</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="name">お名前・会社名</label>
+            <input id="name" name="name" type="text" required>
+          </div>
+          <div class="field">
+            <label for="email">メールアドレス</label>
+            <input id="email" name="email" type="email" required>
+          </div>
+          <div class="field">
+            <label for="msg">ご相談内容</label>
+            <textarea id="msg" name="msg" placeholder="入れたいモチーフ、用途、背景など。決まっていなくても構いません。"></textarea>
+          </div>
+          <div class="field">
+            <label for="source">サイトを知ったきっかけ</label>
+            <select id="source" name="source">
+              <option value="">選択してください</option>
+              <option>検索（Google・Yahoo! など）</option>
+              <option>Instagram</option>
+              <option>YouTube</option>
+              <option>X（旧Twitter）</option>
+              <option>テレビ・新聞・雑誌などのメディア</option>
+              <option>コラボ商品を見て（GU・PUMA・万博・モンハンなど）</option>
+              <option>ICHI ドブ板本店・ドブ板通りで</option>
+              <option>知人・取引先からの紹介</option>
+              <option>以前から知っていた</option>
+              <option>その他</option>
+            </select>
+          </div>
+          <button class="btn btn--solid" type="submit" id="csend">送信する</button>
+          <p class="wiz__err" id="cerr"></p>
+          <div class="wiz__sent" id="csent" hidden></div>
+          <p class="note" style="margin-top:18px">送信をもって<a class="link" href="privacy.html">プライバシーポリシー</a>にご同意いただいたものとします。入力内容は受注者へ送信され、記録されます。1〜2営業日以内にご返信します。<br>
+            うまく送信できない場合は <a class="link" href="mailto:info@ichi-pj.com">info@ichi-pj.com</a> まで直接お送りください。</p>
+        </form>
+
+<script>
+(function(){
+  /* ------------------------------------------------------------------
+     送信先。brief.html と同じ Google Apps Script のURLを入れてください。
+     設定手順は gas/README.md を参照。空のままだとメール送信に切り替わります。
+     ------------------------------------------------------------------ */
+  const ENDPOINT = "";           // 例: "https://script.google.com/macros/s/XXXX/exec"
+  const SHARED_SECRET = "change-me";
+  const MAIL = "info@ichi-pj.com";
+
+  const $ = id => document.getElementById(id);
+  const f = $("cform"); if(!f) return;
+
+  function values(){
+    const a = {};
+    ["kind","qty","due","budget","art","colors","name","email","msg","source"].forEach(k=>{
+      const el = f.elements[k]; if(el) a[k] = el.value.trim();
+    });
+    a.place = [...f.querySelectorAll('input[name="place"]:checked')].map(i=>i.value);
+    return a;
+  }
+
+  function mailtoFallback(a){
+    const body = [
+      "お名前・会社名: " + a.name, "メール: " + a.email,
+      "ご依頼の種類: " + a.kind, "着数: " + a.qty,
+      "納品したい日: " + a.due, "ご予算: " + a.budget,
+      "デザインの状態: " + a.art, "色数・柄の密度: " + a.colors,
+      "刺繍箇所: " + a.place.join(" / "),
+      "サイトを知ったきっかけ: " + a.source,
+      "", "【ご相談内容】", a.msg
+    ].join("\n");
+    return "mailto:" + MAIL + "?subject=" +
+      encodeURIComponent("【お問い合わせ】" + (a.name || "")) +
+      "&body=" + encodeURIComponent(body);
+  }
+
+  f.addEventListener("submit", async function(e){
+    e.preventDefault();
+    const a = values();
+    if(!a.name || !a.email){ $("cerr").textContent = "お名前とメールアドレスをご入力ください。"; return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(a.email)){ $("cerr").textContent = "メールアドレスの形式をご確認ください。"; return; }
+    $("cerr").textContent = "";
+
+    const btn = $("csend"); btn.disabled = true; btn.textContent = "送信中…";
+    let ok = false;
+    if(ENDPOINT){
+      try{
+        // text/plain にすることでプリフライトを避ける（GAS のウェブアプリ向け）
+        const r = await fetch(ENDPOINT, {method:"POST",
+          headers:{"Content-Type":"text/plain;charset=utf-8"},
+          body: JSON.stringify({secret:SHARED_SECRET, form:"contact", answers:a, ua:navigator.userAgent})});
+        ok = r.ok;
+      }catch(err){ ok = false; }
+    }
+    const box = $("csent"); box.hidden = false;
+    if(ok){
+      box.textContent = "送信しました。1〜2営業日以内にご返信します。";
+      btn.textContent = "送信済み";
+    }else{
+      box.innerHTML = "自動送信ができませんでした。メールソフトを開きますので、そのままお送りください。" +
+        '<br><a class="link" href="' + mailtoFallback(a) + '">' + MAIL + " へメールで送る</a>";
+      window.location.href = mailtoFallback(a);
+      btn.disabled = false; btn.textContent = "再送する";
+    }
+  });
+})();
+</script>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="band rise">
+  <div class="band__grid">
+    <div class="band__aside">
+      <p class="tag"><span class="tag__en">STUDIO</span><span class="tag__ja">拠点</span></p>
+      <p>ご来店は予約制です。</p>
+    </div>
+    <div class="band__main">
+      <h2>ICHIドブ板本店</h2>
+      <p class="lead">横須賀ドブ板通りの店舗で、実物のサンプルをご確認いただけます。横振り刺繍と機械刺繍の違い、生地の質感は写真では分かりませんので、ご検討中の方はぜひお立ち寄りください。</p>
+      <div class="tw">
+        <table>
+          <tbody>
+            <tr><th>所在地</th><td>〒238-0041 神奈川県横須賀市本町3-11-7 アイ&rsquo;s ビル 1F</td></tr>
+            <tr><th>最寄駅</th><td>京急 汐入駅より徒歩3分</td></tr>
+            <tr><th>電話</th><td><a class="link" href="tel:+819099244608">090-9924-4608</a></td></tr>
+            <tr><th>ご来店</th><td>予約制です。上のフォームまたはお電話でご予約ください</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">営業時間、行き方、店舗で見られるものは<a class="link" href="access.html">アクセスのページ</a>にまとめています。</p>
+      <div class="btns"><a class="btn btn--ghost" href="access.html">アクセスを見る</a></div>
+    </div>
+  </div>
+</section>

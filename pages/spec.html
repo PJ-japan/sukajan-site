@@ -1,0 +1,224 @@
+<section class="hero">
+  <h1 class="hero__title">
+    <span class="kicker">Scope document generator — concept, licence, revision history</span>
+    <span class="en">SPEC<br>SHEET</span>
+    <span class="sub">仕様確認書・発注確認書 — 制作コンセプトと許諾範囲を1枚に</span>
+  </h1>
+  <p class="lead hero__lead">案件ごとに「今回は何を作るのか」「どこまで使ってよいのか」を着手前に文章で残すためのツールです。制作コンセプト、利用許諾の範囲、禁止事項、改訂の履歴を1枚にまとめ、PDFで書き出せます。</p>
+</section>
+
+<section class="band rise">
+  <div class="band__grid">
+    <div class="band__aside">
+      <p class="tag"><span class="tag__en">WHY</span><span class="tag__ja">なぜ必要か</span></p>
+      <p>入力はブラウザ内だけで完結します。サーバーに送信されません。</p>
+    </div>
+    <div class="band__main">
+      <h2>「言った、言ってない」を防ぐのは、着手前の一文です</h2>
+      <p class="lead">制作が揉めるのは、たいてい途中で方向性が変わったときです。そのとき拠り所になるのが、着手前に交わした<strong>制作コンセプトの記述</strong>です。「今回は作家性を活かしたオリジナル柄を制作する」と一行書いてあるかどうかで、後の説明のしやすさがまったく変わります。</p>
+      <p class="lead">あわせて、著作権は譲渡ではなく<strong>利用許諾</strong>であること、許諾した媒体・期間・地域はどこまでか、何をしてはいけないかを同じ紙に載せます。範囲を超えた依頼が来たときに、この1枚を示せば話が早くなります。</p>
+      <p class="lead">クライアント側で入力していただく<a class="link" href="brief.html">ヒアリングフォーム</a>もあります。そちらで作られた草案をJSONで受け取り、この画面で仕上げる使い方ができます。</p>
+      <p class="note">本ツールが生成する文面は雛形です。実際の取引に用いる前に、必ず弁護士等の専門家によるレビューを受けてください。本ツールおよびその出力は法的助言ではありません。</p>
+    </div>
+  </div>
+</section>
+
+<div class="spec">
+  <div class="spec__form">
+    <h3>01 — 書類</h3>
+    <div class="spec__two">
+      <div class="field">
+        <label for="s_kind">書類種別</label>
+        <select id="s_kind"><option>仕様確認書</option><option>発注確認書</option><option>制作仕様書</option></select>
+      </div>
+      <div class="field"><label for="s_no">書類番号</label><input id="s_no" type="text"></div>
+    </div>
+    <div class="field"><label for="s_title">件名</label><input id="s_title" type="text" placeholder="◯◯周年記念 オリジナルスカジャン柄デザイン制作"></div>
+    <div class="spec__two">
+      <div class="field"><label for="s_client">発注者（甲）</label><input id="s_client" type="text" placeholder="株式会社◯◯ ◯◯様"></div>
+      <div class="field"><label for="s_vendor">受注者（乙）</label><input id="s_vendor" type="text" value="合同会社ICHI"></div>
+    </div>
+
+    <h3>02 — 制作コンセプト（最重要）</h3>
+    <div class="chips" id="s_presets"></div>
+    <div class="field"><label for="s_concept">本件で制作するもの</label><textarea id="s_concept" placeholder="上のボタンから雛形を挿入して、案件に合わせて書き換えてください。"></textarea></div>
+    <div class="field"><label for="s_out">本件に含まないもの</label><textarea id="s_out" placeholder="例）特定の既存意匠の再現、他社キャラクターの描き起こし、製品の生産手配 など"></textarea></div>
+
+    <h3>03 — 成果物と仕様</h3>
+    <div class="field"><label for="s_deliv">成果物</label><textarea id="s_deliv" placeholder="例）スカジャン柄デザイン一式（背面1点・両袖2点・両胸2点）／Illustrator形式／糸色指定つき"></textarea></div>
+    <div class="spec__two">
+      <div class="field"><label for="s_qty">数量・着数</label><input id="s_qty" type="text" placeholder="1着 / 100着 / デザインのみ"></div>
+      <div class="field"><label for="s_tech">刺繍・製法</label>
+        <select id="s_tech"><option>横振り刺繍（一点物・再現不可）</option><option>機械刺繍（量産）</option><option>昇華転写プリント</option><option>デザインのみ（製法は甲側で決定）</option></select>
+      </div>
+    </div>
+
+    <h3>04 — 修正と確定</h3>
+    <div class="spec__two">
+      <div class="field"><label for="s_rev1">ラフ段階の修正回数</label><input id="s_rev1" type="text" value="2回"></div>
+      <div class="field"><label for="s_rev2">本描き段階の修正回数</label><input id="s_rev2" type="text" value="2回"></div>
+    </div>
+    <div class="spec__two">
+      <div class="field"><label for="s_fix">デザイン確定日</label><input id="s_fix" type="date"></div>
+      <div class="field"><label for="s_due">納品予定日</label><input id="s_due" type="date"></div>
+    </div>
+
+    <h3>05 — 費用</h3>
+    <div class="spec__two">
+      <div class="field"><label for="s_fee">金額（税別）</label><input id="s_fee" type="text" placeholder="¥000,000"></div>
+      <div class="field"><label for="s_pay">支払条件</label><input id="s_pay" type="text" placeholder="着手時50% / 納品後30日以内 残額"></div>
+    </div>
+    <div class="field"><label for="s_extra">追加費用が発生する条件</label><textarea id="s_extra">規定回数を超える修正、デザイン確定日以降の変更、成果物の追加、事前に申告のない商品ラインナップの追加、および許諾範囲の拡大が生じた場合は、別途お見積りのうえ、スケジュールを再設定します。</textarea></div>
+
+    <h3>06 — 著作権</h3>
+    <div class="field">
+      <label for="s_own">権利処理の方式</label>
+      <select id="s_own">
+        <option>利用許諾（著作権は乙に留保）</option>
+        <option>別途協議</option>
+      </select>
+    </div>
+    <p class="spec__hint" id="s_own_note"></p>
+
+    <h3>07 — 利用許諾の範囲</h3>
+    <div class="spec__two">
+      <div class="field"><label for="s_use">利用区分</label>
+        <select id="s_use"><option>商用利用</option><option>個人利用（非商用）</option></select>
+      </div>
+      <div class="field"><label for="s_area">地域</label>
+        <select id="s_area"><option>日本国内</option><option>日本国内および海外（範囲を別途記載）</option></select>
+      </div>
+    </div>
+    <div class="spec__two">
+      <div class="field"><label for="s_term">期間</label>
+        <select id="s_term"><option>2年間</option><option>3年間</option><option>1年間</option><option>期間の定めなし（要協議）</option></select>
+      </div>
+      <div class="field"><label for="s_start">起算日</label><input id="s_start" type="date"></div>
+    </div>
+    <div class="field"><label for="s_renew">更新</label>
+      <select id="s_renew"><option>期間満了の1か月前までに協議のうえ更新可能</option><option>自動更新（甲乙いずれかの申出がない限り同一条件で1年延長）</option><option>更新なし</option></select>
+    </div>
+
+    <div class="field">
+      <label>許諾する媒体</label>
+      <div class="checks" id="s_media"></div>
+    </div>
+    <div class="field"><label for="s_media_etc">その他の媒体・注記</label><input id="s_media_etc" type="text" placeholder="例）駅貼りポスター、タクシーサイネージ など"></div>
+    <div class="field"><label for="s_lineup">許諾する商品ラインナップ</label><textarea id="s_lineup" placeholder="例）スカジャン、Tシャツ、トートバッグの3型に限る"></textarea></div>
+    <div class="field"><label for="s_credit">クレジット表記</label>
+      <select id="s_credit"><option>「Design: 横地広海知」を表記する</option><option>「スカジャン絵師 横地広海知」を表記する</option><option>表記しない</option><option>別途協議</option></select>
+    </div>
+    <div class="field"><label for="s_ip">支給物・持ち込みIP</label><textarea id="s_ip" placeholder="例）甲よりロゴデータの支給あり。第三者IPを含む場合、権利者からの承認取得は甲の責任において行う。"></textarea></div>
+
+    <h3>08 — 禁止事項</h3>
+    <p class="spec__hint">下記11項目は書類に定型で記載されます。案件固有の追加があればこちらへ。</p>
+    <div class="field"><label for="s_ban_add">追加の禁止事項</label><textarea id="s_ban_add" placeholder="1行に1項目"></textarea></div>
+
+    <h3>09 — 改訂履歴</h3>
+    <div class="spec__two">
+      <div class="field"><label for="r_date">日付</label><input id="r_date" type="date"></div>
+      <div class="field"><label for="r_by">合意の方法</label><input id="r_by" type="text" placeholder="メール / 打合せ / チャット"></div>
+    </div>
+    <div class="field"><label for="r_what">変更内容</label><textarea id="r_what" placeholder="例）背面のモチーフを龍から鳳凰に変更。納品日を1週間後ろ倒し。"></textarea></div>
+    <button class="chip" id="r_add" type="button">＋ 改訂を追加</button>
+    <p class="spec__hint" id="r_list">改訂はまだありません。</p>
+
+    <div class="spec__actions">
+      <button class="btn btn--solid" id="b_print" type="button">PDFで保存 / 印刷</button>
+      <button class="btn" id="b_save" type="button">JSONで書き出し</button>
+      <button class="btn" id="b_load" type="button">JSONを読み込み</button>
+      <button class="btn" id="b_clear" type="button">入力を消去</button>
+      <input id="b_file" type="file" accept="application/json" hidden>
+    </div>
+    <p class="spec__hint">書き出したJSONが原本の控えになります。改訂のたびに書き出して保管してください。文書ハッシュは内容が1文字でも変わると値が変わるため、後から「どの版か」を照合できます。</p>
+  </div>
+
+  <article class="doc" id="doc" aria-label="書類プレビュー"></article>
+</div>
+
+<script>
+(function(){
+  const D = window.SPECDOC, $ = id => document.getElementById(id);
+  const FIELDS = ["s_kind","s_no","s_title","s_client","s_vendor","s_concept","s_out",
+    "s_deliv","s_qty","s_tech","s_rev1","s_rev2","s_fix","s_due","s_fee","s_pay",
+    "s_extra","s_own","s_use","s_area","s_term","s_start","s_renew","s_media_etc",
+    "s_lineup","s_credit","s_ip","s_ban_add"];
+  let revs = [];
+
+  const media = () => D.MEDIA.filter((_,i)=> $("m_"+i).checked);
+  function data(){ const o = {revs, media: media()}; FIELDS.forEach(f=>o[f]=$(f).value); return o; }
+
+  async function render(){
+    const d = data();
+    $("doc").innerHTML = D.render(d, await D.hash(d));
+  }
+
+  function renderRevList(){
+    $("r_list").innerHTML = revs.length
+      ? revs.map((r,i)=>`rev.${D.p2(i+1)}　${D.esc(r.date)||"日付なし"}　${D.esc((r.what||"").slice(0,30))}`).join("<br>")
+        + `<br><button class="chip" type="button" id="r_undo" style="margin-top:8px">最後の改訂を取り消す</button>`
+      : "改訂はまだありません。";
+    const u = $("r_undo");
+    if(u) u.onclick = ()=>{ revs.pop(); renderRevList(); render(); };
+  }
+
+  function ownNote(){
+    $("s_own_note").textContent = $("s_own").value.indexOf("利用許諾") === 0
+      ? "著作権法第27条・第28条の権利を含め、著作権は乙に留保されます。譲渡ではありません。条文は書類に定型で記載されます。"
+      : "著作権の取り扱いが未確定である旨が書類に記載されます。確定してから発行することをおすすめします。";
+  }
+
+  D.MEDIA.forEach((m,i)=>{
+    const l = document.createElement("label");
+    l.innerHTML = `<input type="checkbox" id="m_${i}">${m}`;
+    $("s_media").appendChild(l);
+    l.querySelector("input").addEventListener("change", render);
+  });
+
+  D.PRESETS.forEach(([label, text])=>{
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "chip"; b.textContent = label;
+    b.onclick = ()=>{ $("s_concept").value = text; render(); };
+    $("s_presets").appendChild(b);
+  });
+
+  FIELDS.forEach(f => $(f).addEventListener("input", ()=>{ ownNote(); render(); }));
+
+  $("r_add").onclick = ()=>{
+    const what = $("r_what").value.trim();
+    if(!what){ $("r_what").focus(); return; }
+    revs.push({date:$("r_date").value, what, by:$("r_by").value});
+    $("r_what").value = ""; $("r_by").value = "";
+    renderRevList(); render();
+  };
+
+  $("b_print").onclick = ()=> window.print();
+  $("b_save").onclick = ()=> D.download(
+      ($("s_no").value || "spec") + "_rev" + D.p2(revs.length) + ".json",
+      JSON.stringify(data(),null,2));
+  $("b_load").onclick = ()=> $("b_file").click();
+  $("b_file").onchange = e=>{
+    const f = e.target.files[0]; if(!f) return;
+    const r = new FileReader();
+    r.onload = ()=>{
+      try{
+        const o = JSON.parse(r.result);
+        FIELDS.forEach(k => { if(o[k] !== undefined) $(k).value = o[k]; });
+        D.MEDIA.forEach((m,i)=> $("m_"+i).checked = Array.isArray(o.media) && o.media.indexOf(m) >= 0);
+        revs = Array.isArray(o.revs) ? o.revs : [];
+        ownNote(); renderRevList(); render();
+      }catch(err){ alert("このファイルは読み込めません。書き出したJSONを選んでください。"); }
+    };
+    r.readAsText(f);
+  };
+  $("b_clear").onclick = ()=>{
+    const keep = ["s_vendor","s_kind","s_own","s_use","s_area","s_term","s_renew","s_credit"];
+    FIELDS.forEach(k => { if(keep.indexOf(k) < 0) $(k).value = ""; });
+    D.MEDIA.forEach((_,i)=> $("m_"+i).checked = false);
+    revs = []; $("s_no").value = D.docNo(); ownNote(); renderRevList(); render();
+  };
+
+  $("s_no").value = D.docNo();
+  ownNote(); renderRevList(); render();
+})();
+</script>

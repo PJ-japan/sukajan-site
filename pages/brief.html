@@ -1,0 +1,395 @@
+<section class="hero">
+  <h1 class="hero__title">
+    <span class="kicker">Client brief — answer a few questions, get a spec sheet</span>
+    <span class="en">BRIEF</span>
+    <span class="sub">ご依頼フォーム — 答えるだけで仕様確認書ができます</span>
+  </h1>
+  <p class="lead hero__lead">質問に順番にお答えいただくと、制作コンセプト・許諾範囲・禁止事項まで入った仕様確認書が自動で作成されます。PDFでその場に保存でき、内容はそのままこちらに届きます。5分ほどで終わります。</p>
+</section>
+
+<div class="wiz" id="wiz">
+  <div class="wiz__bar">
+    <span class="wiz__count" id="w_count">01 / 12</span>
+    <span class="wiz__track"><span class="wiz__fill" id="w_fill" style="width:8%"></span></span>
+  </div>
+
+  <div id="w_steps"></div>
+
+  <div class="step" id="w_review">
+    <span class="step__no">13</span>
+    <p class="step__q">内容をご確認ください</p>
+    <p class="step__help">右の書類がご入力内容から自動生成されたものです。修正がある場合は「戻る」でやり直せます。</p>
+    <div class="wiz__review">
+      <div>
+        <div class="consent">
+          <label><input type="checkbox" id="w_consent">
+            記載の内容で相談を進めることに同意します。<a class="link" href="privacy.html">プライバシーポリシー</a>に同意のうえ、入力内容が受注者へ送信されること、
+            本書が発注の確定ではなく、乙の確認と見積提示をもって正式な発注となることを了解しました。</label>
+        </div>
+        <p class="wiz__err" id="w_err2"></p>
+        <div class="wiz__nav">
+          <button class="btn" id="w_back2" type="button">戻る</button>
+          <button class="btn btn--solid" id="w_send" type="button">送信する</button>
+          <button class="btn" id="w_pdf" type="button">PDFで保存</button>
+          <button class="btn" id="w_json" type="button">JSONで保存</button>
+        </div>
+        <div class="wiz__sent" id="w_sent" hidden></div>
+      </div>
+      <article class="doc" id="doc" aria-label="仕様確認書プレビュー"></article>
+    </div>
+  </div>
+
+  <div class="wiz__nav" id="w_nav">
+    <button class="btn" id="w_back" type="button">戻る</button>
+    <button class="btn btn--solid" id="w_next" type="button">次へ</button>
+  </div>
+  <p class="wiz__err" id="w_err"></p>
+</div>
+
+<script>
+(function(){
+  /* ------------------------------------------------------------------
+     送信先。Google Apps Script のウェブアプリURLをここに入れてください。
+     設定手順は同梱の gas/README.md を参照。
+     空のままでも、PDF保存とJSON保存は動きます。
+     ------------------------------------------------------------------ */
+  const ENDPOINT = "";           // 例: "https://script.google.com/macros/s/XXXX/exec"
+  const SHARED_SECRET = "change-me";
+  const FALLBACK_MAIL = "info@ichi-pj.com";   // 送信失敗時の案内用
+
+  const D = window.SPECDOC, $ = id => document.getElementById(id);
+  const a = {};                  // 回答
+
+  // 今日（ローカル時刻）を YYYY-MM-DD で。過去日を選べないようにする下限に使う
+  const TODAY = (function(){
+    const d = new Date();
+    return d.getFullYear() + "-" + D.p2(d.getMonth()+1) + "-" + D.p2(d.getDate());
+  })();
+
+  // "2026-10-03" → "2026年10月3日（土）"。書類と画面の表示用
+  const WD = ["日","月","火","水","木","金","土"];
+  function jpDate(iso){
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+    if(!m) return "";
+    const d = new Date(+m[1], +m[2]-1, +m[3]);
+    if(isNaN(d)) return "";
+    return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）`;
+  }
+
+  const STEPS = [
+    {k:"decided", t:"radio", q:"柄のデザインは決まっていますか", req:true,
+     h:"最初にここだけ教えてください。決まっていなくてまったく問題ありません。この後の質問が変わります。",
+     o:[["まだ決まっていない","モチーフから一緒に考えたい"],
+        ["おおまかな方向性はある","入れたいモチーフや雰囲気は思い浮かんでいる"],
+        ["ほぼ固まっている","ラフや参考資料がある"]]},
+
+    {k:"company", t:"text",  q:"会社名・お名前を教えてください",
+     h:"個人のお客様はお名前だけで構いません。", ph:"株式会社◯◯ / 山田太郎", req:true},
+    {k:"person",  t:"text",  q:"ご担当者のお名前",
+     h:"会社名だけご記入の場合はこちらもお願いします。", ph:"山田太郎"},
+    {k:"email",   t:"email", q:"ご連絡先のメールアドレス",
+     h:"書類の控えと、こちらからのご返信に使います。", ph:"you@example.com", req:true},
+
+    {k:"kind", t:"radio", q:"どのご依頼にあたりますか", req:true,
+     h:"迷う場合は近いものを選んでください。あとから変更できます。",
+     o:[["フルオーダー（一着）","柄を描き起こし、横振り刺繍で一点物を作る"],
+        ["ブランド別注・量産","企画から柄、刺繍データ、量産まで"],
+        ["柄のデザインのみ","製品はそちらで作る前提で、柄のデータだけを納品"],
+        ["まだ決まっていない","相談しながら決めたい"]]},
+
+    {k:"purpose", t:"radio", q:"何にお使いになりますか", req:true,
+     o:[["販売用の商品","店頭やECで販売する"],
+        ["記念品・周年グッズ","社内配布や贈答"],
+        ["ノベルティ・販促","無償配布する"],
+        ["個人で着る","ご自身用・贈り物"]]},
+
+    {k:"desc", t:"textarea", q:"どんなものを作りたいですか",
+     // 何も決まっていない方に必須で書かせると手が止まるため、その場合だけ任意にする
+     req: () => a.decided !== "まだ決まっていない",
+     h: () => a.decided === "まだ決まっていない"
+        ? "この時点では空欄で構いません。きっかけや、なんとなく気になっていることがあれば書いてください。"
+        : "入れたいモチーフ、雰囲気、由来など。決まっていないことは空欄で構いません。",
+     ph:"例）創業50周年の記念に、社章の鷲と創業地の富士山を背中に入れたい。色は落ち着いた感じで。"},
+
+    {k:"qty", t:"radio", q:"何着ほどご予定ですか", req:true,
+     o:[["1着","一点物"],["2〜10着",""],["10〜50着",""],["100着以上","量産"],
+        ["デザインのみ（着数なし）",""]]},
+
+    {k:"due", t:"date", q:"納品したい日はいつですか", req:true,
+     h:"カレンダーから日付をお選びください。発売日やイベントが決まっていればその日付を。期限がない場合は下のチェックを入れてください。",
+     min: TODAY, none:"期限はとくにない（相談しながら決めたい）",
+     err:"日付を選ぶか、「期限はとくにない」にチェックを入れてください。"},
+
+    {k:"budget", t:"radio", q:"ご予算の目安をお聞かせください", req:true,
+     h:"制作は15万円（税別）から承っています。範囲内でできる仕様をご提案します。",
+     o:[["15〜30万円（税別）","一着のフルオーダーの目安"],
+        ["30〜50万円（税別）",""],
+        ["50〜100万円（税別）",""],
+        ["100〜300万円（税別）",""],
+        ["300万円以上（税別）","量産・別注の目安"],
+        ["まだ決まっていない","相談しながら決めたい"]]},
+
+    {k:"use", t:"radio", q:"商用利用の予定はありますか", req:true,
+     h:"許諾する範囲が変わるため、必ずお選びください。",
+     o:[["商用利用","販売・広告・販促に使う"],["個人利用（非商用）","ご自身で着る、社内で使う"]]},
+
+    {k:"media", t:"checks", q:"どの媒体で使う予定ですか",
+     h:"わかる範囲で。ここに挙げていない使い方が後から出た場合は、追加のご相談になります。",
+     showIf: () => a.use === "商用利用",
+     o:D.MEDIA},
+
+    {k:"lineup", t:"textarea", q:"どの商品に展開しますか",
+     h:"ここに書かれていない商品への展開は、事前のご申告と追加のお見積りが必要になります。",
+     ph:"例）スカジャン、Tシャツ、トートバッグの3型",
+     showIf: () => a.use === "商用利用"},
+
+    {k:"area", t:"radio", q:"販売・展開する地域は", req:true,
+     h:"海外展開の可能性がある場合は、その旨を先にお知らせください。",
+     showIf: () => a.use === "商用利用",
+     o:[["日本国内",""],["日本国内および海外","範囲は別途ご相談"]]},
+
+    {k:"term", t:"radio", q:"利用したい期間は", req:true,
+     h:"期間満了後も継続する場合は、更新のご相談ができます。",
+     showIf: () => a.use === "商用利用",
+     o:[["2年間",""],["3年間",""],["1年間",""],["未定（相談したい）",""]]},
+
+    {k:"ip", t:"textarea", q:"支給物や、他社の権利物はありますか",
+     h:"ロゴ、キャラクター、既存の図案など。第三者の権利物を含む場合、権利者からの承認取得はご依頼主側でお願いしています。",
+     ph:"例）社章のAIデータを支給。他社IPの使用予定はなし。"},
+
+    {k:"note", t:"textarea", q:"その他、伝えておきたいこと",
+     h:"参考にしたい既存の柄、避けたい表現、社内の承認フローなど。", ph:""}
+  ];
+
+  const CONCEPT = {
+    "フルオーダー（一着）": D.PRESETS[4][1],
+    "ブランド別注・量産":   D.PRESETS[5][1],
+    "柄のデザインのみ":     D.PRESETS[3][1],
+    "まだ決まっていない":   D.PRESETS[0][1]
+  };
+  const TECH = {
+    "フルオーダー（一着）": "横振り刺繍（一点物・再現不可）",
+    "ブランド別注・量産":   "機械刺繍（量産）",
+    "柄のデザインのみ":     "デザインのみ（製法は甲側で決定）",
+    "まだ決まっていない":   "未定（協議のうえ決定）"
+  };
+
+  // req と h は値でも関数でも書ける（回答によって出し分けたいものがあるため）
+  const isReq = s => typeof s.req === "function" ? !!s.req() : !!s.req;
+  const helpOf = s => typeof s.h === "function" ? s.h() : (s.h || "");
+
+  let visible = [], idx = 0;
+  const docNo = D.docNo();
+
+  function build(){
+    const wrap = $("w_steps"); wrap.innerHTML = "";
+    STEPS.forEach((s,i)=>{
+      const el = document.createElement("div");
+      el.className = "step"; el.dataset.k = s.k;
+      let input = "";
+      if(s.t === "radio"){
+        input = `<div class="opts">` + s.o.map(([v,note],j)=>
+          `<label class="opt"><input type="radio" name="${s.k}" value="${D.esc(v)}"
+             ${a[s.k]===v?"checked":""}><span class="opt__mark">${D.p2(j+1)}</span>
+           <span><b>${D.esc(v)}</b>${note?`<small>${D.esc(note)}</small>`:""}</span></label>`).join("") + `</div>`;
+      } else if(s.t === "checks"){
+        const cur = Array.isArray(a[s.k]) ? a[s.k] : [];
+        input = `<div class="checks">` + s.o.map(v=>
+          `<label><input type="checkbox" name="${s.k}" value="${D.esc(v)}"
+            ${cur.indexOf(v)>=0?"checked":""}>${D.esc(v)}</label>`).join("") + `</div>`;
+      } else if(s.t === "textarea"){
+        input = `<div class="field"><textarea name="${s.k}" placeholder="${D.esc(s.ph||"")}">${D.esc(a[s.k]||"")}</textarea></div>`;
+      } else if(s.t === "date"){
+        const none = !!a[s.k + "_none"];
+        input = `<div class="field field--date">
+            <input type="date" name="${s.k}" value="${D.esc(a[s.k]||"")}"
+              ${s.min?`min="${D.esc(s.min)}"`:""}${s.max?` max="${D.esc(s.max)}"`:""}${none?" disabled":""}>
+            <p class="field__echo" data-echo="${s.k}">${none?"":D.esc(jpDate(a[s.k]))}</p>
+          </div>` + (s.none ? `<div class="checks">
+            <label><input type="checkbox" name="${s.k}_none"${none?" checked":""}>${D.esc(s.none)}</label>
+          </div>` : "");
+      } else {
+        input = `<div class="field"><input type="${s.t}" name="${s.k}"
+           placeholder="${D.esc(s.ph||"")}" value="${D.esc(a[s.k]||"")}"></div>`;
+      }
+      el.innerHTML = `<span class="step__no">${D.p2(i+1)}</span>
+        <p class="step__q">${D.esc(s.q)}<span data-opt="${s.k}" hidden
+           style="font-size:.5em;color:var(--fg-mute)"> 任意</span></p>
+        ${s.h?`<p class="step__help" data-help="${s.k}">${D.esc(helpOf(s))}</p>`:""}${input}`;
+      wrap.appendChild(el);
+    });
+    wrap.addEventListener("input", capture);
+    wrap.addEventListener("change", capture);
+    // 欄のどこを押してもカレンダーが開くように（未対応ブラウザは既定の動作のまま）
+    wrap.addEventListener("click", e => {
+      const f = e.target.closest(".field--date");
+      if(!f) return;
+      const i = f.querySelector('input[type="date"]');
+      if(i && !i.disabled && typeof i.showPicker === "function"){
+        try{ i.showPicker(); }catch(err){}
+      }
+    });
+  }
+
+  function capture(e){
+    const n = e.target.name; if(!n) return;
+
+    // 「期限はとくにない」— チェックすると日付欄を空にして無効化する
+    if(n.slice(-5) === "_none"){
+      const k = n.slice(0, -5);
+      a[n] = e.target.checked;
+      const inp = document.querySelector(`.step[data-k="${k}"] input[type="date"]`);
+      if(inp){
+        inp.disabled = e.target.checked;
+        if(e.target.checked){ inp.value = ""; a[k] = ""; }
+      }
+      const echo = document.querySelector(`[data-echo="${k}"]`);
+      if(echo) echo.textContent = e.target.checked ? "" : jpDate(a[k]);
+      $("w_err").textContent = "";
+      return;
+    }
+
+    const s = STEPS.find(x=>x.k===n); if(!s) return;
+    if(s.t === "checks"){
+      a[n] = [...document.querySelectorAll(`input[name="${n}"]:checked`)].map(i=>i.value);
+    } else { a[n] = e.target.value; }
+    if(s.t === "date"){
+      const echo = document.querySelector(`[data-echo="${n}"]`);
+      if(echo) echo.textContent = jpDate(a[n]);
+    }
+    $("w_err").textContent = "";
+  }
+
+  function recompute(){
+    visible = STEPS.filter(s => !s.showIf || s.showIf());
+  }
+
+  function show(){
+    recompute();
+    // 回答によって必須／任意と補足文が変わるステップがあるため、毎回引き直す
+    STEPS.forEach(s => {
+      const o = document.querySelector(`[data-opt="${s.k}"]`);
+      if(o) o.hidden = isReq(s);
+      const h = document.querySelector(`[data-help="${s.k}"]`);
+      if(h) h.textContent = helpOf(s);
+    });
+    if(idx > visible.length) idx = visible.length;
+    const total = visible.length + 1;
+    document.querySelectorAll(".step").forEach(el => el.removeAttribute("data-active"));
+    const onReview = idx >= visible.length;
+    if(onReview){ $("w_review").setAttribute("data-active",""); $("w_nav").hidden = true; paint(); }
+    else{
+      $("w_nav").hidden = false;
+      const s = visible[idx];
+      document.querySelector(`.step[data-k="${s.k}"]`).setAttribute("data-active","");
+      const el = document.querySelector(`.step[data-k="${s.k}"] input, .step[data-k="${s.k}"] textarea`);
+      if(el && (s.t==="text"||s.t==="email"||s.t==="textarea")) setTimeout(()=>el.focus(),60);
+    }
+    $("w_count").textContent = D.p2(Math.min(idx+1,total)) + " / " + D.p2(total);
+    $("w_fill").style.width = ((idx+1)/total*100) + "%";
+    $("w_back").disabled = idx === 0;
+    $("w_next").textContent = idx === visible.length-1 ? "内容を確認する" : "次へ";
+  }
+
+  function valid(){
+    const s = visible[idx]; if(!s || !isReq(s)) return true;
+    const v = a[s.k];
+    if(s.t === "date") return !!(v && String(v).trim()) || !!a[s.k + "_none"];
+    if(s.t === "checks") return Array.isArray(v) && v.length > 0;
+    if(!v || !String(v).trim()) return false;
+    if(s.t === "email" && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) return false;
+    return true;
+  }
+
+  function toDoc(){
+    const commercial = a.use === "商用利用";
+    return {
+      s_kind:"仕様確認書（ヒアリング草案）",
+      s_no: docNo,
+      s_title: (a.company||"") + "　" + (a.desc||"").slice(0,24) + (a.desc&&a.desc.length>24?"…":""),
+      s_client: [a.company, a.person].filter(Boolean).join("　") + (a.email?"（"+a.email+"）":""),
+      s_vendor: "合同会社ICHI",
+      s_concept: (CONCEPT[a.kind] || D.PRESETS[0][1])
+                 + (a.decided ? "\n\n【着手時点の状況】\n柄のデザイン：" + a.decided : "")
+                 + (a.desc ? "\n\n【甲のご要望】\n" + a.desc : ""),
+      s_out: "本書に記載のない成果物、記載のない商品ラインナップへの展開、および第三者の権利物の権利処理は本件に含みません。",
+      s_deliv: "ヒアリング内容にもとづき、乙より別途ご提案します。",
+      s_qty: a.qty || "",
+      s_tech: TECH[a.kind] || "",
+      s_rev1: "2回", s_rev2: "2回",
+      s_fix: "",
+      s_due: a.due_none ? "期限の定めなし（協議のうえ決定）" : (jpDate(a.due) || a.due || ""),
+      s_fee: (!a.budget || a.budget === "まだ決まっていない")
+             ? "別途お見積り（制作は15万円（税別）から承っています）"
+             : "ご予算の目安：" + a.budget + "／正式なお見積りは別途",
+      s_pay: "別途取り決め",
+      s_extra: D.DEFAULT_EXTRA,
+      s_own: "利用許諾（著作権は乙に留保）",
+      s_use: a.use || "",
+      s_area: commercial ? (a.area || "") : "—",
+      s_term: commercial ? (a.term || "") : "—",
+      s_start: "",
+      s_renew: commercial ? "期間満了の1か月前までに協議のうえ更新可能" : "—",
+      media: commercial ? (a.media || []) : [],
+      s_media_etc: "",
+      s_lineup: commercial ? (a.lineup || "") : "",
+      s_credit: "別途協議",
+      s_ip: [a.ip, a.note ? "【備考】"+a.note : ""].filter(Boolean).join("\n"),
+      s_ban_add: "",
+      revs: [],
+      _meta: {purpose: a.purpose || "", raw: a}
+    };
+  }
+
+  let lastHash = "";
+  async function paint(){
+    const d = toDoc();
+    lastHash = await D.hash(d);
+    $("doc").innerHTML = D.render(d, lastHash, {draft:true});
+  }
+
+  $("w_next").onclick = ()=>{
+    if(!valid()){
+      $("w_err").textContent = (visible[idx] && visible[idx].err) || "この項目は入力が必要です。";
+      return;
+    }
+    $("w_err").textContent = ""; idx++; show(); window.scrollTo({top:$("wiz").offsetTop-80,behavior:"smooth"});
+  };
+  $("w_back").onclick = ()=>{ if(idx>0){ idx--; show(); } };
+  $("w_back2").onclick = ()=>{ idx = visible.length-1; show(); };
+
+  $("w_pdf").onclick = ()=> window.print();
+  $("w_json").onclick = ()=> D.download(docNo + ".json", JSON.stringify(toDoc(),null,2));
+
+  $("w_send").onclick = async ()=>{
+    if(!$("w_consent").checked){ $("w_err2").textContent = "送信の前に同意欄にチェックをお願いします。"; return; }
+    $("w_err2").textContent = "";
+    const btn = $("w_send"); btn.disabled = true; btn.textContent = "送信中…";
+    const payload = {secret: SHARED_SECRET, docNo: docNo, hash: lastHash,
+                     answers: a, doc: toDoc(), ua: navigator.userAgent};
+    let ok = false;
+    if(ENDPOINT){
+      try{
+        // text/plain にすることでプリフライトを避ける（GAS のウェブアプリ向け）
+        const r = await fetch(ENDPOINT, {method:"POST",
+          headers:{"Content-Type":"text/plain;charset=utf-8"},
+          body: JSON.stringify(payload)});
+        ok = r.ok;
+      }catch(err){ ok = false; }
+    }
+    const box = $("w_sent"); box.hidden = false;
+    if(ok){
+      box.innerHTML = "送信しました。書類番号 " + D.esc(docNo) +
+        "／文書ハッシュ " + D.esc(lastHash.slice(0,16)) +
+        "<br>控えとして、この画面から PDF も保存しておいてください。1〜2営業日以内にご返信します。";
+      btn.textContent = "送信済み";
+    }else{
+      box.innerHTML = "自動送信ができませんでした。お手数ですが「JSONで保存」または「PDFで保存」で書類を保存し、" +
+        (FALLBACK_MAIL ? D.esc(FALLBACK_MAIL) + " 宛にお送りください。" : "お問い合わせフォームよりお送りください。");
+      btn.disabled = false; btn.textContent = "再送する";
+    }
+  };
+
+  build(); show();
+})();
+</script>
