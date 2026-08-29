@@ -206,10 +206,10 @@ html{scroll-padding-top:84px}
    絵の地色が淡いので、暗い層を重ねないと白文字が読めなくなる */
 .hero--art{position:relative;isolation:isolate;overflow:hidden}
 .hero--art::before{content:"";position:absolute;inset:0;z-index:-2;
-  /* CSSはHTMLに埋め込まれるため、相対パスは各ページの階層に依存する。
-     /en/ からも解決できるようルート基準にする */
-  background-image:image-set(url(/assets/hero.webp) type("image/webp"),
-                             url(/assets/hero.jpg) type("image/jpeg"));
+  /* CSSはHTMLに埋め込まれるため、相対パスは各ページの階層で決まる。
+     1階層下のページ用に build.py が ../ を足す（サブフォルダ配信でも動く） */
+  background-image:image-set(url(assets/hero.webp) type("image/webp"),
+                             url(assets/hero.jpg) type("image/jpeg"));
   background-position:72% 38%;background-size:cover;background-repeat:no-repeat}
 .hero--art::after{content:"";position:absolute;inset:0;z-index:-1;
   background:

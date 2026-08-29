@@ -10,6 +10,7 @@ from datetime import date
 from datetime import date
 from datetime import date
 from datetime import date
+from datetime import date
 
 # このファイルが置かれている場所を基準にする（どこから実行しても動く）
 ROOT = pathlib.Path(__file__).resolve().parent
@@ -588,7 +589,8 @@ def write_legacy():
     for slug, path in LEGACY_COPY.items():
         html_text = (OUT / f"{slug}.html").read_text(encoding="utf-8")
         # 1階層深くなるため、相対リンクをルート基準に書き換える
-        html_text = REL_HREF.sub(r'\1="/\2"', html_text)
+        html_text = REL_HREF.sub(r'\1="../\2"', html_text)
+        html_text = html_text.replace("url(assets/", "url(../assets/")
         d = OUT / path
         d.mkdir(parents=True, exist_ok=True)
         (d / "index.html").write_text(html_text, encoding="utf-8")
@@ -614,8 +616,8 @@ EN_SHELL = """<!DOCTYPE html>
 <link rel="alternate" hreflang="ja" href="{base}">
 <link rel="alternate" hreflang="x-default" href="{base}">
 <meta name="theme-color" content="#0A0A0B">
-<link rel="icon" href="/assets/favicon.png" type="image/png">
-<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="icon" href="../assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Sukajan Pattern Designer Hiromichi Yokochi">
 <meta property="og:title" content="Sukajan Pattern Designer Hiromichi Yokochi">
@@ -639,10 +641,10 @@ EN_SHELL = """<!DOCTYPE html>
 <a href="#main" class="skip">Skip to content</a>
 <header class="masthead">
   <div class="masthead__in">
-    <a class="brand" href="/en/"><b>Hiromichi Yokochi</b><span>Sukajan Pattern Designer</span></a>
+    <a class="brand" href="./"><b>Hiromichi Yokochi</b><span>Sukajan Pattern Designer</span></a>
     <nav class="nav" aria-label="Language">
-      <a href="/en/" aria-current="page">EN</a>
-      <a href="/">JA</a>
+      <a href="./" aria-current="page">EN</a>
+      <a href="../">JA</a>
     </nav>
   </div>
 </header>
@@ -673,15 +675,15 @@ EN_SHELL = """<!DOCTYPE html>
     <div>
       <h4>Japanese</h4>
       <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/oem.html">Brand / OEM</a></li>
-        <li><a href="/order.html">Made to order</a></li>
-        <li><a href="/access.html">Access</a></li>
+        <li><a href="../">Home</a></li>
+        <li><a href="../oem.html">Brand / OEM</a></li>
+        <li><a href="../order.html">Made to order</a></li>
+        <li><a href="../access.html">Access</a></li>
       </ul>
     </div>
   </div>
   <div class="foot__legal">
-    <a href="/privacy.html">Privacy policy</a>　Operated by ICHI LLC
+    <a href="../privacy.html">Privacy policy</a>　Operated by ICHI LLC
     <span class="foot__copy">&copy; {year} ICHI / Hiromichi Yokochi &mdash; All rights reserved</span>
   </div>
 </footer>
@@ -705,7 +707,8 @@ EN_LD = json.dumps({
 en_dir = OUT / "en"
 en_dir.mkdir(parents=True, exist_ok=True)
 (en_dir / "index.html").write_text(
-    EN_SHELL.format(css=CSS, ld=EN_LD, base=BASE, en_url=EN_URL,
+    EN_SHELL.format(css=CSS.replace("url(assets/", "url(../assets/"),
+                    ld=EN_LD, base=BASE, en_url=EN_URL,
                     year=date.today().year,
                     body=hold((ROOT / "pages" / "en.html").read_text(encoding="utf-8"))),
     encoding="utf-8")
