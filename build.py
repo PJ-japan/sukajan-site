@@ -139,6 +139,8 @@ PAGES = {
         desc="オーダーメイドスカジャンとスカジャンOEMの納期。ヒアリングから納品までの日程、週次報告、修正回数の取り決めを公開しています。一着は3〜4ヶ月、量産は最短3ヶ月半が目安です。",
         nav="Process",
         crumbs=[("納期と進め方", "process.html")],
+        # ナビは主導線だけに絞る。ここはフッターの About 欄から辿れる
+        unlisted=True,
         faq=[
             ("いちばん早くていつ届きますか", "一着のフルオーダーは、ご予約から引渡しまで3〜4ヶ月程度が目安です。一点ずつお作りするため、ご予約の順にお受けしています。お急ぎの場合は個別にご相談ください。時期によっては最短1ヶ月での納品も可能です（別途特急料金が必要）。"),
             ("イベントに間に合わせたい日があります", "先に納品日をお知らせください。そこから逆算して間に合う進め方をご提案します。間に合わない場合はその場でお伝えします。"),
@@ -234,6 +236,8 @@ PAGES = {
         desc="スカジャンの歴史をなぜモノから整理するのか。パラシュート生地説の検証、エジプトと中国の戦争土産、柄は祈りであること。オリジナルスカジャンを描くスカジャン絵師のロングインタビュー全文（2022年8月）。",
         nav="Interview",
         crumbs=[("インタビュー", "interview.html")],
+        # ナビは主導線だけに絞る。ここはフッターの About 欄から辿れる
+        unlisted=True,
         extra=[PERSON],
     ),
     "access": dict(
@@ -381,7 +385,9 @@ def nav_html(current):
     for slug in NAV_ORDER:
         href = "index.html" if slug == "index" else f"{slug}.html"
         cur = ' aria-current="page"' if slug == current else ""
-        out.append(f'<a href="{href}"{cur}>{PAGES[slug]["nav"]}</a>')
+        # 見積もりは主導線なのでナビでもボタンにする
+        cls = ' class="nav--cta"' if slug == "estimate" else ""
+        out.append(f'<a href="{href}"{cls}{cur}>{PAGES[slug]["nav"]}</a>')
     return "\n        ".join(out)
 
 
@@ -502,7 +508,7 @@ SHELL = """<!DOCTYPE html>
     <div>
       <h4>Contact</h4>
       <ul>
-        <li><a href="estimate.html">見積もり・ご相談</a></li>
+        <li><a class="foot__cta" href="estimate.html">見積もり・ご相談</a></li>
         <li><a href="contact.html">取材・その他のお問い合わせ</a></li>
         <li><a href="https://ichi-dobuita.square.site/">WEBストア</a></li>
         <li><a href="access.html">アクセス・ご来店</a></li>
