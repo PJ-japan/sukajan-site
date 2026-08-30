@@ -445,6 +445,9 @@ a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accen
 /* 柄のデザインのみ。金額ではなく文章が入るので小さくする */
 .est__out[data-mode="design"] .est__total{font-family:var(--jp);font-weight:500;
   font-size:clamp(19px,2.4vw,26px);line-height:1.5;letter-spacing:0}
+.est__aside{margin:clamp(18px,2vw,26px) 0 0;padding-top:clamp(16px,1.8vw,22px);
+  border-top:1px solid var(--line);font-size:13.5px;line-height:2;color:var(--fg-dim)}
+.panel .est__aside{border-color:rgba(10,10,11,.14);color:#4A4A48}
 .est__vars{margin-top:clamp(18px,2vw,26px)}
 .est__varscap{font-family:var(--mono);font-size:12px;letter-spacing:.08em;
   color:var(--fg-mute);margin:0 0 8px}

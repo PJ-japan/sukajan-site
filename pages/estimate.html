@@ -5,6 +5,9 @@
     <span class="sub">スカジャンの自動見積もり — 仕様を選ぶと、その場で概算が出ます</span>
   </h1>
   <p class="lead hero__lead">柄のデザインのみ、オリジナルスカジャンのオーダーメイド、スカジャンOEM・ブランド別注。ご依頼の種類を選ぶと、必要な項目だけが出ます。オーダーとOEMは公開している目安価格にもとづいた概算がその場で出ます。メールアドレスの入力は不要です。</p>
+  <div class="btns btns--sub">
+    <a class="btn btn--ghost" href="contact.html">取材・その他のお問い合わせはこちら</a>
+  </div>
 </section>
 
 <div class="panel">
@@ -256,6 +259,7 @@
           <p class="est__total"><span id="e_total">—</span><span class="est__from" id="e_from">〜</span></p>
           <p class="est__unit" id="e_unit"></p>
           <ul class="est__break" id="e_break"></ul>
+          <p class="est__aside" id="e_paint" hidden>ペイントカスタム（ヴィンテージのミリタリーボディに、当時の風合いでペイントする一着）もお受けしています。ボディの状態が一点ごとに違うため、事前に<a class="link" href="contact.html">ご来店のご相談</a>をいただけると確実です。<strong>ボディの入手状況により、お渡しまで1年以上いただく場合があります。</strong></p>
           <div class="est__vars" id="e_vars" hidden>
             <p class="est__varscap" id="e_varscap">次の選択で、ここから金額が上がります</p>
             <ul id="e_varslist"></ul>
@@ -552,6 +556,7 @@
   function calcDesign(){
     const d = designSpec();
 
+    $("e_paint").hidden = true;
     $("e_out").dataset.mode = "design";
     $("e_cap").textContent = "お見積り";
     $("e_total").textContent = "内容にあわせて個別に算出します";
@@ -613,6 +618,7 @@
     $("g_product").hidden = kind === "design";
     if(kind === "design") return calcDesign();
 
+    $("e_paint").hidden = kind !== "order";
     $("e_out").dataset.mode = "price";
     $("e_cap").textContent = "概算（税込）";
     $("e_from").hidden = false;

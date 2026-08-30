@@ -23,7 +23,7 @@ BASE = "https://hiromichiyokochi.com/"
 # ここだけ書き換えればよい。ビルド時に brief.html / contact.html へ差し込まれる。
 # 手順は gas/README.md を参照。
 # --------------------------------------------------------------------------
-FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbwOGldPkG1IKMqv-V9Cxjd68K4yVvbdU8MNKij6av7vmRtnTttZMQsRVp1d6qrLyHN2/exec"
+FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbw2JAXpvh_X2c-SsPSC-3dfT3uinyZp31ZC0JVAQihLZXdGcwAsJmYVLInJcQh5GwE6/exec"
 FORM_SECRET   = "m5u0-yxSl-ByIk"  # gas/Code.gs の SECRET と同じ文字列にする
 FORM_MAIL     = "info@ichi-pj.com"
 CSS = (ROOT / "_style.css").read_text(encoding="utf-8")
