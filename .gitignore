@@ -7,3 +7,9 @@ dist/
 # エディタ
 .vscode/
 *.swp
+
+# 作業メモと社内向けの説明。リポジトリは公開されているため git には載せない。
+# Claude Code は作業フォルダのファイルを読むだけなので、commit しなくても効く。
+# 実体は手元と Google ドライブに置く。
+CLAUDE.md
+README.md
