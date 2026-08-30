@@ -187,6 +187,11 @@ html{scroll-padding-top:84px}
   .masthead[data-js][data-open] .nav a{padding:14px 0;font-size:11.5px;
     border-bottom:1px solid var(--line)}
   .masthead[data-js][data-open] .nav a:last-child{border-bottom:0}
+  /* 縦積みのときは、朱のボタンにも左右の余白を与えて中央に置く。
+     .nav a の padding:14px 0 に上書きされ、文字が端に貼りついていた */
+  .masthead[data-js][data-open] .nav a.nav--cta{
+    padding:16px 20px;margin:12px 0 4px;justify-content:center;text-align:center;
+    font-size:14px;border-bottom:0}
   /* 縦積みになると .nav の幅が中身ぶんに広がり、overflow-x:auto が効かず
      ページ全体が横スクロールしていた。親の幅に収めてスクロールを nav の中に閉じ込める */
   .nav{align-self:stretch;width:100%;max-width:100%;
