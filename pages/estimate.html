@@ -4,7 +4,7 @@
     <span class="en">ESTIMATE</span>
     <span class="sub">スカジャンの自動見積もり — 仕様を選ぶと、その場で概算が出ます</span>
   </h1>
-  <p class="lead hero__lead">オリジナルスカジャンのオーダーメイド、スカジャンOEM・ブランド別注の概算をその場で計算します。着数と仕様を選ぶだけで、公開している目安価格にもとづいた金額が出ます。メールアドレスの入力は不要です。</p>
+  <p class="lead hero__lead">柄のデザインのみ、オリジナルスカジャンのオーダーメイド、スカジャンOEM・ブランド別注。ご依頼の種類を選ぶと、必要な項目だけが出ます。オーダーとOEMは公開している目安価格にもとづいた概算がその場で出ます。メールアドレスの入力は不要です。</p>
 </section>
 
 <div class="panel">
@@ -15,19 +15,23 @@
         <p>入力は不要。選ぶだけです。</p>
       </div>
       <div class="band__main">
-        <h2>仕様を選ぶと、<br>その場で概算が出ます</h2>
-        <p class="lead">スカジャンの費用は「製品代 × 着数」では決まりません。<strong>着数に比例するもの</strong>（生地・縫製・刺繍工賃）と、<strong>最初に一度だけかかるもの</strong>（デザイン費、刺繍データ代）があるためです。この計算機は、<a class="link" href="oem.html#price">公開している目安価格</a>にもとづいて下限を出します。</p>
+        <h2>ご依頼の種類を選ぶと、<br>必要な項目だけが出ます</h2>
+        <p class="lead"><strong>柄のデザインのみ</strong>は、費用が使用する媒体・期間・権利の形で決まるため、条件をうかがってから個別にお見積りします。<strong>オーダーメイドとOEM</strong>は、<a class="link" href="oem.html#price">公開している目安価格</a>にもとづいて、その場で概算を出します。</p>
 
         <form id="estform" novalidate>
           <div class="est__grid">
             <div class="field">
               <label for="e_kind">ご依頼の種類</label>
               <select id="e_kind" name="kind">
+                <option value="design">柄のデザインのみ（生産はそちらで）</option>
                 <option value="order">フルオーダー（一着）</option>
                 <option value="oem">ブランド別注・量産（OEM）</option>
               </select>
             </div>
 
+          </div>
+
+          <div class="est__grid" id="g_product" hidden>
             <div class="field">
               <label for="e_qty">着数</label>
               <input id="e_qty" name="qty" type="number" min="1" max="10000" step="1" value="1" inputmode="numeric">
@@ -87,20 +91,174 @@
               </select>
             </div>
           </div>
+
+          <!-- 柄のデザインのみ。金額は利用範囲で決まるため、条件を伺って個別にお見積りする -->
+          <div id="g_design" hidden>
+            <div class="est__grid">
+              <p class="est__groupcap est__wide">つくるもの</p>
+
+              <div class="field">
+                <label for="d_count">柄の点数</label>
+                <input id="d_count" name="d_count" type="number" min="1" max="200" step="1" value="1" inputmode="numeric">
+              </div>
+
+              <div class="field">
+                <label for="d_finish">仕上げ</label>
+                <select id="d_finish" name="d_finish">
+                  <option>刺繍にする前提</option>
+                  <option>プリントにする前提</option>
+                  <option>刺繍とプリントの両方</option>
+                  <option>まだ決めていない</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="d_scale">柄の規模</label>
+                <select id="d_scale" name="d_scale">
+                  <option>背中一面の大図案</option>
+                  <option>胸・袖などのワンポイント</option>
+                  <option>大図案とワンポイントの一式</option>
+                  <option>総柄・繰り返しパターン</option>
+                  <option>まだ決めていない</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="d_colors">色数の目安</label>
+                <select id="d_colors" name="d_colors">
+                  <option>2〜3色</option>
+                  <option>4〜6色</option>
+                  <option>7色以上</option>
+                  <option>まだ決めていない</option>
+                </select>
+              </div>
+
+              <div class="field est__wide">
+                <label>のせるアイテム</label>
+                <div class="checks">
+                  <label><input type="checkbox" name="d_item" value="スカジャン">スカジャン</label>
+                  <label><input type="checkbox" name="d_item" value="スウェット・Tシャツ">スウェット・Tシャツ</label>
+                  <label><input type="checkbox" name="d_item" value="その他のアパレル">その他のアパレル</label>
+                  <label><input type="checkbox" name="d_item" value="雑貨・小物">雑貨・小物</label>
+                  <label><input type="checkbox" name="d_item" value="パッケージ・販促物">パッケージ・販促物</label>
+                  <label><input type="checkbox" name="d_item" value="未定">未定</label>
+                </div>
+              </div>
+
+              <div class="field est__wide">
+                <label for="d_motif">モチーフ・参考イメージ</label>
+                <textarea id="d_motif" name="d_motif" placeholder="入れたいモチーフ、参考にしたい年代や雰囲気、避けたい表現など。決まっていなければ空欄で構いません。"></textarea>
+              </div>
+
+              <p class="est__groupcap est__wide">どう使うか（ここで金額が決まります）</p>
+
+              <div class="field est__wide">
+                <label>使用する媒体</label>
+                <div class="checks">
+                  <label><input type="checkbox" name="d_media" value="商品本体" checked>商品本体</label>
+                  <label><input type="checkbox" name="d_media" value="広告・販促物">広告・販促物</label>
+                  <label><input type="checkbox" name="d_media" value="Web・SNS">Web・SNS</label>
+                  <label><input type="checkbox" name="d_media" value="パッケージ">パッケージ</label>
+                  <label><input type="checkbox" name="d_media" value="店頭什器・内装">店頭什器・内装</label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="d_period">使用期間</label>
+                <select id="d_period" name="d_period">
+                  <option>イベント・シーズン限定（〜3ヶ月）</option>
+                  <option>1年</option>
+                  <option>3年</option>
+                  <option>期間を定めない（定番として継続販売）</option>
+                  <option>まだ決めていない</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="d_area">使用地域</label>
+                <select id="d_area" name="d_area">
+                  <option>国内のみ</option>
+                  <option>国内＋アジア</option>
+                  <option>全世界</option>
+                  <option>まだ決めていない</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="d_right">権利の形</label>
+                <select id="d_right" name="d_right">
+                  <option>使用許諾（範囲を決めて使う）</option>
+                  <option>買い切り（著作権の譲渡）</option>
+                  <option>独占的な使用許諾（同業他社には出さない）</option>
+                  <option>相談して決めたい</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="d_volume">生産予定数の規模</label>
+                <select id="d_volume" name="d_volume">
+                  <option>〜100点</option>
+                  <option>〜1,000点</option>
+                  <option>1,000点以上</option>
+                  <option>まだ決めていない</option>
+                </select>
+              </div>
+
+              <p class="est__groupcap est__wide">進め方</p>
+
+              <div class="field">
+                <label for="d_due">希望納期</label>
+                <select id="d_due" name="d_due">
+                  <option>通常（柄1点あたり3〜4週間）</option>
+                  <option>お急ぎ（別途特急料金）</option>
+                  <option>まだ決めていない</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="d_ip">既存IP・キャラクターの持ち込み</label>
+                <select id="d_ip" name="d_ip">
+                  <option>なし（ゼロから描き起こす）</option>
+                  <option>あり（ライセンス承認はこちらで取得します）</option>
+                  <option>あり（承認の進め方から相談したい）</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="d_credit">クレジット表記</label>
+                <select id="d_credit" name="d_credit">
+                  <option>「スカジャン絵師 横地広海知」名義で出せる</option>
+                  <option>名義は出さない</option>
+                  <option>相談して決めたい</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="d_pr">当方での実績掲載</label>
+                <select id="d_pr" name="d_pr">
+                  <option>可</option>
+                  <option>発売後なら可</option>
+                  <option>不可</option>
+                  <option>相談して決めたい</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </form>
 
         <div class="est__out" id="e_out" aria-live="polite">
-          <p class="est__cap">概算（税込）</p>
-          <p class="est__total"><span id="e_total">—</span><span class="est__from">〜</span></p>
+          <p class="est__cap" id="e_cap">概算（税込）</p>
+          <p class="est__total"><span id="e_total">—</span><span class="est__from" id="e_from">〜</span></p>
           <p class="est__unit" id="e_unit"></p>
           <ul class="est__break" id="e_break"></ul>
           <div class="est__vars" id="e_vars" hidden>
-            <p class="est__varscap">次の選択で、ここから金額が上がります</p>
+            <p class="est__varscap" id="e_varscap">次の選択で、ここから金額が上がります</p>
             <ul id="e_varslist"></ul>
           </div>
         </div>
 
-        <p class="note">※ 表示されるのは<strong>下限の目安</strong>です。刺繍の面積・柄の複雑さにより変動します。<br>
+        <p class="note">※ 以下はオーダーメイド・OEMについての注記です。<br>
+          ※ 表示されるのは<strong>下限の目安</strong>です。刺繍の面積・柄の複雑さにより変動します。<br>
           ※ <strong>49着まで</strong>は一着ずつ横振り刺繍で仕上げます。基本料金にボディ代・デザイン費・刺繍（背中1箇所と胸2箇所）が含まれ、それを超える箇所だけが加算されます。<br>
           ※ <strong>50着から</strong>は機械刺繍での量産です。製品代のほかに、デザイン費と刺繍データ（型）代が最初に一度だけかかります。着数で割るため、数が増えるほど一着あたりの負担は下がります。<br>
           ※ 正式なお見積りは、生地と縫製の手配先に在庫と工程を確認したうえでお出しします。上記との差が出る場合は、どの工程で何が変わったのかを添えてご説明します。<br>
@@ -233,6 +391,20 @@
     return [...f.querySelectorAll('input[name="place"]:checked')].map(i => i.value);
   }
 
+  const checked = n => [...f.querySelectorAll('input[name="' + n + '"]:checked')].map(i => i.value);
+
+  function designSpec(){
+    const v = id => { const el = f.elements[id]; return el ? el.value.trim() : ""; };
+    return {
+      count:  Math.max(1, Math.min(200, parseInt(v("d_count"), 10) || 1)),
+      finish: v("d_finish"), scale: v("d_scale"), colors: v("d_colors"),
+      item:   checked("d_item"), motif: v("d_motif"),
+      media:  checked("d_media"), period: v("d_period"), area: v("d_area"),
+      right:  v("d_right"), volume: v("d_volume"), due: v("d_due"),
+      ip:     v("d_ip"), credit: v("d_credit"), pr: v("d_pr")
+    };
+  }
+
   function spec(){
     return {
       kind:   f.elements.kind.value,
@@ -253,6 +425,7 @@
   /* 「フルオーダー（一着）」と着数の食い違いを防ぐ */
   function syncKind(src){
     const k = f.elements.kind, q = f.elements.qty;
+    if(k.value === "design") return;
     const qty = parseInt(q.value, 10) || 1;
     if(src === "kind" && k.value === "order" && qty !== 1) q.value = 1;
     if(src === "qty"  && qty > 1 && k.value === "order")   k.value = "oem";
@@ -363,7 +536,77 @@
     return v;
   }
 
+  /* 柄のデザインのみ。金額は利用範囲で決まるので数字は出さず、
+     いま分かっていること（納期の目安と、価格を決める条件）を返す。 */
+  function calcDesign(){
+    const d = designSpec();
+
+    $("e_out").dataset.mode = "design";
+    $("e_cap").textContent = "お見積り";
+    $("e_total").textContent = "内容にあわせて個別に算出します";
+    $("e_from").hidden = true;
+    $("e_unit").textContent = d.count > 1
+      ? "納期の目安：柄1点あたり3〜4週間 × " + d.count + "点"
+      : "納期の目安：柄1点あたり3〜4週間";
+
+    const rows = [
+      ["柄の点数", d.count + "点"],
+      ["仕上げ", d.finish],
+      ["柄の規模", d.scale],
+      ["使用する媒体", d.media.join(" / ") || "未選択"],
+      ["使用期間", d.period],
+      ["使用地域", d.area],
+      ["権利の形", d.right]
+    ];
+    $("e_break").innerHTML = rows.map(x =>
+      '<li><span>' + x[0] + '</span><span>' + x[1] + '</span></li>').join("");
+
+    $("e_vars").hidden = false;
+    $("e_varscap").textContent = "金額はこの3つでほぼ決まります";
+    $("e_varslist").innerHTML = [
+      "<strong>使用媒体</strong>　商品本体だけか、広告やパッケージにも展開するか",
+      "<strong>使用期間</strong>　イベント限定か、定番として使い続けるか",
+      "<strong>権利の形</strong>　使用許諾か、買い切り（著作権の譲渡）か"
+    ].map(x => "<li>" + x + "</li>").join("");
+
+    const recap = [
+      ["ご依頼の種類", "柄のデザインのみ"],
+      ["柄の点数", d.count + "点"],
+      ["仕上げ", d.finish],
+      ["柄の規模", d.scale],
+      ["色数の目安", d.colors],
+      ["のせるアイテム", d.item.join(" / ") || "未選択"],
+      ["使用する媒体", d.media.join(" / ") || "未選択"],
+      ["使用期間", d.period],
+      ["使用地域", d.area],
+      ["権利の形", d.right],
+      ["生産予定数", d.volume],
+      ["希望納期", d.due],
+      ["既存IPの持ち込み", d.ip],
+      ["クレジット表記", d.credit],
+      ["実績掲載", d.pr]
+    ];
+    if(d.motif) recap.push(["モチーフ・参考", d.motif]);
+
+    $("l_recap").innerHTML =
+      '<p class="est__recapcap">この内容で送信します</p><dl>' +
+      recap.map(x => "<dt>" + x[0] + "</dt><dd>" + x[1] + "</dd>").join("") + "</dl>";
+
+    return { design: d, recap: recap };
+  }
+
   function calc(){
+    /* 種類でフォームを切り替える */
+    const kind = f.elements.kind.value;
+    $("g_design").hidden  = kind !== "design";
+    $("g_product").hidden = kind === "design";
+    if(kind === "design") return calcDesign();
+
+    $("e_out").dataset.mode = "price";
+    $("e_cap").textContent = "概算（税込）";
+    $("e_from").hidden = false;
+    $("e_varscap").textContent = "次の選択で、ここから金額が上がります";
+
     enforceSleeve();
     const s = spec();
     const r = price(s);
@@ -414,6 +657,22 @@
   /* ---------- 正式見積もりの依頼 ---------- */
   function answers(){
     const st = calc();
+    if(f.elements.kind.value === "design"){
+      const d = st.design;
+      return {
+        form: "design",
+        name:  lf.elements.name.value.trim(),
+        email: lf.elements.email.value.trim(),
+        tel:   lf.elements.tel.value.trim(),
+        msg:   lf.elements.msg.value.trim(),
+        source:lf.elements.source.value,
+        kind:  "柄のデザインのみ",
+        count: d.count + "点", finish: d.finish, scale: d.scale, colors: d.colors,
+        item:  d.item, motif: d.motif,
+        media: d.media, period: d.period, area: d.area, right: d.right,
+        volume:d.volume, due: d.due, ip: d.ip, credit: d.credit, pr: d.pr
+      };
+    }
     const a = {
       name:  lf.elements.name.value.trim(),
       email: lf.elements.email.value.trim(),
@@ -431,10 +690,29 @@
       unit:  yen(st.unit) + "〜",
       total: yen(st.total) + "〜"
     };
+    a.form = "estimate";
     return a;
   }
 
   function mailtoFallback(a){
+    if(a.form === "design"){
+      const b = [
+        "お名前・会社名: " + a.name, "メール: " + a.email, "電話: " + a.tel,
+        "", "【柄のデザインのみ／伺った内容】",
+        "柄の点数: " + a.count, "仕上げ: " + a.finish, "柄の規模: " + a.scale,
+        "色数の目安: " + a.colors, "のせるアイテム: " + a.item.join(" / "),
+        "使用する媒体: " + a.media.join(" / "), "使用期間: " + a.period,
+        "使用地域: " + a.area, "権利の形: " + a.right, "生産予定数: " + a.volume,
+        "希望納期: " + a.due, "既存IP: " + a.ip, "クレジット: " + a.credit,
+        "実績掲載: " + a.pr,
+        "", "モチーフ・参考:", a.motif || "（未記入）",
+        "", "補足:", a.msg || "（未記入）",
+        "", "知ったきっかけ: " + a.source
+      ].join("\n");
+      return "mailto:" + MAIL + "?subject=" +
+        encodeURIComponent("【柄のデザインのご相談】" + (a.name || "")) +
+        "&body=" + encodeURIComponent(b);
+    }
     const body = [
       "お名前・会社名: " + a.name, "メール: " + a.email, "電話: " + a.tel,
       "", "【自動見積もりで選んだ内容】",
@@ -463,7 +741,7 @@
       try{
         const r = await fetch(ENDPOINT, {method:"POST",
           headers:{"Content-Type":"text/plain;charset=utf-8"},
-          body: JSON.stringify({secret:SHARED_SECRET, form:"estimate", answers:a, ua:navigator.userAgent})});
+          body: JSON.stringify({secret:SHARED_SECRET, form:a.form, answers:a, ua:navigator.userAgent})});
         ok = r.ok;
       }catch(err){ ok = false; }
     }

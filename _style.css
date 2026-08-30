@@ -422,6 +422,15 @@ a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accen
 .panel .est__break li{border-color:rgba(10,10,11,.14)}
 .est__break li span:last-child{font-family:var(--mono);white-space:nowrap}
 .est__break li.est__hint{color:var(--accent);border-bottom:0}
+/* 設問グループの見出し */
+.est__groupcap{grid-column:1/-1;font-family:var(--mono);font-size:12px;letter-spacing:.1em;
+  color:var(--fg-mute);margin:clamp(18px,2vw,28px) 0 4px;padding-top:clamp(14px,1.6vw,20px);
+  border-top:1px solid var(--line)}
+.panel .est__groupcap{color:#6E6E6A;border-color:rgba(10,10,11,.14)}
+.est__grid > .est__groupcap:first-child{margin-top:0;padding-top:0;border-top:0}
+/* 柄のデザインのみ。金額ではなく文章が入るので小さくする */
+.est__out[data-mode="design"] .est__total{font-family:var(--jp);font-weight:500;
+  font-size:clamp(19px,2.4vw,26px);line-height:1.5;letter-spacing:0}
 .est__vars{margin-top:clamp(18px,2vw,26px)}
 .est__varscap{font-family:var(--mono);font-size:12px;letter-spacing:.08em;
   color:var(--fg-mute);margin:0 0 8px}

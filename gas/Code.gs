@@ -9,6 +9,7 @@ const SHEET_ID   = 'ここにスプレッドシートのIDを入れる';  // URL
 const SHEET_NAME = 'briefs';        // ご依頼フォーム（brief.html）
 const CONTACT_SHEET = 'contacts';   // お問い合わせフォーム（contact.html）
 const ESTIMATE_SHEET = 'estimates'; // 自動見積もり（estimate.html）
+const DESIGN_SHEET = 'design';      // 柄のデザインのみ（estimate.html）
 const SECRET     = 'm5u0-yxSl-ByIk';   // build.py の FORM_SECRET と同じ文字列
 const NOTIFY_TO  = 'info@ichi-pj.com';   // 通知メールの宛先。空にすると送りません
 const AUTO_REPLY = true;                 // 送信者へ受付メールを自動で返すか
@@ -21,6 +22,14 @@ const HEADERS = [
   'ご依頼の種類','用途','ご要望','着数','希望納期','ご予算',
   '利用区分','地域','期間','媒体','商品ラインナップ',
   '支給物・持込IP','備考','制作コンセプト（自動生成）','UA'
+];
+
+const DESIGN_HEADERS = [
+  '受信日時','お名前・会社名','メール','電話',
+  '柄の点数','仕上げ','柄の規模','色数の目安','のせるアイテム',
+  '使用する媒体','使用期間','使用地域','権利の形','生産予定数',
+  '希望納期','既存IP','クレジット','実績掲載',
+  'モチーフ・参考','補足','知ったきっかけ','UA'
 ];
 
 const ESTIMATE_HEADERS = [
@@ -45,6 +54,9 @@ function doPost(e) {
 
     // 自動見積もり（estimate.html）からの正式見積もり依頼
     if (body.form === 'estimate') return handleEstimate_(body);
+
+    // 柄のデザインのみ（estimate.html）。金額は出さず、伺った条件を渡す
+    if (body.form === 'design') return handleDesign_(body);
 
     const a = body.answers || {};
     const d = body.doc || {};
@@ -116,6 +128,112 @@ function doPost(e) {
 }
 
 /** お問い合わせフォームを contacts シートに1行追加し、通知を送る */
+function handleDesign_(body) {
+  const a = body.answers || {};
+  const sh = sheet_(DESIGN_SHEET, DESIGN_HEADERS);
+  const item  = (a.item  || []).join(' / ');
+  const media = (a.media || []).join(' / ');
+
+  sh.appendRow([
+    new Date(),
+    a.name || '', a.email || '', a.tel || '',
+    a.count || '', a.finish || '', a.scale || '', a.colors || '', item,
+    media, a.period || '', a.area || '', a.right || '', a.volume || '',
+    a.due || '', a.ip || '', a.credit || '', a.pr || '',
+    a.motif || '', a.msg || '', a.source || '', body.ua || ''
+  ]);
+
+  if (AUTO_REPLY && a.email) {
+    MailApp.sendEmail({
+      to: a.email,
+      name: REPLY_NAME,
+      replyTo: NOTIFY_TO,
+      subject: '柄のデザインのご相談を承りました｜スカジャン絵師 横地広海知',
+      body: [
+        (a.name || '') + ' 様',
+        '',
+        'ご相談をありがとうございます。以下の内容で承りました。',
+        '柄のデザインの費用は、使用する媒体・期間・権利の形で決まります。',
+        'いただいた条件をもとに、1営業日以内にお見積りと進め方をご返信します。',
+        '',
+        '──────────────',
+        '柄の点数: ' + (a.count || '未記入'),
+        '仕上げ: ' + (a.finish || '未記入'),
+        '柄の規模: ' + (a.scale || '未記入'),
+        '色数の目安: ' + (a.colors || '未記入'),
+        'のせるアイテム: ' + (item || '未選択'),
+        '',
+        '使用する媒体: ' + (media || '未選択'),
+        '使用期間: ' + (a.period || '未記入'),
+        '使用地域: ' + (a.area || '未記入'),
+        '権利の形: ' + (a.right || '未記入'),
+        '生産予定数: ' + (a.volume || '未記入'),
+        '',
+        '希望納期: ' + (a.due || '未記入'),
+        '既存IPの持ち込み: ' + (a.ip || '未記入'),
+        'クレジット表記: ' + (a.credit || '未記入'),
+        '実績掲載: ' + (a.pr || '未記入'),
+        '──────────────',
+        '',
+        'モチーフ・参考:',
+        a.motif || '（未記入）',
+        '',
+        '補足:',
+        a.msg || '（未記入）',
+        '',
+        '※ このメールは自動送信です。ご返信いただければ担当に届きます。',
+        '',
+        REPLY_NAME,
+        '神奈川県横須賀市本町3-11-7 アイ\'s ビル 1F',
+        'https://hiromichiyokochi.com/'
+      ].join('\n')
+    });
+  }
+
+  if (NOTIFY_TO) {
+    MailApp.sendEmail({
+      to: NOTIFY_TO,
+      replyTo: a.email || NOTIFY_TO,
+      subject: '【柄のデザイン】' + (a.name || '名称未記入') + '／' + (a.count || '') +
+               '／' + (a.period || '') + '／' + (a.right || ''),
+      body: [
+        'お名前・会社名: ' + (a.name || ''),
+        'メール: ' + (a.email || ''),
+        '電話: ' + (a.tel || ''),
+        '',
+        '柄の点数: ' + (a.count || ''),
+        '仕上げ: ' + (a.finish || ''),
+        '柄の規模: ' + (a.scale || ''),
+        '色数の目安: ' + (a.colors || ''),
+        'のせるアイテム: ' + item,
+        '',
+        '使用する媒体: ' + media,
+        '使用期間: ' + (a.period || ''),
+        '使用地域: ' + (a.area || ''),
+        '権利の形: ' + (a.right || ''),
+        '生産予定数: ' + (a.volume || ''),
+        '',
+        '希望納期: ' + (a.due || ''),
+        '既存IP: ' + (a.ip || ''),
+        'クレジット: ' + (a.credit || ''),
+        '実績掲載: ' + (a.pr || ''),
+        '',
+        'モチーフ・参考:',
+        a.motif || '（未記入）',
+        '',
+        '補足:',
+        a.msg || '（未記入）',
+        '',
+        '知ったきっかけ: ' + (a.source || ''),
+        'UA: ' + (body.ua || '')
+      ].join('\n')
+    });
+  }
+
+  return json({ ok: true });
+}
+
+
 function handleEstimate_(body) {
   const a = body.answers || {};
   const sh = sheet_(ESTIMATE_SHEET, ESTIMATE_HEADERS);
