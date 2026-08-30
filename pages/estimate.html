@@ -101,7 +101,7 @@
         </div>
 
         <p class="note">※ 表示されるのは<strong>下限の目安</strong>です。刺繍の面積・柄の複雑さにより変動します。<br>
-          ※ <strong>49着まで</strong>は一着ずつ横振り刺繍で仕上げます。単価に背中の刺繍代とデザイン費が含まれ、胸・袖は1箇所ごとに加算されます。<br>
+          ※ <strong>49着まで</strong>は一着ずつ横振り刺繍で仕上げます。基本料金にボディ代・デザイン費・刺繍（背中1箇所と胸2箇所）が含まれ、それを超える箇所だけが加算されます。<br>
           ※ <strong>50着から</strong>は機械刺繍での量産です。製品代のほかに、デザイン費と刺繍データ（型）代が最初に一度だけかかります。着数で割るため、数が増えるほど一着あたりの負担は下がります。<br>
           ※ 正式なお見積りは、生地と縫製の手配先に在庫と工程を確認したうえでお出しします。上記との差が出る場合は、どの工程で何が変わったのかを添えてご説明します。<br>
           ※ この画面の金額は契約上の見積書ではありません。</p>
@@ -194,6 +194,18 @@
   const MASS_FROM = 50;             // この着数から量産あつかい
 
   const EMB = { back: 44000, chest: 11000, sleeve: 16500 };  // 横振り刺繍の刺繍代
+
+  /* 基本料金 165,000円（税込）の内訳。委託契約書 第2条による。
+       着手金（ボディ代） 22,000
+       デザイン保証金     77,000  ← デザイン費
+       残金（刺繍代）     66,000  ← 背中 44,000 ＋ 胸 11,000 × 2
+     つまり基本料金には「背中1箇所＋胸2箇所」の刺繍が含まれる。
+     胸3箇所目以降と袖だけが加算される。
+     「ボディの形から作る」220,000円は内訳が契約書にないため、
+     デザイン費と刺繍代は同額、差分はボディ代とみなしている。 */
+  const INCLUDED = { chest: 2 };                    // 基本料金に含まれる胸の箇所数
+  const ORDER = { design: 77000, emb: 66000 };      // オーダーメイドのデザイン費／含まれる刺繍代
+
   const ONCE = { design: 100000, data: 50000 };              // 量産で一度だけかかるもの
 
   const MASS_UP = {                 // 量産の割増（製品代に対して）
@@ -288,18 +300,23 @@
     let sub = 0;
 
     if(!mass){
-      const embAdd = chest * EMB.chest + sleeve * EMB.sleeve;
-      const embAll = (back ? EMB.back : 0) + embAdd;
-      let per = unit + embAdd;
-      if(rev) per += embAll;                       // 刺繍代が2倍
-      const productTotal = per * s.qty;
-      sub += productTotal;
+      /* 基本料金に含まれない箇所だけを足す（胸は3箇所目から、袖は全部） */
+      const extraChest = Math.max(0, chest - INCLUDED.chest);
+      const embAdd = extraChest * EMB.chest + sleeve * EMB.sleeve;
+      /* リバーシブルは刺繍代とデザイン費が2倍 */
+      const revAdd = rev ? (ORDER.emb + embAdd) + ORDER.design : 0;
+      const per = unit + embAdd + revAdd;
+      sub += per * s.qty;
 
-      rows.push(["製品代（" + s.bodyTxt + "）／背中の刺繍・デザイン費込み",
+      rows.push(["製品代（" + s.bodyTxt + "）／ボディ・デザイン費・刺繍（背中＋胸2箇所）込み",
                  yen(unit * s.qty) + "〜"]);
-      if(embAdd) rows.push(["刺繍の追加（胸 " + chest + " ／袖 " + sleeve + "）",
-                            "+ " + yen(embAdd * s.qty)]);
-      if(rev)    rows.push(["リバーシブル（刺繍代が2倍）", "+ " + yen(embAll * s.qty)]);
+      if(embAdd){
+        const parts = [];
+        if(extraChest) parts.push("胸 " + extraChest + " 箇所");
+        if(sleeve)     parts.push("袖 " + sleeve + " 箇所");
+        rows.push(["刺繍の追加（" + parts.join("／") + "）", "+ " + yen(embAdd * s.qty)]);
+      }
+      if(rev) rows.push(["リバーシブル（刺繍代とデザイン費が2倍）", "+ " + yen(revAdd * s.qty)]);
     }else{
       let mult = 1;
       if(s.colors === "complex") mult *= MASS_UP.complex;
@@ -340,13 +357,9 @@
     if(!r.mass && s.colors === "complex")
       v.push("色数・柄の密度が複雑（7色以上・ぼかしや描き込み）");
     if(!r.mass && s.fabric === "別珍") v.push("生地が別珍");
-    if(!r.mass && r.rev)
-      v.push("リバーシブルはデザイン費も2倍になります（基本料金に含まれるため、正式なお見積りでご提示します）");
     if(r.mass && (s.place.includes("右胸") || s.place.includes("左胸") ||
                   s.place.includes("右袖") || s.place.includes("左袖")))
       v.push("背中以外の刺繍箇所（量産の刺繍代は仕様により変わるため、正式なお見積りでご提示します）");
-    if(!s.place.includes("背中"))
-      v.push("背中に刺繍を入れない場合の金額は、個別にお見積りします");
     return v;
   }
 
