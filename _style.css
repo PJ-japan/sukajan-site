@@ -11,7 +11,7 @@
   --bg-2:    #121214;
   --fg:      #EDEDEA;
   --fg-dim:  #8B8B88;
-  --fg-mute: #55555A;
+  --fg-mute: #7A7A78;   /* 近黒の上で 4.6:1。9.5〜13px の補助テキストに使う */
   --line:    #26262A;
   --accent:  #FF3B14;
 
@@ -289,7 +289,7 @@ html{scroll-padding-top:84px}
 .panel .lead{color:var(--bg)}
 .panel h2,.panel h3,.panel h4{color:var(--bg)}
 .panel .tag__en{color:var(--bg)}
-.panel .tag__ja,.panel .note,.panel .band__aside p:not(.tag){color:#8A8A86}
+.panel .tag__ja,.panel .note,.panel .band__aside p:not(.tag){color:#646461}
 .panel strong{color:var(--bg);box-shadow:inset 0 -.42em 0 rgba(255,59,20,.24)}
 .panel a.link{border-bottom-color:#B4B4B0}
 .panel a.link:hover{color:var(--accent);border-bottom-color:var(--accent)}
@@ -368,7 +368,7 @@ html{scroll-padding-top:84px}
   font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--fg-mute);background:var(--bg-2);border:1px solid var(--line);
   transition:background .4s var(--ease),border-color .4s var(--ease),color .4s var(--ease)}
-.panel .slot{background:rgba(10,10,11,.05);border-color:rgba(10,10,11,.14);color:#8A8A86}
+.panel .slot{background:rgba(10,10,11,.05);border-color:rgba(10,10,11,.14);color:#646461}
 a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accent)}
 .slot--wide{aspect-ratio:16/9}
 
@@ -379,7 +379,7 @@ a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accen
 .panel .figure img{border-color:rgba(10,10,11,.14);background:rgba(10,10,11,.05)}
 .figure figcaption{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
   line-height:1.9;color:var(--fg-mute);margin-top:12px}
-.panel .figure figcaption{color:#8A8A86}
+.panel .figure figcaption{color:#646461}
 
 /* 写真グリッド（刺繍の仕上がりなど）。図版は 4:5 に揃える */
 .shots{display:grid;grid-template-columns:repeat(2,1fr);
@@ -390,7 +390,7 @@ a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accen
 .panel .shots img{background:rgba(10,10,11,.05);border-color:rgba(10,10,11,.14)}
 .shots figcaption{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
   line-height:1.9;color:var(--fg-mute);margin-top:10px}
-.panel .shots figcaption{color:#8A8A86}
+.panel .shots figcaption{color:#646461}
 
 /* 動画（作画・制作）。読み込みは再生するまで発生させない */
 .video{margin:clamp(26px,3vw,42px) 0 0}
@@ -399,7 +399,7 @@ a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accen
 .panel .video video{background:rgba(10,10,11,.05);border-color:rgba(10,10,11,.14)}
 .video figcaption{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
   line-height:1.9;color:var(--fg-mute);margin-top:12px}
-.panel .video figcaption{color:#8A8A86}
+.panel .video figcaption{color:#646461}
 
 /* --------------------------------------------------------------------------
    自動見積もり（estimate.html）
@@ -414,13 +414,13 @@ a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accen
   border:1px solid var(--accent)}
 .est__cap{font-family:var(--mono);font-size:12px;letter-spacing:.12em;
   text-transform:uppercase;color:var(--fg-mute);margin:0}
-.panel .est__cap{color:#8A8A86}
+.panel .est__cap{color:#646461}
 .est__total{font-family:var(--display);font-weight:800;font-size:clamp(34px,5.4vw,58px);line-height:1.05;
   letter-spacing:-.02em;margin:8px 0 0;color:var(--accent)}
 .est__from{font-size:.5em;letter-spacing:0;margin-left:.1em}
 .est__unit{font-family:var(--mono);font-size:13px;letter-spacing:.05em;
   color:var(--fg-mute);margin:10px 0 0}
-.panel .est__unit{color:#6E6E6A}
+.panel .est__unit{color:#646461}
 .est__break{list-style:none;margin:clamp(18px,2vw,26px) 0 0;padding:0;
   border-top:1px solid var(--line)}
 .panel .est__break{border-color:rgba(10,10,11,.14)}
@@ -440,7 +440,7 @@ a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accen
 .est__groupcap{grid-column:1/-1;font-family:var(--mono);font-size:12px;letter-spacing:.1em;
   color:var(--fg-mute);margin:clamp(18px,2vw,28px) 0 4px;padding-top:clamp(14px,1.6vw,20px);
   border-top:1px solid var(--line)}
-.panel .est__groupcap{color:#6E6E6A;border-color:rgba(10,10,11,.14)}
+.panel .est__groupcap{color:#646461;border-color:rgba(10,10,11,.14)}
 .est__grid > .est__groupcap:first-child{margin-top:0;padding-top:0;border-top:0}
 /* 柄のデザインのみ。金額ではなく文章が入るので小さくする */
 .est__out[data-mode="design"] .est__total{font-family:var(--jp);font-weight:500;
@@ -451,7 +451,7 @@ a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accen
 .est__vars{margin-top:clamp(18px,2vw,26px)}
 .est__varscap{font-family:var(--mono);font-size:12px;letter-spacing:.08em;
   color:var(--fg-mute);margin:0 0 8px}
-.panel .est__varscap{color:#6E6E6A}
+.panel .est__varscap{color:#646461}
 .est__vars ul{margin:0;padding-left:1.2em}
 .est__vars li{font-size:14px;line-height:2}
 
@@ -459,15 +459,17 @@ a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accen
   border:1px solid var(--line);background:var(--bg-2)}
 .panel .est__recap{border-color:rgba(10,10,11,.14);background:rgba(10,10,11,.04)}
 .est__recapcap{font-family:var(--mono);font-size:12px;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--fg-mute);margin:0 0 14px}
+  text-transform:uppercase;color:var(--fg-dim);margin:0 0 14px}
 .est__recap dl{display:grid;grid-template-columns:auto 1fr;gap:7px 18px;margin:0;
   font-size:14px;line-height:1.8}
 .est__recap dt{font-family:var(--mono);font-size:12px;letter-spacing:.04em;
-  color:var(--fg-mute);white-space:nowrap}
-.panel .est__recap dt{color:#6E6E6A}
+  color:var(--fg-dim);white-space:nowrap}
+.panel .est__recap dt{color:#646461}
 .est__recap dd{margin:0}
-.req{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+.req{font-family:var(--mono);font-size:11px;letter-spacing:.1em;
   color:var(--accent);margin-left:.5em}
+/* 明るい帯では朱の小さな文字が読めない。淡い地を敷く */
+.panel .req{color:var(--bg);background:rgba(255,59,20,.15);padding:2px 7px}
 
 /* 地図の埋め込み */
 .map{margin:clamp(28px,3vw,48px) 0 0;border:1px solid var(--line);
@@ -509,7 +511,7 @@ tbody th{font-weight:400;white-space:nowrap;color:var(--fg)}
   table:not(:has(tr > *:nth-child(3))) tbody th{font-size:11px;letter-spacing:.1em;
     color:var(--fg-mute);margin-bottom:5px}
   .panel table:not(:has(tr > *:nth-child(3))) tr{border-bottom-color:rgba(10,10,11,.14)}
-  .panel table:not(:has(tr > *:nth-child(3))) tbody th{color:#8A8A86}
+  .panel table:not(:has(tr > *:nth-child(3))) tbody th{color:#646461}
 }
 
 /* --------------------------------------------------------------------------
@@ -558,7 +560,8 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
 
 .field{margin-bottom:26px;max-width:34em}
 .field label{display:block;font-family:var(--mono);font-size:13px;letter-spacing:.06em;
-  text-transform:uppercase;color:#8A8A86;margin-bottom:10px}
+  text-transform:uppercase;color:var(--fg-mute);margin-bottom:10px}
+.panel .field label{color:#646461}
 /* 入力欄は暗い背景を既定にし、.panel（明るい帯）で反転させる。
    逆にしていたため、暗い帯に置いたフォームで黒い文字が読めなくなっていた */
 .field input,.field select,.field textarea{
