@@ -100,8 +100,9 @@
           </div>
         </div>
 
-        <p class="note">※ 表示されるのは<strong>下限の目安</strong>です。刺繍の面積・色数・柄の複雑さ・生地により変動します。<br>
-          ※ 50着以上は、デザイン費と刺繍データ（型）代が別途かかります。着数で割るため、数が増えるほど一着あたりの負担は下がります。<br>
+        <p class="note">※ 表示されるのは<strong>下限の目安</strong>です。刺繍の面積・柄の複雑さにより変動します。<br>
+          ※ <strong>49着まで</strong>は一着ずつ横振り刺繍で仕上げます。単価に背中の刺繍代とデザイン費が含まれ、胸・袖は1箇所ごとに加算されます。<br>
+          ※ <strong>50着から</strong>は機械刺繍での量産です。製品代のほかに、デザイン費と刺繍データ（型）代が最初に一度だけかかります。着数で割るため、数が増えるほど一着あたりの負担は下がります。<br>
           ※ 正式なお見積りは、生地と縫製の手配先に在庫と工程を確認したうえでお出しします。上記との差が出る場合は、どの工程で何が変わったのかを添えてご説明します。<br>
           ※ この画面の金額は契約上の見積書ではありません。</p>
       </div>
@@ -183,7 +184,25 @@
     ready:   [[1, 49, 165000], [50, 99, 38500], [100, null, 18700]],
     scratch: [[1, 49, 220000], [50, 99, 49500], [100, null, 27500]]
   };
-  const DESIGN_INCLUDED_MAX = 49;   // この着数までは1着単価にデザイン費が含まれる
+
+  /* ------------------------------------------------------------------
+     加算のルール。すべて税込。
+     49着までを「オーダーメイド（横振り刺繍・一点もの）」、
+     50着からを「量産（機械刺繍）」として、別の計算をする。
+     刺繍代の単価は横振り刺繍のものなので、量産には掛けない。
+     ------------------------------------------------------------------ */
+  const MASS_FROM = 50;             // この着数から量産あつかい
+
+  const EMB = { back: 44000, chest: 11000, sleeve: 16500 };  // 横振り刺繍の刺繍代
+  const ONCE = { design: 100000, data: 50000 };              // 量産で一度だけかかるもの
+
+  const MASS_UP = {                 // 量産の割増（製品代に対して）
+    complex:    1.1,                // 色数・柄の密度が複雑
+    betchin:    1.1,                // 生地が別珍
+    reversible: 1.7                 // リバーシブル
+  };
+  const REVERSIBLE_DESIGN = 2;      // リバーシブルはデザイン費が2倍
+  const RUSH = 0.2;                 // 特急は2割増
 
   const $ = id => document.getElementById(id);
   const f = $("estform"), lf = $("leadform");
@@ -240,48 +259,119 @@
     }
   }
 
-  function variables(s){
+  /* ------------------------------------------------------------------
+     金額の計算
+
+     49着まで（オーダーメイド・横振り刺繍）
+       製品代  = 表の単価（背中1箇所・デザイン費込みの下限）
+       刺繍加算 = 胸 11,000／袖 16,500（1箇所あたり）
+       リバーシブル = 刺繍代が2倍（背中＋加算をもう一度足す）
+                     ※ デザイン費も2倍になるが、単価に含まれているため
+                        ここでは金額に反映せず、注記で伝える
+
+     50着から（量産・機械刺繍）
+       製品代  = 表の単価 × 割増（複雑1.1／別珍1.1／リバーシブル1.7）
+       一度だけ = デザイン費 100,000〜（リバーシブルは2倍）＋ 型代 50,000〜
+       ※ 刺繍箇所の加算は横振り刺繍の単価なので、量産には掛けない
+
+     特急はいずれも小計の2割増。
+     ------------------------------------------------------------------ */
+  function price(s){
+    const mass = s.qty >= MASS_FROM;
+    const unit = unitPrice(s.body, s.qty);
+    const chest  = s.place.filter(p => p === "右胸" || p === "左胸").length;
+    const sleeve = s.place.filter(p => p === "右袖" || p === "左袖").length;
+    const back   = s.place.includes("背中");
+    const rev    = s.side === "リバーシブル";
+
+    const rows = [];
+    let sub = 0;
+
+    if(!mass){
+      const embAdd = chest * EMB.chest + sleeve * EMB.sleeve;
+      const embAll = (back ? EMB.back : 0) + embAdd;
+      let per = unit + embAdd;
+      if(rev) per += embAll;                       // 刺繍代が2倍
+      const productTotal = per * s.qty;
+      sub += productTotal;
+
+      rows.push(["製品代（" + s.bodyTxt + "）／背中の刺繍・デザイン費込み",
+                 yen(unit * s.qty) + "〜"]);
+      if(embAdd) rows.push(["刺繍の追加（胸 " + chest + " ／袖 " + sleeve + "）",
+                            "+ " + yen(embAdd * s.qty)]);
+      if(rev)    rows.push(["リバーシブル（刺繍代が2倍）", "+ " + yen(embAll * s.qty)]);
+    }else{
+      let mult = 1;
+      if(s.colors === "complex") mult *= MASS_UP.complex;
+      if(s.fabric === "別珍")    mult *= MASS_UP.betchin;
+      if(rev)                    mult *= MASS_UP.reversible;
+      const per = Math.round(unit * mult);
+      const productTotal = per * s.qty;
+      sub += productTotal;
+
+      rows.push(["製品代（" + s.bodyTxt + "）", yen(unit * s.qty) + "〜"]);
+      if(mult !== 1){
+        const up = [];
+        if(s.colors === "complex") up.push("色数・柄の密度が複雑 +10%");
+        if(s.fabric === "別珍")    up.push("別珍 +10%");
+        if(rev)                    up.push("リバーシブル ×1.7");
+        rows.push([up.join("／"), "+ " + yen(productTotal - unit * s.qty)]);
+      }
+
+      const design = ONCE.design * (rev ? REVERSIBLE_DESIGN : 1);
+      sub += design + ONCE.data;
+      rows.push(["デザイン費" + (rev ? "（リバーシブルのため2倍）" : ""), yen(design) + "〜"]);
+      rows.push(["刺繍データ（型）代", yen(ONCE.data) + "〜"]);
+    }
+
+    let rush = 0;
+    if(s.due === "rush"){
+      rush = Math.round(sub * RUSH);
+      rows.push(["特急料金（2割増）", "+ " + yen(rush)]);
+    }
+
+    const total = sub + rush;
+    return { total: total, per: Math.round(total / s.qty), rows: rows, mass: mass, rev: rev };
+  }
+
+  /* 金額に反映していない要素だけを並べる */
+  function variables(s, r){
     const v = [];
-    if(s.place.length >= 2) v.push("刺繍箇所が" + s.place.length + "箇所（背中のみが下限です）");
-    if(s.colors === "standard") v.push("色数・柄の密度が標準（4〜6色）");
-    if(s.colors === "complex")  v.push("色数・柄の密度が複雑（7色以上・ぼかしや描き込み）");
-    if(s.fabric === "別珍")     v.push("生地が別珍");
-    if(s.side === "リバーシブル") v.push("リバーシブル仕様");
-    if(s.due === "rush")        v.push("お急ぎ（別途特急料金がかかります）");
+    if(!r.mass && s.colors === "complex")
+      v.push("色数・柄の密度が複雑（7色以上・ぼかしや描き込み）");
+    if(!r.mass && s.fabric === "別珍") v.push("生地が別珍");
+    if(!r.mass && r.rev)
+      v.push("リバーシブルはデザイン費も2倍になります（基本料金に含まれるため、正式なお見積りでご提示します）");
+    if(r.mass && (s.place.includes("右胸") || s.place.includes("左胸") ||
+                  s.place.includes("右袖") || s.place.includes("左袖")))
+      v.push("背中以外の刺繍箇所（量産の刺繍代は仕様により変わるため、正式なお見積りでご提示します）");
+    if(!s.place.includes("背中"))
+      v.push("背中に刺繍を入れない場合の金額は、個別にお見積りします");
     return v;
   }
 
   function calc(){
     enforceSleeve();
     const s = spec();
-    const unit = unitPrice(s.body, s.qty);
-    const total = unit * s.qty;
-    const designIncluded = s.qty <= DESIGN_INCLUDED_MAX;
+    const r = price(s);
 
-    $("e_total").textContent = yen(total);
+    $("e_total").textContent = yen(r.total);
     $("e_unit").textContent = s.qty > 1
-      ? "1着あたり " + yen(unit) + "〜 × " + s.qty + "着"
-      : "1着あたり " + yen(unit) + "〜";
+      ? "1着あたり " + yen(r.per) + "〜 × " + s.qty + "着"
+      : "1着あたり " + yen(r.per) + "〜";
 
-    const rows = [];
-    rows.push(["製品代（" + s.bodyTxt + "）" + (designIncluded ? "／デザイン費込み" : ""), yen(total) + "〜"]);
-    if(!designIncluded){
-      rows.push(["デザイン費", "別途"]);
-      rows.push(["刺繍データ（型）代", "別途"]);
-    }
-    if(s.due === "rush") rows.push(["特急料金", "別途"]);
-    $("e_break").innerHTML = rows.map(r =>
-      '<li><span>' + r[0] + '</span><span>' + r[1] + '</span></li>').join("");
+    let html = r.rows.map(x =>
+      '<li><span>' + x[0] + '</span><span>' + x[1] + '</span></li>').join("");
 
-    /* 50着から1着あたりの単価が大きく下がる。手前の着数なら知らせる */
-    const brk = $("e_break");
+    /* 50着から1着あたりが大きく下がる。手前の着数なら並べて見せる */
     if(s.qty >= 35 && s.qty <= 49){
-      const at50 = unitPrice(s.body, 50) * 50;
-      brk.insertAdjacentHTML("beforeend",
-        '<li class="est__hint"><span>50着にすると</span><span>' + yen(at50) + '〜</span></li>');
+      const at50 = price(Object.assign({}, s, { qty: 50 }));
+      html += '<li class="est__hint"><span>50着にすると</span><span>' +
+              yen(at50.total) + '〜</span></li>';
     }
+    $("e_break").innerHTML = html;
 
-    const v = variables(s);
+    const v = variables(s, r);
     $("e_vars").hidden = v.length === 0;
     $("e_varslist").innerHTML = v.map(x => "<li>" + x + "</li>").join("");
 
@@ -295,13 +385,13 @@
       ["生地", s.fabric],
       ["仕様", s.side],
       ["希望納期", s.dueTxt],
-      ["画面に出た概算", yen(total) + "〜（税込）"]
+      ["画面に出た概算", yen(r.total) + "〜（税込）"]
     ];
     $("l_recap").innerHTML =
       '<p class="est__recapcap">この内容で送信します</p><dl>' +
-      recap.map(r => "<dt>" + r[0] + "</dt><dd>" + r[1] + "</dd>").join("") + "</dl>";
+      recap.map(x => "<dt>" + x[0] + "</dt><dd>" + x[1] + "</dd>").join("") + "</dl>";
 
-    return { s: s, unit: unit, total: total, recap: recap };
+    return { s: s, unit: r.per, total: r.total, recap: recap };
   }
 
   f.addEventListener("input",  e => { syncKind(e.target.name); calc(); });
