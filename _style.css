@@ -806,8 +806,11 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
 
 .wiz__nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:clamp(32px,3.6vw,52px);
   padding-top:24px;border-top:1px solid var(--line)}
-.wiz__err{font-family:var(--mono);font-size:10.5px;color:var(--accent);
+.wiz__err{font-family:var(--jp);font-size:13.5px;color:var(--accent);
   margin:14px 0 0;min-height:1.4em}
+/* 明るい帯では朱の文字がコントラスト不足になる。淡い地を敷いて読ませる */
+.panel .wiz__err:not(:empty){color:var(--bg);background:rgba(255,59,20,.12);
+  padding:10px 14px;margin-top:16px}
 
 /* 確認画面 */
 .wiz__review{display:grid;gap:clamp(24px,3vw,44px)}
@@ -818,7 +821,9 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
   font-family:var(--jp);font-size:13px;line-height:1.9;color:var(--fg-dim)}
 .consent input{margin-top:6px;accent-color:var(--accent)}
 .wiz__sent{border:1px solid var(--accent);padding:20px 22px;margin-top:20px;
-  font-family:var(--mono);font-size:11px;line-height:1.9;color:var(--fg)}
+  font-family:var(--jp);font-size:14px;line-height:1.95;color:var(--fg)}
+/* 明るい帯の中では文字色を反転させる。白地に白文字になっていた */
+.panel .wiz__sent{color:var(--bg)}
 
 .doc__draft{border:1px solid #FF3B14;background:#fff6f4;padding:12px 14px;
   margin:0 0 22px;font-size:11.5px;line-height:1.9;color:#111}
