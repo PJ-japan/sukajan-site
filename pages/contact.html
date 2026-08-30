@@ -15,73 +15,118 @@
         <p>分かる範囲で構いません。</p>
       </div>
       <div class="band__main">
-        <h2>スカジャンのお問い合わせ</h2>
-        <p class="lead"><strong>お見積りのご依頼は<a class="link" href="estimate.html">見積もり・ご相談のページ</a>が早いです。</strong>ご依頼の種類を選ぶと必要な項目だけが出て、オーダーとOEMはその場で概算が出ます。メールアドレスの入力は不要です。<br>このページは、取材のご依頼、ご来店の予約、その他のご相談にお使いください。</p>
+        <h2>ご来店・取材のお問い合わせ</h2>
+        <p class="lead"><strong>制作のご依頼・お見積りは<a class="link" href="estimate.html">見積もり・ご相談のページ</a>へどうぞ。</strong>ご依頼の種類を選ぶと必要な項目だけが出て、オーダーとOEMはその場で概算が出ます。メールアドレスの入力は不要です。</p>
+        <p class="lead">このページは、<strong>ご来店のご相談、取材・出演のご依頼、その他のお問い合わせ</strong>にお使いください。</p>
         <form id="cform" novalidate>
           <div class="field">
-            <label for="kind">ご依頼の種類</label>
+            <label for="kind">ご用件</label>
             <select id="kind" name="kind">
-              <option>フルオーダー（一着）</option>
-              <option>ブランド別注・量産</option>
-              <option>柄のデザインのみ</option>
-              <option>来店して相談したい</option>
-              <option>取材・その他</option>
+              <option value="visit">来店して相談したい</option>
+              <option value="press">取材・出演のご依頼</option>
+              <option value="other">その他のお問い合わせ</option>
             </select>
           </div>
-          <div class="field">
-            <label for="qty">おおよその着数</label>
-            <input id="qty" name="qty" type="text" placeholder="1着 / 30着 / 100着以上 など">
-          </div>
-          <div class="field">
-            <label for="due">納品したい日</label>
-            <input id="due" name="due" type="text" placeholder="2026年12月上旬 / 未定 など">
-          </div>
-          <div class="field">
-            <label for="budget">ご予算</label>
-            <input id="budget" name="budget" type="text" placeholder="上限があればお知らせください">
-          </div>
-          <div class="field">
-            <label for="art">デザインの状態</label>
-            <select id="art" name="art">
-              <option>デザインから依頼したい</option>
-              <option>ラフや資料がある</option>
-              <option>完成データがある</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>刺繍を入れたい箇所</label>
-            <div class="checks">
-              <label><input type="checkbox" name="place" value="背中">背中</label>
-              <label><input type="checkbox" name="place" value="右袖">右袖</label>
-              <label><input type="checkbox" name="place" value="左袖">左袖</label>
-              <label><input type="checkbox" name="place" value="右胸">右胸</label>
-              <label><input type="checkbox" name="place" value="左胸">左胸</label>
+
+          <!-- 来店 -->
+          <div id="g_visit">
+            <div class="field">
+              <label for="v_date">ご希望日</label>
+              <input id="v_date" name="v_date" type="date">
+            </div>
+            <div class="field">
+              <label for="v_time">ご希望の時間帯</label>
+              <select id="v_time" name="v_time">
+                <option>午前</option>
+                <option>午後</option>
+                <option>夕方以降</option>
+                <option>相談したい</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="v_num">ご来店人数</label>
+              <input id="v_num" name="v_num" type="text" placeholder="1名 / 2名 など">
+            </div>
+            <div class="field">
+              <label>ご覧になりたいもの</label>
+              <div class="checks">
+                <label><input type="checkbox" name="v_see" value="スカジャンの実物">スカジャンの実物</label>
+                <label><input type="checkbox" name="v_see" value="横振り刺繍と機械刺繍の比較">横振りと機械刺繍の比較</label>
+                <label><input type="checkbox" name="v_see" value="生地見本">生地見本</label>
+                <label><input type="checkbox" name="v_see" value="ペイントカスタム">ペイントカスタム</label>
+                <label><input type="checkbox" name="v_see" value="ヴィンテージコレクション">ヴィンテージコレクション</label>
+              </div>
             </div>
           </div>
+
+          <!-- 取材・出演 -->
+          <div id="g_press" hidden>
+            <div class="field">
+              <label for="p_outlet">媒体名</label>
+              <input id="p_outlet" name="p_outlet" type="text" placeholder="番組名・誌名・サイト名など">
+            </div>
+            <div class="field">
+              <label for="p_type">媒体の種類</label>
+              <select id="p_type" name="p_type">
+                <option>テレビ</option>
+                <option>雑誌・新聞</option>
+                <option>Webメディア</option>
+                <option>ラジオ・ポッドキャスト</option>
+                <option>書籍</option>
+                <option>YouTube・SNS</option>
+                <option>学生・研究・卒業制作</option>
+                <option>その他</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="p_form">ご依頼の形式</label>
+              <select id="p_form" name="p_form">
+                <option>インタビュー取材</option>
+                <option>撮影あり（店舗・制作風景など）</option>
+                <option>番組・イベントへの出演</option>
+                <option>コメント・監修のみ</option>
+                <option>写真・資料の貸出</option>
+                <option>まだ決まっていない</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="p_when">取材のご希望日</label>
+              <input id="p_when" name="p_when" type="text" placeholder="2026年10月上旬 / 未定 など">
+            </div>
+            <div class="field">
+              <label for="p_pub">掲載・放送の予定日</label>
+              <input id="p_pub" name="p_pub" type="text" placeholder="決まっていなければ「未定」で構いません">
+            </div>
+            <div class="field">
+              <label for="p_where">取材場所</label>
+              <select id="p_where" name="p_where">
+                <option>ICHIドブ板本店</option>
+                <option>ドブ板通り周辺</option>
+                <option>オンライン</option>
+                <option>スタジオ等へ伺う</option>
+                <option>相談したい</option>
+              </select>
+            </div>
+          </div>
+
           <div class="field">
-            <label for="colors">色数・柄の密度</label>
-            <select id="colors" name="colors">
-              <option value="">選択してください</option>
-              <option>シンプル（2〜3色・ワンポイント中心）</option>
-              <option>標準（4〜6色・背中に一図案）</option>
-              <option>複雑（7色以上・ぼかしや描き込みが多い）</option>
-              <option>まだ分からない</option>
-            </select>
+            <label for="name">お名前・会社名 <span class="req">必須</span></label>
+            <input id="name" name="name" type="text" required autocomplete="organization">
           </div>
           <div class="field">
-            <label for="name">お名前・会社名</label>
-            <input id="name" name="name" type="text" required>
+            <label for="email">メールアドレス <span class="req">必須</span></label>
+            <input id="email" name="email" type="email" required autocomplete="email" inputmode="email">
           </div>
           <div class="field">
-            <label for="email">メールアドレス</label>
-            <input id="email" name="email" type="email" required>
+            <label for="tel">お電話番号</label>
+            <input id="tel" name="tel" type="tel" autocomplete="tel" placeholder="任意">
           </div>
           <div class="field">
             <label for="msg">ご相談内容</label>
-            <textarea id="msg" name="msg" placeholder="入れたいモチーフ、用途、背景など。決まっていなくても構いません。"></textarea>
+            <textarea id="msg" name="msg" placeholder="企画の趣旨、聞きたいこと、ご事情など。決まっていなくても構いません。"></textarea>
           </div>
           <div class="field">
-            <label for="source">サイトを知ったきっかけ</label>
+            <label for="source">当サイトを知ったきっかけ</label>
             <select id="source" name="source">
               <option value="">選択してください</option>
               <option>検索（Google・Yahoo! など）</option>
@@ -96,6 +141,7 @@
               <option>その他</option>
             </select>
           </div>
+
           <button class="btn btn--solid" type="submit" id="csend">送信する</button>
           <p class="wiz__err" id="cerr"></p>
           <div class="wiz__sent" id="csent" hidden></div>
@@ -105,10 +151,6 @@
 
 <script>
 (function(){
-  /* ------------------------------------------------------------------
-     送信先。brief.html と同じ Google Apps Script のURLを入れてください。
-     設定手順は gas/README.md を参照。空のままだとメール送信に切り替わります。
-     ------------------------------------------------------------------ */
   const ENDPOINT = "";           // 例: "https://script.google.com/macros/s/XXXX/exec"
   const SHARED_SECRET = "change-me";
   const MAIL = "info@ichi-pj.com";
@@ -116,28 +158,54 @@
   const $ = id => document.getElementById(id);
   const f = $("cform"); if(!f) return;
 
+  /* ご用件でフォームを切り替える */
+  function sync(){
+    const k = f.elements.kind.value;
+    $("g_visit").hidden = k !== "visit";
+    $("g_press").hidden = k !== "press";
+  }
+  f.addEventListener("change", e => { if(e.target.name === "kind") sync(); });
+  sync();
+
+  const val = n => { const el = f.elements[n]; return el ? el.value.trim() : ""; };
+  const checked = n => [...f.querySelectorAll('input[name="' + n + '"]:checked')].map(i => i.value);
+
   function values(){
-    const a = {};
-    ["kind","qty","due","budget","art","colors","name","email","msg","source"].forEach(k=>{
-      const el = f.elements[k]; if(el) a[k] = el.value.trim();
-    });
-    a.place = [...f.querySelectorAll('input[name="place"]:checked')].map(i=>i.value);
+    const k = f.elements.kind.value;
+    const a = {
+      kind: f.elements.kind.selectedOptions[0].textContent,
+      kindKey: k,
+      name: val("name"), email: val("email"), tel: val("tel"),
+      msg: val("msg"), source: val("source")
+    };
+    if(k === "visit"){
+      a.v_date = val("v_date"); a.v_time = val("v_time");
+      a.v_num = val("v_num");   a.v_see = checked("v_see");
+    }
+    if(k === "press"){
+      a.p_outlet = val("p_outlet"); a.p_type = val("p_type");
+      a.p_form = val("p_form");     a.p_when = val("p_when");
+      a.p_pub = val("p_pub");       a.p_where = val("p_where");
+    }
     return a;
   }
 
   function mailtoFallback(a){
-    const body = [
-      "お名前・会社名: " + a.name, "メール: " + a.email,
-      "ご依頼の種類: " + a.kind, "着数: " + a.qty,
-      "納品したい日: " + a.due, "ご予算: " + a.budget,
-      "デザインの状態: " + a.art, "色数・柄の密度: " + a.colors,
-      "刺繍箇所: " + a.place.join(" / "),
-      "サイトを知ったきっかけ: " + a.source,
-      "", "【ご相談内容】", a.msg
-    ].join("\n");
+    const rows = ["お名前・会社名: " + a.name, "メール: " + a.email, "電話: " + a.tel,
+                  "", "ご用件: " + a.kind];
+    if(a.kindKey === "visit"){
+      rows.push("ご希望日: " + a.v_date, "ご希望の時間帯: " + a.v_time,
+                "ご来店人数: " + a.v_num, "ご覧になりたいもの: " + (a.v_see || []).join(" / "));
+    }
+    if(a.kindKey === "press"){
+      rows.push("媒体名: " + a.p_outlet, "媒体の種類: " + a.p_type,
+                "ご依頼の形式: " + a.p_form, "取材のご希望日: " + a.p_when,
+                "掲載・放送の予定日: " + a.p_pub, "取材場所: " + a.p_where);
+    }
+    rows.push("", "【ご相談内容】", a.msg, "", "知ったきっかけ: " + a.source);
     return "mailto:" + MAIL + "?subject=" +
-      encodeURIComponent("【お問い合わせ】" + (a.name || "")) +
-      "&body=" + encodeURIComponent(body);
+      encodeURIComponent("【" + a.kind + "】" + (a.name || "")) +
+      "&body=" + encodeURIComponent(rows.join("\n"));
   }
 
   f.addEventListener("submit", async function(e){
@@ -151,7 +219,6 @@
     let ok = false;
     if(ENDPOINT){
       try{
-        // text/plain にすることでプリフライトを避ける（GAS のウェブアプリ向け）
         const r = await fetch(ENDPOINT, {method:"POST",
           headers:{"Content-Type":"text/plain;charset=utf-8"},
           body: JSON.stringify({secret:SHARED_SECRET, form:"contact", answers:a, ua:navigator.userAgent})});

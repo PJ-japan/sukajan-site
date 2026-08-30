@@ -428,6 +428,13 @@ a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accen
   padding:11px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.7}
 .panel .est__break li{border-color:rgba(10,10,11,.14)}
 .est__break li span:last-child{font-family:var(--mono);white-space:nowrap}
+/* ヒーローの2列目のボタン。1列目より一段弱く見せる */
+.btns--sub{margin-top:10px}
+.btns--sub .btn{padding:12px 22px;font-size:13px;border-color:var(--line);color:var(--fg-dim)}
+.btns--sub .btn:hover{border-color:var(--fg);color:var(--bg);background:var(--fg)}
+
+/* 同じセクション内で話題が変わるときの2つめの見出し */
+.band__h2--sub{margin-top:clamp(48px,5vw,80px)}
 .est__break li.est__hint{color:var(--accent);border-bottom:0}
 /* 設問グループの見出し */
 .est__groupcap{grid-column:1/-1;font-family:var(--mono);font-size:12px;letter-spacing:.1em;

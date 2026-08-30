@@ -39,9 +39,10 @@ const ESTIMATE_HEADERS = [
 ];
 
 const CONTACT_HEADERS = [
-  '受信日時','お名前・会社名','メール',
-  'ご依頼の種類','着数','納品したい日','ご予算',
-  'デザインの状態','色数・柄の密度','刺繍箇所','ご相談内容','知ったきっかけ','UA'
+  '受信日時','ご用件','お名前・会社名','メール','電話',
+  '来店希望日','時間帯','人数','見たいもの',
+  '媒体名','媒体の種類','依頼の形式','取材希望日','掲載・放送予定日','取材場所',
+  'ご相談内容','知ったきっかけ','UA'
 ];
 
 function doPost(e) {
@@ -325,15 +326,33 @@ function handleEstimate_(body) {
 }
 
 
+/* ご用件ごとの明細。空の項目は出さない */
+function contactDetail_(a) {
+  const out = [];
+  const add = (k, v) => { if (v) out.push(k + ': ' + v); };
+  add('来店希望日', a.v_date);
+  add('時間帯', a.v_time);
+  add('人数', a.v_num);
+  add('見たいもの', (a.v_see || []).join(' / '));
+  add('媒体名', a.p_outlet);
+  add('媒体の種類', a.p_type);
+  add('依頼の形式', a.p_form);
+  add('取材希望日', a.p_when);
+  add('掲載・放送予定日', a.p_pub);
+  add('取材場所', a.p_where);
+  return out;
+}
+
+
 function handleContact_(body) {
   const a = body.answers || {};
   const sh = sheet_(CONTACT_SHEET, CONTACT_HEADERS);
 
   sh.appendRow([
-    new Date(),
-    a.name || '', a.email || '',
-    a.kind || '', a.qty || '', a.due || '', a.budget || '',
-    a.art || '', a.colors || '', (a.place || []).join(' / '),
+    new Date(), a.kind || '',
+    a.name || '', a.email || '', a.tel || '',
+    a.v_date || '', a.v_time || '', a.v_num || '', (a.v_see || []).join(' / '),
+    a.p_outlet || '', a.p_type || '', a.p_form || '', a.p_when || '', a.p_pub || '', a.p_where || '',
     a.msg || '', a.source || '', body.ua || ''
   ]);
 
@@ -351,12 +370,8 @@ function handleContact_(body) {
         '担当より、1営業日以内に概算のお見積りとおおよその日程をご返信します。',
         '',
         '──────────────',
-        'ご依頼の種類: ' + (a.kind || '未記入'),
-        '着数: ' + (a.qty || '未記入'),
-        '刺繍箇所: ' + ((a.place || []).join(' / ') || '未記入'),
-        '色数・柄の密度: ' + (a.colors || '未記入'),
-        '納品したい日: ' + (a.due || '未記入'),
-        'ご予算: ' + (a.budget || '未記入'),
+        'ご用件: ' + (a.kind || '未記入'),
+        contactDetail_(a).join('\n'),
         '──────────────',
         '',
         'ご相談内容:',
@@ -379,39 +394,16 @@ function handleContact_(body) {
       body: [
         'お名前・会社名: ' + (a.name || ''),
         'メール: ' + (a.email || ''),
-        'ご依頼の種類: ' + (a.kind || ''),
-        '着数: ' + (a.qty || ''),
-        '納品したい日: ' + (a.due || ''),
-        'ご予算: ' + (a.budget || ''),
-        'デザインの状態: ' + (a.art || ''),
-        '色数・柄の密度: ' + (a.colors || ''),
-        '刺繍箇所: ' + ((a.place || []).join(' / ')),
+        '電話: ' + (a.tel || ''),
+        '',
+        'ご用件: ' + (a.kind || ''),
+        contactDetail_(a).join('\n'),
+        '',
+        'ご相談内容:',
+        a.msg || '（未記入）',
+        '',
         '知ったきっかけ: ' + (a.source || ''),
-        '',
-        '【ご相談内容】',
-        a.msg || '',
-        '',
-        'スプレッドシート: https://docs.google.com/spreadsheets/d/' + SHEET_ID,
-        '',
-        '════════ 返信の下書き（金額を入れて送るだけ）════════',
-        '',
-        (a.name || '') + ' 様',
-        '',
-        'お問い合わせありがとうございます。いただいた内容で概算をお出しします。',
-        '',
-        '　ご依頼の種類: ' + (a.kind || ''),
-        '　着数: ' + (a.qty || ''),
-        '　刺繍箇所: ' + ((a.place || []).join(' / ')),
-        '　色数・柄の密度: ' + (a.colors || ''),
-        '',
-        '　概算: 　　　　　円（税込）',
-        '　納期の目安: 　　　　',
-        '',
-        '柄の内容によって前後します。正式なお見積りは、生地と縫製の手配先に',
-        '確認のうえ改めてお出しします。ご不明な点があればお知らせください。',
-        '',
-        REPLY_NAME,
-        '════════════════════════════════'
+        'UA: ' + (body.ua || '')
       ].join('\n')
     });
   }
