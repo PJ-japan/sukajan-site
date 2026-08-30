@@ -439,8 +439,8 @@ tbody th{font-weight:400;white-space:nowrap;color:var(--fg)}
    Buttons
    -------------------------------------------------------------------------- */
 .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:clamp(32px,3.4vw,52px)}
-.btn{display:inline-flex;align-items:center;padding:16px 32px;
-  font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+.btn{display:inline-flex;align-items:center;padding:15px 28px;
+  font-family:var(--mono);font-size:14px;letter-spacing:.1em;text-transform:uppercase;
   border:1px solid var(--fg-mute);color:var(--fg);background:transparent;cursor:pointer;
   transition:background .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease)}
 .btn:hover{background:var(--fg);color:var(--bg);border-color:var(--fg)}
@@ -521,20 +521,20 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
    フッターと各ページ末尾の導線がそのまま残る
    -------------------------------------------------------------------------- */
 .cta{position:fixed;left:0;right:0;bottom:0;z-index:60;
-  display:flex;align-items:center;gap:12px;padding:11px var(--gut);
+  display:flex;align-items:center;gap:12px;padding:9px var(--gut);
   background:color-mix(in srgb,var(--bg) 90%,transparent);
   backdrop-filter:blur(18px);border-top:1px solid var(--line);
   transform:translateY(102%);transition:transform .5s var(--ease);
-  padding-bottom:calc(11px + env(safe-area-inset-bottom,0px))}
+  padding-bottom:calc(9px + env(safe-area-inset-bottom,0px))}
 .cta[hidden]{display:none}
 .cta[data-show]{transform:none}
-.cta__label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--fg-mute);margin:0 auto 0 0;white-space:nowrap}
-.cta .btn{padding:13px 24px;font-size:10px;white-space:nowrap}
+.cta__label{font-family:var(--mono);font-size:13px;letter-spacing:.05em;
+  color:var(--fg-mute);margin:0 auto 0 0;white-space:nowrap}
+.cta .btn{padding:12px 22px;font-size:15px;line-height:1.4;white-space:nowrap}
 @media (max-width:720px){
   .cta__label{display:none}
   .cta{gap:8px}
-  .cta .btn{flex:1;justify-content:center;padding:14px 10px;letter-spacing:.1em}
+  .cta .btn{flex:1;justify-content:center;padding:15px 8px;font-size:14px;letter-spacing:.03em}
 }
 @media (prefers-reduced-motion:reduce){.cta{transition:none}}
 
