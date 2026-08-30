@@ -559,19 +559,38 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
 .field{margin-bottom:26px;max-width:34em}
 .field label{display:block;font-family:var(--mono);font-size:13px;letter-spacing:.06em;
   text-transform:uppercase;color:#8A8A86;margin-bottom:10px}
+/* 入力欄は暗い背景を既定にし、.panel（明るい帯）で反転させる。
+   逆にしていたため、暗い帯に置いたフォームで黒い文字が読めなくなっていた */
 .field input,.field select,.field textarea{
-  width:100%;padding:12px 0;font-family:var(--jp);font-size:15px;color:var(--bg);
-  background:transparent;border:0;border-bottom:1px solid rgba(10,10,11,.2);
-  border-radius:0;letter-spacing:.03em;transition:border-color .3s var(--ease)}
+  width:100%;padding:12px 0;font-family:var(--jp);font-size:15px;color:var(--fg);
+  background:transparent;border:0;border-bottom:1px solid var(--line);
+  border-radius:0;letter-spacing:.03em;color-scheme:dark;
+  transition:border-color .3s var(--ease)}
+.panel .field input,.panel .field select,.panel .field textarea{
+  color:var(--bg);border-bottom-color:rgba(10,10,11,.2);color-scheme:light}
 .field input:focus,.field select:focus,.field textarea:focus{
   outline:none;border-bottom-color:var(--accent)}
+/* ブラウザの自動入力で背景が塗られると文字が読めなくなるので上書きする */
+.field input:-webkit-autofill,.field input:-webkit-autofill:focus{
+  -webkit-text-fill-color:var(--fg);
+  box-shadow:0 0 0 1000px var(--bg) inset;
+  caret-color:var(--fg)}
+.panel .field input:-webkit-autofill,.panel .field input:-webkit-autofill:focus{
+  -webkit-text-fill-color:var(--bg);
+  box-shadow:0 0 0 1000px var(--fg) inset;
+  caret-color:var(--bg)}
 .field textarea{min-height:110px;field-sizing:content;resize:vertical;line-height:2}
 .checks{display:flex;flex-wrap:wrap;gap:8px}
 .checks label{font-family:var(--jp);text-transform:none;letter-spacing:.03em;
-  font-size:13px;margin:0;color:var(--bg);border:1px solid rgba(10,10,11,.2);
+  font-size:13px;margin:0;color:var(--fg-dim);border:1px solid var(--line);
   padding:9px 18px;cursor:pointer;
   transition:border-color .25s var(--ease),color .25s var(--ease)}
+.panel .checks label{color:var(--bg);border-color:rgba(10,10,11,.2)}
+.checks label:hover{border-color:var(--fg-mute);color:var(--fg)}
+.panel .checks label:hover{border-color:var(--bg);color:var(--bg)}
 .checks label:has(input:checked){border-color:var(--accent);color:var(--accent)}
+/* 明るい帯では朱の文字がコントラスト不足になる。枠と淡い地で選択を示す */
+.panel .checks label:has(input:checked){color:var(--bg);background:rgba(255,59,20,.12)}
 .checks input{position:absolute;opacity:0;width:1px;height:1px}
 
 /* --------------------------------------------------------------------------
@@ -769,8 +788,6 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
    既定の .checks は明色セクション向けで、文字色が背景と同じ近黒になり
    ウィザード内では見えなくなっていた（.spec__form 側にだけ上書きがあった） */
 .step .checks{margin-top:18px}
-.step .checks label{color:var(--fg-dim);border-color:var(--line)}
-.step .checks label:hover{border-color:var(--fg-mute);color:var(--fg)}
 .step .checks label:has(input:checked){border-color:var(--accent);color:var(--accent)}
 
 .opts{display:grid;gap:8px;max-width:38em}
