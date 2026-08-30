@@ -5,7 +5,20 @@
  */
 
 // ===== 設定 ===============================================================
-const SHEET_ID   = 'ここにスプレッドシートのIDを入れる';  // URLの /d/ と /edit の間
+/**
+ * スプレッドシートのIDは、このファイルには書きません。
+ * このリポジトリは公開されているため、IDを書くと git の履歴に残り続けます。
+ * 万一シートの共有設定が「リンクを知っている全員」になった場合、
+ * 問い合わせ全件（氏名・メール・電話番号）が読める状態になります。
+ *
+ * 代わりに Apps Script のスクリプトプロパティに入れてください。
+ *   Apps Script エディタ → 左の歯車「プロジェクトの設定」
+ *   → 「スクリプト プロパティ」→ プロパティ名 SHEET_ID、値にIDを貼る
+ *
+ * 一度設定すれば、このファイルを貼り直しても消えません。
+ */
+const SHEET_ID = PropertiesService.getScriptProperties().getProperty('SHEET_ID');
+
 const SHEET_NAME = 'briefs';        // ご依頼フォーム（brief.html）
 const CONTACT_SHEET = 'contacts';   // お問い合わせフォーム（contact.html）
 const ESTIMATE_SHEET = 'estimates'; // 自動見積もり（estimate.html）
@@ -415,6 +428,11 @@ function doGet() {
 }
 
 function sheet_(name, headers) {
+  if (!SHEET_ID) {
+    throw new Error(
+      'SHEET_ID が未設定です。Apps Script の「プロジェクトの設定」→'
+      + '「スクリプト プロパティ」に SHEET_ID を追加してください。');
+  }
   const nm = name || SHEET_NAME;
   const hd = headers || HEADERS;
   const ss = SpreadsheetApp.openById(SHEET_ID);
