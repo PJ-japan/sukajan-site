@@ -13,7 +13,7 @@
   --fg-dim:  #8B8B88;
   --fg-mute: #7A7A78;   /* 近黒の上で 4.6:1。9.5〜13px の補助テキストに使う */
   --line:    #26262A;
-  --accent:  #FF3B14;
+  --accent:  #E00022;   /* 白文字を載せて 5.0:1。明暗どちらの帯にも置ける値 */
 
   --display:"Archivo","Helvetica Neue",Arial,sans-serif;
   --mono:"Space Mono",ui-monospace,SFMono-Regular,monospace;
@@ -64,14 +64,14 @@ h4{font-family:var(--jp);font-weight:500;font-size:15px;line-height:1.8;
 p{margin:0 0 1.4em;max-width:38em;text-wrap:pretty;color:var(--fg-dim)}
 .lead{font-size:clamp(15px,1.1vw,17px);line-height:2.15;color:var(--fg)}
 strong{font-weight:500;color:var(--fg);
-  box-shadow:inset 0 -.42em 0 rgba(255,59,20,.28)}
+  box-shadow:inset 0 -.42em 0 rgba(224,0,34,.28)}
 .note{font-family:var(--mono);font-size:11px;line-height:1.95;
   letter-spacing:.01em;color:var(--fg-mute);max-width:48em;text-transform:none}
 
 a{color:inherit;text-decoration:none}
 a.link{border-bottom:1px solid var(--fg-mute);padding-bottom:2px;
   transition:border-color .3s var(--ease),color .3s var(--ease)}
-a.link:hover{color:var(--accent);border-bottom-color:var(--accent)}
+a.link:hover{color:var(--fg);border-bottom-color:var(--accent)}
 :focus-visible{outline:1px solid var(--accent);outline-offset:4px}
 
 .tbd{border-bottom:1px dashed var(--accent)}
@@ -141,7 +141,8 @@ html{scroll-padding-top:84px}
   text-transform:uppercase;white-space:nowrap;color:var(--fg-dim);
   transition:color .25s var(--ease)}
 .nav a:hover{color:var(--fg)}
-.nav a[aria-current="page"]{color:var(--accent)}
+.nav a[aria-current="page"]{color:var(--fg);
+  box-shadow:inset 0 -2px 0 var(--accent)}
 /* 見積もりだけはボタンにして、主導線だと分かるようにする */
 .nav a.nav--cta{color:#fff;background:var(--accent);
   padding:7px 14px;margin:-7px 0;letter-spacing:.05em;text-transform:none}
@@ -290,9 +291,9 @@ html{scroll-padding-top:84px}
 .panel h2,.panel h3,.panel h4{color:var(--bg)}
 .panel .tag__en{color:var(--bg)}
 .panel .tag__ja,.panel .note,.panel .band__aside p:not(.tag){color:#646461}
-.panel strong{color:var(--bg);box-shadow:inset 0 -.42em 0 rgba(255,59,20,.24)}
+.panel strong{color:var(--bg);box-shadow:inset 0 -.42em 0 rgba(224,0,34,.24)}
 .panel a.link{border-bottom-color:#B4B4B0}
-.panel a.link:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.panel a.link:hover{color:var(--bg);border-bottom-color:var(--accent)}
 .panel ::selection{background:var(--accent);color:#fff}
 
 /* --------------------------------------------------------------------------
@@ -327,8 +328,8 @@ html{scroll-padding-top:84px}
   font-size:clamp(26px,3.6vw,52px);line-height:.9;letter-spacing:-.03em;
   color:var(--line);grid-row:1 / span 3}
 .panel .seq li::before{color:rgba(10,10,11,.14)}
-.seq .when{font-family:var(--mono);font-size:10px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.seq .when{font-family:var(--mono);font-size:12px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--fg-dim);margin:0 0 6px}
 .seq h4{margin:0 0 .3em}
 .seq p{margin:0;font-size:13.5px;line-height:2}
 
@@ -369,7 +370,7 @@ html{scroll-padding-top:84px}
   color:var(--fg-mute);background:var(--bg-2);border:1px solid var(--line);
   transition:background .4s var(--ease),border-color .4s var(--ease),color .4s var(--ease)}
 .panel .slot{background:rgba(10,10,11,.05);border-color:rgba(10,10,11,.14);color:#646461}
-a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accent)}
+a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--fg)}
 .slot--wide{aspect-ratio:16/9}
 
 /* 本文中の写真 */
@@ -467,9 +468,9 @@ a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accen
 .panel .est__recap dt{color:#646461}
 .est__recap dd{margin:0}
 .req{font-family:var(--mono);font-size:11px;letter-spacing:.1em;
-  color:var(--accent);margin-left:.5em}
+  color:var(--fg);background:rgba(224,0,34,.3);padding:2px 7px;margin-left:.5em}
 /* 明るい帯では朱の小さな文字が読めない。淡い地を敷く */
-.panel .req{color:var(--bg);background:rgba(255,59,20,.15);padding:2px 7px}
+.panel .req{color:var(--bg);background:rgba(224,0,34,.15);padding:2px 7px}
 
 /* 地図の埋め込み */
 .map{margin:clamp(28px,3vw,48px) 0 0;border:1px solid var(--line);
@@ -549,8 +550,8 @@ summary{cursor:pointer;list-style:none;padding:24px 0;
 summary::-webkit-details-marker{display:none}
 summary::before{content:"Q";font-family:var(--mono);font-size:10px;
   letter-spacing:.1em;color:var(--accent);flex:none}
-summary:hover{color:var(--accent)}
-.panel summary:hover{color:var(--accent)}
+summary:hover{color:var(--fg);box-shadow:inset 0 -2px 0 var(--accent)}
+.panel summary:hover{color:var(--bg);box-shadow:inset 0 -2px 0 var(--accent)}
 details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
 @supports (interpolate-size: allow-keywords){
   details::details-content{block-size:0;overflow:hidden;
@@ -593,7 +594,7 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
 .panel .checks label:hover{border-color:var(--bg);color:var(--bg)}
 .checks label:has(input:checked){border-color:var(--accent);color:var(--accent)}
 /* 明るい帯では朱の文字がコントラスト不足になる。枠と淡い地で選択を示す */
-.panel .checks label:has(input:checked){color:var(--bg);background:rgba(255,59,20,.12)}
+.panel .checks label:has(input:checked){color:var(--bg);background:rgba(224,0,34,.12)}
 .checks input{position:absolute;opacity:0;width:1px;height:1px}
 
 /* --------------------------------------------------------------------------
@@ -606,15 +607,15 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
   text-transform:uppercase;color:var(--fg-mute);margin-bottom:18px;font-weight:400}
 .foot ul{list-style:none;margin:0;padding:0}
 .foot li{margin-bottom:10px}
-.foot a:hover{color:var(--accent)}
+.foot a:hover{color:var(--fg);box-shadow:inset 0 -1px 0 var(--accent)}
 /* 問い合わせ導線はフッターでも目立たせる */
 .foot__cta{display:inline-flex;align-items:center;margin-top:6px;padding:12px 20px;
   background:var(--fg);color:var(--bg);font-family:var(--mono);font-size:13px;
   letter-spacing:.05em;transition:background .3s var(--ease),color .3s var(--ease)}
-.foot__cta:hover{background:var(--accent);color:#fff}
+.foot a.foot__cta:hover{background:var(--accent);color:#fff;box-shadow:none}
 .foot__copy{display:block;margin-top:8px;color:var(--fg-mute)}
 .foot__legal a{border-bottom:1px solid var(--fg-mute)}
-.foot__legal a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.foot__legal a:hover{color:var(--fg);border-bottom-color:var(--accent)}
 .foot__legal{margin:48px 0 0;padding-top:22px;border-top:1px solid var(--line);
   font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--fg-mute)}
@@ -637,7 +638,7 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
 @media (max-width:720px){
   .cta__label{display:none}
   .cta{gap:8px}
-  .cta .btn{flex:1;justify-content:center;padding:15px 8px;font-size:14px;letter-spacing:.03em}
+  .cta .btn{flex:1;justify-content:center;padding:15px 14px;font-size:14px;letter-spacing:.03em}
 }
 @media (prefers-reduced-motion:reduce){.cta{transition:none}}
 
@@ -673,7 +674,7 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
   padding:7px 13px;border:1px solid var(--line);color:var(--fg-dim);
   background:transparent;cursor:pointer;
   transition:border-color .25s var(--ease),color .25s var(--ease)}
-.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip:hover{border-color:var(--accent);color:var(--fg)}
 
 .spec__actions{position:sticky;bottom:0;background:var(--bg);
   padding:18px 0 0;border-top:1px solid var(--line);margin-top:24px;
@@ -699,7 +700,7 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
   text-transform:uppercase;color:#999;font-weight:400;
   border-bottom:1px solid #ddd;padding-bottom:6px;margin:26px 0 12px}
 .doc p{color:#222;margin:0 0 10px;font-size:12px;line-height:1.95}
-.doc .doc__concept{border-left:3px solid #FF3B14;padding:10px 0 10px 16px;
+.doc .doc__concept{border-left:3px solid #E00022;padding:10px 0 10px 16px;
   background:#fafafa;font-size:12.5px;line-height:2.05}
 .doc dl{display:grid;grid-template-columns:9em 1fr;gap:0;margin:0}
 .doc dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:#888;
@@ -720,7 +721,7 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
   word-break:break-all}
 /* 書類は白地。全体の strong はオフホワイト＋朱の蛍光ペン風で、
    このなかでは文字が背景に溶けて読めなくなる（印刷・PDFでも同じ） */
-.doc strong{color:inherit;box-shadow:inset 0 -.42em 0 rgba(255,59,20,.18)}
+.doc strong{color:inherit;box-shadow:inset 0 -.42em 0 rgba(224,0,34,.18)}
 
 @media print{
   @page{size:A4;margin:14mm}
@@ -762,7 +763,7 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
 @keyframes stepIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .step__no{font-family:var(--display);font-weight:800;font-variation-settings:"wdth" 112;
   font-size:clamp(30px,4.6vw,64px);line-height:.9;letter-spacing:-.03em;
-  color:var(--line);display:block;margin-bottom:18px}
+  color:#5D5D5A;display:block;margin-bottom:18px}
 .step__q{font-family:var(--jp);font-weight:500;font-size:clamp(19px,2.3vw,30px);
   line-height:1.75;letter-spacing:.03em;margin:0 0 12px;max-width:22em}
 .step__help{font-family:var(--mono);font-size:10.5px;line-height:1.95;
@@ -811,8 +812,11 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
   padding-top:24px;border-top:1px solid var(--line)}
 .wiz__err{font-family:var(--jp);font-size:13.5px;color:var(--accent);
   margin:14px 0 0;min-height:1.4em}
+/* エラーは読めないと意味がないので、朱の文字ではなく地を敷いて示す */
+.wiz__err:not(:empty){color:var(--fg);background:rgba(224,0,34,.22);
+  padding:10px 14px;margin-top:16px}
 /* 明るい帯では朱の文字がコントラスト不足になる。淡い地を敷いて読ませる */
-.panel .wiz__err:not(:empty){color:var(--bg);background:rgba(255,59,20,.12);
+.panel .wiz__err:not(:empty){color:var(--bg);background:rgba(224,0,34,.12);
   padding:10px 14px;margin-top:16px}
 
 /* 確認画面 */
@@ -828,7 +832,7 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
 /* 明るい帯の中では文字色を反転させる。白地に白文字になっていた */
 .panel .wiz__sent{color:var(--bg)}
 
-.doc__draft{border:1px solid #FF3B14;background:#fff6f4;padding:12px 14px;
+.doc__draft{border:1px solid #E00022;background:#fff6f4;padding:12px 14px;
   margin:0 0 22px;font-size:11.5px;line-height:1.9;color:#111}
 @media print{
   /* #w_review にも class="step" が付いているため、.step を一律で消すと
@@ -863,7 +867,7 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
   border-top:1px solid var(--line)}
 .press__y{grid-column:1 / -1;font-family:var(--display);font-weight:800;
   font-variation-settings:"wdth" 112;font-size:clamp(30px,5.4vw,76px);line-height:.9;
-  letter-spacing:-.035em;color:var(--line);margin-bottom:18px}
+  letter-spacing:-.035em;color:#5D5D5A;margin-bottom:18px}
 @media (min-width:860px){
   .press__y{grid-column:1 / 4;margin-bottom:0;position:sticky;top:118px;align-self:start}
   .press__list{grid-column:4 / -1}
@@ -879,8 +883,8 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
   letter-spacing:.03em;color:var(--fg);margin:0}
 .item__o{font-family:var(--mono);font-size:10px;letter-spacing:.12em;
   text-transform:uppercase;color:var(--fg-mute);margin:6px 0 0}
-.item__k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--accent);border:1px solid var(--line);
+.item__k{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--fg-dim);border:1px solid var(--line);
   padding:4px 10px;white-space:nowrap;justify-self:start}
-a.item:hover .item__t{color:var(--accent)}
+a.item:hover .item__t{color:var(--fg);box-shadow:inset 0 -2px 0 var(--accent)}
 a.item:hover .item__k{border-color:var(--accent)}
