@@ -122,8 +122,8 @@
             <input id="tel" name="tel" type="tel" autocomplete="tel" placeholder="任意">
           </div>
           <div class="field">
-            <label for="msg">ご相談内容</label>
-            <textarea id="msg" name="msg" placeholder="企画の趣旨、聞きたいこと、ご事情など。決まっていなくても構いません。"></textarea>
+            <label for="msg" id="msg_label">ご相談内容</label>
+            <textarea id="msg" name="msg" placeholder="ご相談したいこと、ご来店の目的など。決まっていなくても構いません。"></textarea>
           </div>
           <div class="field">
             <label for="source">当サイトを知ったきっかけ</label>
@@ -159,10 +159,21 @@
   const f = $("cform"); if(!f) return;
 
   /* ご用件でフォームを切り替える */
+  /* ご用件ごとに、自由記述欄の見出しと例示も変える。
+     来店の人に「企画の趣旨」と聞いても答えようがないため */
+  const MSG = {
+    visit: ["ご相談内容", "ご相談したいこと、ご来店の目的など。決まっていなくても構いません。"],
+    press: ["企画内容・お聞きになりたいこと", "企画の趣旨、聞きたいこと、締切のご事情など。決まっていなくても構いません。"],
+    other: ["お問い合わせ内容", "ご用件をお書きください。"]
+  };
+
   function sync(){
     const k = f.elements.kind.value;
     $("g_visit").hidden = k !== "visit";
     $("g_press").hidden = k !== "press";
+    const m = MSG[k] || MSG.other;
+    $("msg_label").textContent = m[0];
+    f.elements.msg.placeholder = m[1];
   }
   f.addEventListener("change", e => { if(e.target.name === "kind") sync(); });
   sync();
