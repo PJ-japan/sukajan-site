@@ -8,6 +8,7 @@
 const SHEET_ID   = 'ここにスプレッドシートのIDを入れる';  // URLの /d/ と /edit の間
 const SHEET_NAME = 'briefs';        // ご依頼フォーム（brief.html）
 const CONTACT_SHEET = 'contacts';   // お問い合わせフォーム（contact.html）
+const ESTIMATE_SHEET = 'estimates'; // 自動見積もり（estimate.html）
 const SECRET     = 'm5u0-yxSl-ByIk';   // build.py の FORM_SECRET と同じ文字列
 const NOTIFY_TO  = 'info@ichi-pj.com';   // 通知メールの宛先。空にすると送りません
 const AUTO_REPLY = true;                 // 送信者へ受付メールを自動で返すか
@@ -20,6 +21,12 @@ const HEADERS = [
   'ご依頼の種類','用途','ご要望','着数','希望納期','ご予算',
   '利用区分','地域','期間','媒体','商品ラインナップ',
   '支給物・持込IP','備考','制作コンセプト（自動生成）','UA'
+];
+
+const ESTIMATE_HEADERS = [
+  '受信日時','お名前・会社名','メール','電話',
+  'ご依頼の種類','着数','ボディ','刺繍箇所','色数・柄の密度','生地','仕様','希望納期',
+  '1着あたり概算','合計概算','補足','知ったきっかけ','UA'
 ];
 
 const CONTACT_HEADERS = [
@@ -35,6 +42,9 @@ function doPost(e) {
 
     // お問い合わせフォーム（contact.html）はこちらで処理する
     if (body.form === 'contact') return handleContact_(body);
+
+    // 自動見積もり（estimate.html）からの正式見積もり依頼
+    if (body.form === 'estimate') return handleEstimate_(body);
 
     const a = body.answers || {};
     const d = body.doc || {};
@@ -106,6 +116,97 @@ function doPost(e) {
 }
 
 /** お問い合わせフォームを contacts シートに1行追加し、通知を送る */
+function handleEstimate_(body) {
+  const a = body.answers || {};
+  const sh = sheet_(ESTIMATE_SHEET, ESTIMATE_HEADERS);
+  const place = (a.place || []).join(' / ');
+
+  sh.appendRow([
+    new Date(),
+    a.name || '', a.email || '', a.tel || '',
+    a.kind || '', a.qty || '', a.body || '', place,
+    a.colors || '', a.fabric || '', a.side || '', a.due || '',
+    a.unit || '', a.total || '',
+    a.msg || '', a.source || '', body.ua || ''
+  ]);
+
+  // 送信者への受付メール。画面に出したのと同じ概算をそのまま控えとして返す。
+  // 契約上の見積書ではないことを必ず明記する。
+  if (AUTO_REPLY && a.email) {
+    MailApp.sendEmail({
+      to: a.email,
+      name: REPLY_NAME,
+      replyTo: NOTIFY_TO,
+      subject: '正式見積もりのご依頼を承りました｜スカジャン絵師 横地広海知',
+      body: [
+        (a.name || '') + ' 様',
+        '',
+        'お見積りのご依頼をありがとうございます。以下の内容で承りました。',
+        '生地と縫製の手配先に在庫と工程を確認したうえで、1営業日以内に正式な金額と日程をご返信します。',
+        '',
+        '──────────────',
+        'ご依頼の種類: ' + (a.kind || '未記入'),
+        '着数: ' + (a.qty || '未記入'),
+        'ボディ: ' + (a.body || '未記入'),
+        '刺繍箇所: ' + (place || '未記入'),
+        '色数・柄の密度: ' + (a.colors || '未記入'),
+        '生地: ' + (a.fabric || '未記入'),
+        '仕様: ' + (a.side || '未記入'),
+        '希望納期: ' + (a.due || '未記入'),
+        '',
+        '画面に表示された概算: ' + (a.total || '') + '（1着あたり ' + (a.unit || '') + '）',
+        '──────────────',
+        '',
+        '※ 上の金額は、公開している目安価格から自動計算した「下限の目安」です。',
+        '　 刺繍の面積・色数・柄の複雑さ・生地により変動します。契約上の見積書ではありません。',
+        '　 正式なお見積りとの差が出る場合は、どの工程で何が変わったのかを添えてご説明します。',
+        '',
+        '補足:',
+        a.msg || '（未記入）',
+        '',
+        '※ このメールは自動送信です。ご返信いただければ担当に届きます。',
+        '',
+        REPLY_NAME,
+        '神奈川県横須賀市本町3-11-7 アイ\'s ビル 1F',
+        'https://hiromichiyokochi.com/'
+      ].join('\n')
+    });
+  }
+
+  if (NOTIFY_TO) {
+    MailApp.sendEmail({
+      to: NOTIFY_TO,
+      replyTo: a.email || NOTIFY_TO,
+      subject: '【自動見積もり】' + (a.name || '名称未記入') + '／' + (a.qty || '') + '／' + (a.total || ''),
+      body: [
+        'お名前・会社名: ' + (a.name || ''),
+        'メール: ' + (a.email || ''),
+        '電話: ' + (a.tel || ''),
+        '',
+        'ご依頼の種類: ' + (a.kind || ''),
+        '着数: ' + (a.qty || ''),
+        'ボディ: ' + (a.body || ''),
+        '刺繍箇所: ' + place,
+        '色数・柄の密度: ' + (a.colors || ''),
+        '生地: ' + (a.fabric || ''),
+        '仕様: ' + (a.side || ''),
+        '希望納期: ' + (a.due || ''),
+        '',
+        '画面に出た概算: ' + (a.total || '') + '（1着あたり ' + (a.unit || '') + '）',
+        '',
+        '補足:',
+        a.msg || '（未記入）',
+        '',
+        '知ったきっかけ: ' + (a.source || ''),
+        'UA: ' + (body.ua || '')
+      ].join('\n')
+    });
+  }
+
+  return json({ ok: true });
+}
+
+
 function handleContact_(body) {
   const a = body.answers || {};
   const sh = sheet_(CONTACT_SHEET, CONTACT_HEADERS);

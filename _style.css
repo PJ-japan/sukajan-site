@@ -394,6 +394,55 @@ a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--accen
   line-height:1.9;color:var(--fg-mute);margin-top:12px}
 .panel .video figcaption{color:#8A8A86}
 
+/* --------------------------------------------------------------------------
+   自動見積もり（estimate.html）
+   -------------------------------------------------------------------------- */
+.est__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 clamp(16px,2vw,28px);margin-top:clamp(28px,3vw,44px)}
+.est__grid .field{max-width:none}
+.est__wide{grid-column:1/-1}
+@media (max-width:640px){.est__grid{grid-template-columns:1fr}}
+
+.est__out{margin-top:clamp(14px,1.6vw,22px);padding:clamp(22px,2.6vw,34px);
+  border:1px solid var(--accent)}
+.est__cap{font-family:var(--mono);font-size:12px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--fg-mute);margin:0}
+.panel .est__cap{color:#8A8A86}
+.est__total{font-family:var(--display);font-weight:800;font-size:clamp(34px,5.4vw,58px);line-height:1.05;
+  letter-spacing:-.02em;margin:8px 0 0;color:var(--accent)}
+.est__from{font-size:.5em;letter-spacing:0;margin-left:.1em}
+.est__unit{font-family:var(--mono);font-size:13px;letter-spacing:.05em;
+  color:var(--fg-mute);margin:10px 0 0}
+.panel .est__unit{color:#6E6E6A}
+.est__break{list-style:none;margin:clamp(18px,2vw,26px) 0 0;padding:0;
+  border-top:1px solid var(--line)}
+.panel .est__break{border-color:rgba(10,10,11,.14)}
+.est__break li{display:flex;justify-content:space-between;gap:16px;
+  padding:11px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.7}
+.panel .est__break li{border-color:rgba(10,10,11,.14)}
+.est__break li span:last-child{font-family:var(--mono);white-space:nowrap}
+.est__break li.est__hint{color:var(--accent);border-bottom:0}
+.est__vars{margin-top:clamp(18px,2vw,26px)}
+.est__varscap{font-family:var(--mono);font-size:12px;letter-spacing:.08em;
+  color:var(--fg-mute);margin:0 0 8px}
+.panel .est__varscap{color:#6E6E6A}
+.est__vars ul{margin:0;padding-left:1.2em}
+.est__vars li{font-size:14px;line-height:2}
+
+.est__recap{margin:clamp(26px,3vw,40px) 0;padding:clamp(18px,2vw,26px);
+  border:1px solid var(--line);background:var(--bg-2)}
+.panel .est__recap{border-color:rgba(10,10,11,.14);background:rgba(10,10,11,.04)}
+.est__recapcap{font-family:var(--mono);font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--fg-mute);margin:0 0 14px}
+.est__recap dl{display:grid;grid-template-columns:auto 1fr;gap:7px 18px;margin:0;
+  font-size:14px;line-height:1.8}
+.est__recap dt{font-family:var(--mono);font-size:12px;letter-spacing:.04em;
+  color:var(--fg-mute);white-space:nowrap}
+.panel .est__recap dt{color:#6E6E6A}
+.est__recap dd{margin:0}
+.req{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  color:var(--accent);margin-left:.5em}
+
 /* 地図の埋め込み */
 .map{margin:clamp(28px,3vw,48px) 0 0;border:1px solid var(--line);
   aspect-ratio:16/9;overflow:hidden;background:var(--bg-2)}
@@ -480,7 +529,7 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
 }
 
 .field{margin-bottom:26px;max-width:34em}
-.field label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+.field label{display:block;font-family:var(--mono);font-size:13px;letter-spacing:.06em;
   text-transform:uppercase;color:#8A8A86;margin-bottom:10px}
 .field input,.field select,.field textarea{
   width:100%;padding:12px 0;font-family:var(--jp);font-size:15px;color:var(--bg);

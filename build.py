@@ -250,6 +250,14 @@ PAGES = {
         crumbs=[("プライバシーポリシー", "privacy.html")],
         unlisted=True,
     ),
+    "estimate": dict(
+        title="スカジャン自動見積もり｜オリジナル・OEMの概算がその場で出ます｜横地広海知",
+        desc="オリジナルスカジャンのオーダーメイド、スカジャンOEM・ブランド別注の概算をその場で計算します。着数・ボディ・刺繍箇所・色数を選ぶだけ。公開している目安価格にもとづいた金額が、メールアドレスの入力なしで出ます。",
+        nav="Estimate",
+        crumbs=[("自動見積もり", "estimate.html")],
+        service="スカジャンのオーダーメイド・OEMの概算見積もり",
+        extra=[PERSON],
+    ),
     "contact": dict(
         title="ご相談・お問い合わせ｜スカジャン絵師 横地広海知",
         desc="オリジナルスカジャンのオーダーメイド、スカジャンOEM・ブランド別注、柄デザインのご相談。用途と希望納期をお知らせいただければ、可否とおおよその日程を最初にお答えします。",
@@ -260,7 +268,7 @@ PAGES = {
 }
 
 # 生成するページ（サイトの構成順）
-PAGE_ORDER = ["index", "about", "interview", "order", "oem", "process", "works", "press", "brief", "spec", "access", "contact", "privacy"]
+PAGE_ORDER = ["index", "about", "interview", "order", "oem", "estimate", "process", "works", "press", "brief", "spec", "access", "contact", "privacy"]
 
 # ヘッダーのナビに出すページ。unlisted のものは除く
 NAV_ORDER = [s for s in PAGE_ORDER if not PAGES[s].get("unlisted")]
@@ -272,7 +280,8 @@ CTA = {
     "about":     ("柄のご相談を承っています",   "相談する",           "contact.html", "制作事例を見る", "works.html"),
     "interview": ("柄のご相談を承っています",   "相談する",           "contact.html", "横地広海知について", "about.html"),
     "order":     ("一着から柄を描き起こします", "このまま相談する",   "contact.html", "制作事例を見る", "works.html"),
-    "oem":       ("柄がなくても始められます",   "見積もりを相談する", "contact.html", "納期と進め方", "process.html"),
+    "oem":       ("柄がなくても始められます",   "自動見積もりを試す", "estimate.html", "納期と進め方", "process.html"),
+    "estimate":  ("概算はその場で出ます",       "この内容で依頼する", "#send", "別注・量産について", "oem.html"),
     "process":   ("納期のご相談も承ります",     "相談する",           "contact.html", "別注・量産について", "oem.html"),
     "works":     ("同じように柄から作れます",   "相談する",           "contact.html", "Instagram で見る", "https://www.instagram.com/hiromichiyokochi/"),
     "press":     ("取材のご依頼も承ります",     "お問い合わせ",       "contact.html", "横地広海知について", "about.html"),
@@ -568,11 +577,46 @@ for slug in PAGE_ORDER:
     print(f"built {slug}.html  ({len(page):,} bytes){mark}")
 
 # 静的ファイルをそのまま持っていく
-for name in ("robots.txt", "sitemap.xml"):
+for name in ("robots.txt",):
     src = ROOT / name
     if src.exists():
         shutil.copy2(src, OUT / name)
         print(f"copied {name}")
+
+# sitemap.xml は PAGE_ORDER から作る。
+# 手書きにしておくとページを足したときに載せ忘れる（実際に一度やった）。
+SITEMAP_PRIORITY = {
+    "index": "1.0", "oem": "0.9", "order": "0.9", "estimate": "0.9",
+    "about": "0.9", "contact": "0.8", "access": "0.8",
+    "privacy": "0.4",
+}
+
+
+def sitemap_xml():
+    rows = ['<?xml version="1.0" encoding="UTF-8"?>',
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+
+    def url(loc, pri):
+        rows.append("  <url>")
+        rows.append(f"    <loc>{loc}</loc>")
+        rows.append(f"    <priority>{pri}</priority>")
+        rows.append("  </url>")
+
+    url(BASE, SITEMAP_PRIORITY["index"])
+    url(BASE + "en/", "0.8")
+    for slug in PAGE_ORDER:
+        meta = PAGES[slug]
+        # noindex のページ（brief / spec）だけ外す。
+        # privacy はナビには出さないが、検索に載せてよいので含める。
+        if slug == "index" or meta.get("noindex"):
+            continue
+        url(f"{BASE}{slug}.html", SITEMAP_PRIORITY.get(slug, "0.8"))
+    rows.append("</urlset>")
+    return "\n".join(rows) + "\n"
+
+
+(OUT / "sitemap.xml").write_text(sitemap_xml(), encoding="utf-8")
+print("built  sitemap.xml")
 
 # --------------------------------------------------------------------------
 # 旧サイトのURLを生かす

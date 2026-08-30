@@ -1,0 +1,379 @@
+<section class="hero">
+  <h1 class="hero__title">
+    <span class="kicker">Instant estimate &mdash; original sukajan &amp; OEM</span>
+    <span class="en">ESTIMATE</span>
+    <span class="sub">スカジャンの自動見積もり — 仕様を選ぶと、その場で概算が出ます</span>
+  </h1>
+  <p class="lead hero__lead">オリジナルスカジャンのオーダーメイド、スカジャンOEM・ブランド別注の概算をその場で計算します。着数と仕様を選ぶだけで、公開している目安価格にもとづいた金額が出ます。メールアドレスの入力は不要です。</p>
+</section>
+
+<div class="panel">
+  <section class="band rise" id="calc">
+    <div class="band__grid">
+      <div class="band__aside">
+        <p class="tag"><span class="tag__en">ESTIMATE</span><span class="tag__ja">自動見積もり</span></p>
+        <p>入力は不要。選ぶだけです。</p>
+      </div>
+      <div class="band__main">
+        <h2>仕様を選ぶと、<br>その場で概算が出ます</h2>
+        <p class="lead">スカジャンの費用は「製品代 × 着数」では決まりません。<strong>着数に比例するもの</strong>（生地・縫製・刺繍工賃）と、<strong>最初に一度だけかかるもの</strong>（デザイン費、刺繍データ代）があるためです。この計算機は、<a class="link" href="oem.html#price">公開している目安価格</a>にもとづいて下限を出します。</p>
+
+        <form id="estform" novalidate>
+          <div class="est__grid">
+            <div class="field">
+              <label for="e_kind">ご依頼の種類</label>
+              <select id="e_kind" name="kind">
+                <option value="order">フルオーダー（一着）</option>
+                <option value="oem">ブランド別注・量産（OEM）</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="e_qty">着数</label>
+              <input id="e_qty" name="qty" type="number" min="1" max="10000" step="1" value="1" inputmode="numeric">
+            </div>
+
+            <div class="field">
+              <label for="e_body">ボディ</label>
+              <select id="e_body" name="body">
+                <option value="ready">既製のボディを使う</option>
+                <option value="scratch">ボディの形から作る</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="e_fabric">生地</label>
+              <select id="e_fabric" name="fabric">
+                <option>ポリエステルサテン</option>
+                <option>別珍</option>
+                <option>まだ決めていない</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="e_colors">色数・柄の密度</label>
+              <select id="e_colors" name="colors">
+                <option value="simple">シンプル（2〜3色・ワンポイント中心）</option>
+                <option value="standard" selected>標準（4〜6色・背中に一図案）</option>
+                <option value="complex">複雑（7色以上・ぼかしや描き込みが多い）</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="e_side">仕様</label>
+              <select id="e_side" name="side">
+                <option>片面</option>
+                <option>リバーシブル</option>
+              </select>
+            </div>
+
+            <div class="field est__wide">
+              <label>刺繍を入れたい箇所</label>
+              <div class="checks">
+                <label><input type="checkbox" name="place" value="背中" checked>背中</label>
+                <label><input type="checkbox" name="place" value="右胸">右胸</label>
+                <label><input type="checkbox" name="place" value="左胸">左胸</label>
+                <label><input type="checkbox" name="place" value="右袖" data-scratch>右袖</label>
+                <label><input type="checkbox" name="place" value="左袖" data-scratch>左袖</label>
+              </div>
+              <p class="field__echo" id="e_placenote" hidden>袖への刺繍は「ボディの形から作る」場合のみお受けしています。ボディの選択を切り替えました。</p>
+            </div>
+
+            <div class="field est__wide">
+              <label for="e_due">希望納期</label>
+              <select id="e_due" name="due">
+                <option value="normal">通常（ご予約から引渡しまで3〜4ヶ月）</option>
+                <option value="rush">お急ぎ（最短1ヶ月・別途特急料金）</option>
+              </select>
+            </div>
+          </div>
+        </form>
+
+        <div class="est__out" id="e_out" aria-live="polite">
+          <p class="est__cap">概算（税込）</p>
+          <p class="est__total"><span id="e_total">—</span><span class="est__from">〜</span></p>
+          <p class="est__unit" id="e_unit"></p>
+          <ul class="est__break" id="e_break"></ul>
+          <div class="est__vars" id="e_vars" hidden>
+            <p class="est__varscap">次の選択で、ここから金額が上がります</p>
+            <ul id="e_varslist"></ul>
+          </div>
+        </div>
+
+        <p class="note">※ 表示されるのは<strong>下限の目安</strong>です。刺繍の面積・色数・柄の複雑さ・生地により変動します。<br>
+          ※ 50着以上は、デザイン費と刺繍データ（型）代が別途かかります。着数で割るため、数が増えるほど一着あたりの負担は下がります。<br>
+          ※ 正式なお見積りは、生地と縫製の手配先に在庫と工程を確認したうえでお出しします。上記との差が出る場合は、どの工程で何が変わったのかを添えてご説明します。<br>
+          ※ この画面の金額は契約上の見積書ではありません。</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="band rise" id="send">
+  <div class="band__grid">
+    <div class="band__aside">
+      <p class="tag"><span class="tag__en">NEXT</span><span class="tag__ja">正式見積もり</span></p>
+      <p>1営業日以内にご返信します。</p>
+    </div>
+    <div class="band__main">
+      <h2>この内容で、<br>正式なお見積りをお出しします</h2>
+      <p class="lead">上で選んだ仕様はそのまま引き継がれます。<strong>ご連絡先だけご記入ください。</strong>生地と縫製の手配先に在庫と工程を確認したうえで、正式な金額と日程をご返信します。無理な場合はその場で申し上げます。</p>
+
+      <form id="leadform" novalidate>
+        <div class="field">
+          <label for="l_name">お名前・会社名 <span class="req">必須</span></label>
+          <input id="l_name" name="name" type="text" required autocomplete="organization">
+        </div>
+        <div class="field">
+          <label for="l_email">メールアドレス <span class="req">必須</span></label>
+          <input id="l_email" name="email" type="email" required autocomplete="email" inputmode="email">
+        </div>
+        <div class="field">
+          <label for="l_tel">お電話番号</label>
+          <input id="l_tel" name="tel" type="tel" autocomplete="tel" placeholder="任意">
+        </div>
+        <div class="field">
+          <label for="l_msg">補足・ご相談内容</label>
+          <textarea id="l_msg" name="msg" placeholder="入れたいモチーフ、用途、納期の事情など。決まっていなくても構いません。"></textarea>
+        </div>
+        <div class="field">
+          <label for="l_source">サイトを知ったきっかけ</label>
+          <select id="l_source" name="source">
+            <option value="">選択してください</option>
+            <option>検索（Google・Yahoo! など）</option>
+            <option>Instagram</option>
+            <option>YouTube</option>
+            <option>X（旧Twitter）</option>
+            <option>テレビ・新聞・雑誌などのメディア</option>
+            <option>コラボ商品を見て（GU・PUMA・万博・モンハンなど）</option>
+            <option>ICHI ドブ板本店・ドブ板通りで</option>
+            <option>知人・取引先からの紹介</option>
+            <option>以前から知っていた</option>
+            <option>その他</option>
+          </select>
+        </div>
+
+        <div class="est__recap" id="l_recap"></div>
+
+        <button class="btn btn--solid" type="submit" id="l_send">この内容で正式見積もりを依頼する</button>
+        <p class="wiz__err" id="l_err"></p>
+        <div class="wiz__sent" id="l_sent" hidden></div>
+        <p class="note" style="margin-top:18px">送信をもって<a class="link" href="privacy.html">プライバシーポリシー</a>にご同意いただいたものとします。入力内容と上記の選択内容は受注者へ送信され、記録されます。1営業日以内にご返信します。<br>
+          うまく送信できない場合は <a class="link" href="mailto:info@ichi-pj.com">info@ichi-pj.com</a> まで直接お送りください。</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  /* ------------------------------------------------------------------
+     送信先。contact.html / brief.html と同じ Google Apps Script のURL。
+     build.py が公開時に差し込むので、ここは空のままにしておく。
+     ------------------------------------------------------------------ */
+  const ENDPOINT = "";           // 例: "https://script.google.com/macros/s/XXXX/exec"
+  const SHARED_SECRET = "change-me";
+  const MAIL = "info@ichi-pj.com";
+
+  /* ------------------------------------------------------------------
+     目安価格。oem.html の「LOT & PRICE」の表と同じ数字にすること。
+     [ 下限着数, 上限着数(null=上限なし), 1着あたりの下限金額(税込) ]
+     ------------------------------------------------------------------ */
+  const TABLE = {
+    ready:   [[1, 49, 165000], [50, 99, 38500], [100, null, 18700]],
+    scratch: [[1, 49, 220000], [50, 99, 49500], [100, null, 27500]]
+  };
+  const DESIGN_INCLUDED_MAX = 49;   // この着数までは1着単価にデザイン費が含まれる
+
+  const $ = id => document.getElementById(id);
+  const f = $("estform"), lf = $("leadform");
+  if(!f || !lf) return;
+
+  const yen = n => "¥" + n.toLocaleString("ja-JP");
+
+  function unitPrice(body, qty){
+    for(const [lo, hi, price] of TABLE[body]){
+      if(qty >= lo && (hi === null || qty <= hi)) return price;
+    }
+    return TABLE[body][TABLE[body].length - 1][2];
+  }
+
+  function places(){
+    return [...f.querySelectorAll('input[name="place"]:checked')].map(i => i.value);
+  }
+
+  function spec(){
+    return {
+      kind:   f.elements.kind.value,
+      kindTxt:f.elements.kind.selectedOptions[0].textContent,
+      qty:    Math.max(1, Math.min(10000, parseInt(f.elements.qty.value, 10) || 1)),
+      body:   f.elements.body.value,
+      bodyTxt:f.elements.body.selectedOptions[0].textContent,
+      fabric: f.elements.fabric.value,
+      colors: f.elements.colors.value,
+      colorsTxt: f.elements.colors.selectedOptions[0].textContent,
+      side:   f.elements.side.value,
+      due:    f.elements.due.value,
+      dueTxt: f.elements.due.selectedOptions[0].textContent,
+      place:  places()
+    };
+  }
+
+  /* 「フルオーダー（一着）」と着数の食い違いを防ぐ */
+  function syncKind(src){
+    const k = f.elements.kind, q = f.elements.qty;
+    const qty = parseInt(q.value, 10) || 1;
+    if(src === "kind" && k.value === "order" && qty !== 1) q.value = 1;
+    if(src === "qty"  && qty > 1 && k.value === "order")   k.value = "oem";
+    if(src === "qty"  && qty === 1 && k.value === "oem")   { /* 量産で1着の試作もあるため触らない */ }
+  }
+
+  /* 袖の刺繍は「ボディの形から作る」場合のみ。選ばれたら自動で切り替える */
+  function enforceSleeve(){
+    const sleeve = [...f.querySelectorAll('input[data-scratch]')].some(i => i.checked);
+    const note = $("e_placenote");
+    if(sleeve && f.elements.body.value !== "scratch"){
+      f.elements.body.value = "scratch";
+      note.hidden = false;
+    }else if(!sleeve){
+      note.hidden = true;
+    }
+  }
+
+  function variables(s){
+    const v = [];
+    if(s.place.length >= 2) v.push("刺繍箇所が" + s.place.length + "箇所（背中のみが下限です）");
+    if(s.colors === "standard") v.push("色数・柄の密度が標準（4〜6色）");
+    if(s.colors === "complex")  v.push("色数・柄の密度が複雑（7色以上・ぼかしや描き込み）");
+    if(s.fabric === "別珍")     v.push("生地が別珍");
+    if(s.side === "リバーシブル") v.push("リバーシブル仕様");
+    if(s.due === "rush")        v.push("お急ぎ（別途特急料金がかかります）");
+    return v;
+  }
+
+  function calc(){
+    enforceSleeve();
+    const s = spec();
+    const unit = unitPrice(s.body, s.qty);
+    const total = unit * s.qty;
+    const designIncluded = s.qty <= DESIGN_INCLUDED_MAX;
+
+    $("e_total").textContent = yen(total);
+    $("e_unit").textContent = s.qty > 1
+      ? "1着あたり " + yen(unit) + "〜 × " + s.qty + "着"
+      : "1着あたり " + yen(unit) + "〜";
+
+    const rows = [];
+    rows.push(["製品代（" + s.bodyTxt + "）" + (designIncluded ? "／デザイン費込み" : ""), yen(total) + "〜"]);
+    if(!designIncluded){
+      rows.push(["デザイン費", "別途"]);
+      rows.push(["刺繍データ（型）代", "別途"]);
+    }
+    if(s.due === "rush") rows.push(["特急料金", "別途"]);
+    $("e_break").innerHTML = rows.map(r =>
+      '<li><span>' + r[0] + '</span><span>' + r[1] + '</span></li>').join("");
+
+    /* 50着から1着あたりの単価が大きく下がる。手前の着数なら知らせる */
+    const brk = $("e_break");
+    if(s.qty >= 35 && s.qty <= 49){
+      const at50 = unitPrice(s.body, 50) * 50;
+      brk.insertAdjacentHTML("beforeend",
+        '<li class="est__hint"><span>50着にすると</span><span>' + yen(at50) + '〜</span></li>');
+    }
+
+    const v = variables(s);
+    $("e_vars").hidden = v.length === 0;
+    $("e_varslist").innerHTML = v.map(x => "<li>" + x + "</li>").join("");
+
+    /* 問い合わせ側に引き継ぐ内容 */
+    const recap = [
+      ["ご依頼の種類", s.kindTxt],
+      ["着数", s.qty + "着"],
+      ["ボディ", s.bodyTxt],
+      ["刺繍箇所", s.place.join(" / ") || "未選択"],
+      ["色数・柄の密度", s.colorsTxt],
+      ["生地", s.fabric],
+      ["仕様", s.side],
+      ["希望納期", s.dueTxt],
+      ["画面に出た概算", yen(total) + "〜（税込）"]
+    ];
+    $("l_recap").innerHTML =
+      '<p class="est__recapcap">この内容で送信します</p><dl>' +
+      recap.map(r => "<dt>" + r[0] + "</dt><dd>" + r[1] + "</dd>").join("") + "</dl>";
+
+    return { s: s, unit: unit, total: total, recap: recap };
+  }
+
+  f.addEventListener("input",  e => { syncKind(e.target.name); calc(); });
+  f.addEventListener("change", e => { syncKind(e.target.name); calc(); });
+  calc();
+
+  /* ---------- 正式見積もりの依頼 ---------- */
+  function answers(){
+    const st = calc();
+    const a = {
+      name:  lf.elements.name.value.trim(),
+      email: lf.elements.email.value.trim(),
+      tel:   lf.elements.tel.value.trim(),
+      msg:   lf.elements.msg.value.trim(),
+      source:lf.elements.source.value,
+      kind:  st.s.kindTxt,
+      qty:   st.s.qty + "着",
+      body:  st.s.bodyTxt,
+      place: st.s.place,
+      colors:st.s.colorsTxt,
+      fabric:st.s.fabric,
+      side:  st.s.side,
+      due:   st.s.dueTxt,
+      unit:  yen(st.unit) + "〜",
+      total: yen(st.total) + "〜"
+    };
+    return a;
+  }
+
+  function mailtoFallback(a){
+    const body = [
+      "お名前・会社名: " + a.name, "メール: " + a.email, "電話: " + a.tel,
+      "", "【自動見積もりで選んだ内容】",
+      "ご依頼の種類: " + a.kind, "着数: " + a.qty, "ボディ: " + a.body,
+      "刺繍箇所: " + a.place.join(" / "), "色数・柄の密度: " + a.colors,
+      "生地: " + a.fabric, "仕様: " + a.side, "希望納期: " + a.due,
+      "画面に出た概算: " + a.total + "（1着あたり " + a.unit + "）",
+      "", "【補足】", a.msg,
+      "", "知ったきっかけ: " + a.source
+    ].join("\n");
+    return "mailto:" + MAIL + "?subject=" +
+      encodeURIComponent("【正式見積もりのご依頼】" + (a.name || "")) +
+      "&body=" + encodeURIComponent(body);
+  }
+
+  lf.addEventListener("submit", async function(e){
+    e.preventDefault();
+    const a = answers();
+    if(!a.name || !a.email){ $("l_err").textContent = "お名前とメールアドレスをご入力ください。"; return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(a.email)){ $("l_err").textContent = "メールアドレスの形式をご確認ください。"; return; }
+    $("l_err").textContent = "";
+
+    const btn = $("l_send"); btn.disabled = true; btn.textContent = "送信中…";
+    let ok = false;
+    if(ENDPOINT){
+      try{
+        const r = await fetch(ENDPOINT, {method:"POST",
+          headers:{"Content-Type":"text/plain;charset=utf-8"},
+          body: JSON.stringify({secret:SHARED_SECRET, form:"estimate", answers:a, ua:navigator.userAgent})});
+        ok = r.ok;
+      }catch(err){ ok = false; }
+    }
+    const box = $("l_sent"); box.hidden = false;
+    if(ok){
+      box.textContent = "承りました。1営業日以内に、正式なお見積りと日程をご返信します。";
+      btn.textContent = "送信済み";
+    }else{
+      box.innerHTML = "自動送信ができませんでした。メールソフトを開きますので、そのままお送りください。" +
+        '<br><a class="link" href="' + mailtoFallback(a) + '">' + MAIL + " へメールで送る</a>";
+      window.location.href = mailtoFallback(a);
+      btn.disabled = false; btn.textContent = "再送する";
+    }
+  });
+})();
+</script>
