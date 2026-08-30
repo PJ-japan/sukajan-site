@@ -175,6 +175,14 @@ PAGES = {
              "横須賀ドブ板通りのICHIドブ板本店で、実物のサンプルをご確認いただけます。横振り刺繍と機械刺繍の仕上がりの違い、生地見本、これまでの制作事例をご覧いただけます。ご来店は予約制です。遠方の場合は生地見本と刺繍サンプルの郵送でも対応します。"),
         ],
     ),
+    "design": dict(
+        title="スカジャンの柄・和柄のデザイン依頼｜柄だけをお納めします｜横地広海知",
+        desc="オリジナルスカジャンの柄、和柄のデザインだけをご依頼いただけます。生産ラインをお持ちのブランド向けに、柄のイラストデータのみを納品。GU・PUMAへの柄提供実績。スウェットやTシャツなどスカジャン以外のアイテムの柄も承ります。刺繍化を前提とした線で描きます。",
+        nav="柄のデザイン",
+        crumbs=[("柄のデザイン", "design.html")],
+        service="スカジャン柄・和柄のデザイン制作（柄データのみの納品）",
+        extra=[PERSON],
+    ),
     "order": dict(
         title="オーダーメイドスカジャン｜オリジナル柄を一着から｜フルオーダー｜横須賀ドブ板",
         desc="オーダーメイドのオリジナルスカジャンを一着から。入れたいモチーフをうかがって柄をゼロから描き起こし、ドブ板の横振り刺繍で仕上げる一点物。標準165,000円（税込）〜、ご予約から引渡しまで3〜4ヶ月。海外からのご注文も対応。",
@@ -253,7 +261,7 @@ PAGES = {
     "estimate": dict(
         title="スカジャン自動見積もり｜オリジナル・OEMの概算がその場で出ます｜横地広海知",
         desc="オリジナルスカジャンのオーダーメイド、スカジャンOEM・ブランド別注の概算をその場で計算します。着数・ボディ・刺繍箇所・色数を選ぶだけ。公開している目安価格にもとづいた金額が、メールアドレスの入力なしで出ます。",
-        nav="Estimate",
+        nav="見積もり・ご相談",
         crumbs=[("自動見積もり", "estimate.html")],
         service="スカジャンのオーダーメイド・OEMの概算見積もり",
         extra=[PERSON],
@@ -263,12 +271,17 @@ PAGES = {
         desc="オリジナルスカジャンのオーダーメイド、スカジャンOEM・ブランド別注、柄デザインのご相談。用途と希望納期をお知らせいただければ、可否とおおよその日程を最初にお答えします。",
         nav="Contact",
         crumbs=[("ご相談", "contact.html")],
+        # 見積もりページ（estimate）が問い合わせの主導線。
+        # このページは取材・来店予約など、金額の話ではないご相談の受け皿。
+        # ナビには出さず、フッターから辿れるようにしている。
+        unlisted=True,
         extra=[LOCAL],
     ),
 }
 
 # 生成するページ（サイトの構成順）
-PAGE_ORDER = ["index", "about", "interview", "order", "oem", "estimate", "process", "works", "press", "brief", "spec", "access", "contact", "privacy"]
+PAGE_ORDER = ["index", "about", "interview", "design", "order", "oem", "process",
+              "works", "press", "brief", "spec", "access", "estimate", "contact", "privacy"]
 
 # ヘッダーのナビに出すページ。unlisted のものは除く
 NAV_ORDER = [s for s in PAGE_ORDER if not PAGES[s].get("unlisted")]
@@ -279,8 +292,9 @@ CTA = {
     "index":     ("一着から、量産まで",         "相談する",           "contact.html", "別注・量産について", "oem.html"),
     "about":     ("柄のご相談を承っています",   "相談する",           "contact.html", "制作事例を見る", "works.html"),
     "interview": ("柄のご相談を承っています",   "相談する",           "contact.html", "横地広海知について", "about.html"),
-    "order":     ("一着から柄を描き起こします", "このまま相談する",   "contact.html", "制作事例を見る", "works.html"),
+    "order":     ("一着から柄を描き起こします", "見積もりを見る",     "estimate.html", "制作事例を見る", "works.html"),
     "oem":       ("柄がなくても始められます",   "自動見積もりを試す", "estimate.html", "納期と進め方", "process.html"),
+    "design":    ("柄だけのご依頼も承ります",   "柄の相談をする",     "estimate.html", "別注・量産について", "oem.html"),
     "estimate":  ("概算はその場で出ます",       "この内容で依頼する", "#send", "別注・量産について", "oem.html"),
     "process":   ("納期のご相談も承ります",     "相談する",           "contact.html", "別注・量産について", "oem.html"),
     "works":     ("同じように柄から作れます",   "相談する",           "contact.html", "Instagram で見る", "https://www.instagram.com/hiromichiyokochi/"),
@@ -472,7 +486,7 @@ SHELL = """<!DOCTYPE html>
       <ul>
         <li><a href="order.html">オーダーメイドスカジャン（一着）</a></li>
         <li><a href="oem.html">スカジャンOEM・ブランド別注</a></li>
-        <li><a href="oem.html#design-only">オリジナル柄のデザインのみ</a></li>
+        <li><a href="design.html">オリジナル柄のデザインのみ</a></li>
       </ul>
     </div>
     <div>
@@ -488,7 +502,8 @@ SHELL = """<!DOCTYPE html>
     <div>
       <h4>Contact</h4>
       <ul>
-        <li><a href="contact.html">ご相談・お問い合わせ</a></li>
+        <li><a href="estimate.html">見積もり・ご相談</a></li>
+        <li><a href="contact.html">取材・その他のお問い合わせ</a></li>
         <li><a href="https://ichi-dobuita.square.site/">WEBストア</a></li>
         <li><a href="access.html">アクセス・ご来店</a></li>
       </ul>
@@ -586,7 +601,7 @@ for name in ("robots.txt",):
 # sitemap.xml は PAGE_ORDER から作る。
 # 手書きにしておくとページを足したときに載せ忘れる（実際に一度やった）。
 SITEMAP_PRIORITY = {
-    "index": "1.0", "oem": "0.9", "order": "0.9", "estimate": "0.9",
+    "index": "1.0", "oem": "0.9", "order": "0.9", "estimate": "0.9", "design": "0.9",
     "about": "0.9", "contact": "0.8", "access": "0.8",
     "privacy": "0.4",
 }
