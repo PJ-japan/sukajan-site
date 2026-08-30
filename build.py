@@ -76,8 +76,11 @@ def works_html(limit=None):
     for w in items:
         img = ('<img src="%s" alt="%s" loading="lazy">' % (html.escape(w["image"], quote=True), html.escape(w.get("title", "")))
                if w.get("image") else '<div class="slot">背面</div>')
-        cells.append('<a href="%s">%s<h3>%s</h3><p class="note">%s</p></a>' % (
-            html.escape(w.get("url", "works.html"), quote=True), img,
+        url = w.get("url", "works.html")
+        # 事例カードは Instagram の投稿へ飛ぶ。外部なので別タブで開く
+        ext = ' target="_blank" rel="noopener"' if url.startswith("http") else ""
+        cells.append('<a href="%s"%s>%s<h3>%s</h3><p class="note">%s</p></a>' % (
+            html.escape(url, quote=True), ext, img,
             html.escape(w.get("title", "")), html.escape(w.get("meta", ""))))
     return '<div class="rail">%s</div>' % "".join(cells)
 
@@ -104,7 +107,7 @@ LOCAL = {
     "@id": BASE + "#studio",
     "name": "ICHIドブ板本店",
     "alternateName": "スカジャン絵師 横地広海知",
-    "description": "横須賀ドブ板通りの店舗。スカジャンの実物サンプル、横振り刺繍と機械刺繍の比較、生地見本をご確認いただけます。ご来店は予約制。",
+    "description": "横須賀ドブ板通りの店舗。スカジャンの実物サンプル、横振り刺繍と機械刺繍の比較、生地見本をご確認いただけます。営業時間内はご予約なしでご来店いただけます。",
     "url": BASE,
     "image": BASE + "assets/ogp.jpg",
     "telephone": "+81-90-9924-4608",
@@ -174,7 +177,7 @@ PAGES = {
             ("スカジャン以外のアイテムの柄も頼めますか",
              "承ります。スウェットやTシャツなど、スカジャン以外のアイテム向けの柄も手がけています。"),
             ("発注前に実物を見られますか",
-             "横須賀ドブ板通りのICHIドブ板本店で、実物のサンプルをご確認いただけます。横振り刺繍と機械刺繍の仕上がりの違い、生地見本、これまでの制作事例をご覧いただけます。ご来店は予約制です。遠方の場合は生地見本と刺繍サンプルの郵送でも対応します。"),
+             "横須賀ドブ板通りのICHIドブ板本店で、実物のサンプルをご確認いただけます。横振り刺繍と機械刺繍の仕上がりの違い、生地見本、これまでの制作事例をご覧いただけます。営業時間内はご予約なしでご来店いただけます。遠方の場合は生地見本と刺繍サンプルの郵送でも対応します。"),
         ],
     ),
     "design": dict(
@@ -242,13 +245,13 @@ PAGES = {
     ),
     "access": dict(
         title="アクセス｜ICHIドブ板本店（横須賀ドブ板通り）｜スカジャンの実物サンプル",
-        desc="オリジナルスカジャンの実物を見られる店。横須賀ドブ板通りのICHIドブ板本店で、横振り刺繍と機械刺繍の比較、生地見本、オーダー事例をご覧いただけます。京急汐入駅から徒歩3分、ご来店は予約制です。",
+        desc="オリジナルスカジャンの実物を見られる店。横須賀ドブ板通りのICHIドブ板本店で、横振り刺繍と機械刺繍の比較、生地見本、オーダー事例をご覧いただけます。京急汐入駅から徒歩3分。営業時間内はご予約なしでご来店いただけます。",
         nav="Access",
         crumbs=[("アクセス", "access.html")],
         extra=[LOCAL],
         faq=[
             ("予約なしで行ってもいいですか",
-             "制作で外していることがあるため、予約制とさせていただいています。フォームまたはお電話でご連絡ください。"),
+             "営業時間は週ごとに変わるため、Googleマップの表示をご確認ください。オーダーのご相談は事前にご連絡いただけると確実です。"),
             ("何が見られますか",
              "横振り刺繍と機械刺繍の実物比較、生地見本（ポリエステルサテン・別珍など）、これまでの制作事例をご覧いただけます。"),
             ("遠方で行けないのですが",
@@ -303,7 +306,7 @@ CTA = {
     "process":   ("納期のご相談も承ります",     "相談する",           "contact.html", "別注・量産について", "oem.html"),
     "works":     ("同じように柄から作れます",   "相談する",           "contact.html", "Instagram で見る", "https://www.instagram.com/hiromichiyokochi/"),
     "press":     ("取材のご依頼も承ります",     "お問い合わせ",       "contact.html", "横地広海知について", "about.html"),
-    "access":    ("ご来店は予約制です",         "来店を予約する",     "contact.html", "WEBストア", "https://ichi-dobuita.square.site/"),
+    "access":    ("ご予約なしでご来店いただけます", "ご来店について相談する", "contact.html", "WEBストア", "https://ichi-dobuita.square.site/"),
 }
 
 
@@ -508,19 +511,19 @@ SHELL = """<!DOCTYPE html>
     <div>
       <h4>Contact</h4>
       <ul>
-        <li><a class="foot__cta" href="estimate.html">見積もり・ご相談</a></li>
-        <li><a href="contact.html">取材・その他のお問い合わせ</a></li>
-        <li><a href="https://ichi-dobuita.square.site/">WEBストア</a></li>
+        <li><a href="estimate.html">見積もり・ご相談</a></li>
+        <li><a class="foot__cta" href="contact.html">取材・その他のお問い合わせ</a></li>
+        <li><a href="https://ichi-dobuita.square.site/" target="_blank" rel="noopener">WEBストア</a></li>
         <li><a href="access.html">アクセス・ご来店</a></li>
       </ul>
     </div>
     <div>
       <h4>Follow</h4>
       <ul>
-        <li><a href="https://www.instagram.com/hiromichiyokochi/">Instagram</a></li>
-        <li><a href="https://x.com/HiromichiYKC">X</a></li>
-        <li><a href="https://note.com/hiromichiyokochi">note</a></li>
-        <li><a href="https://prtimes.jp/main/html/searchrlp/company_id/185297">PR TIMES</a></li>
+        <li><a href="https://www.instagram.com/hiromichiyokochi/" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://x.com/HiromichiYKC" target="_blank" rel="noopener">X</a></li>
+        <li><a href="https://note.com/hiromichiyokochi" target="_blank" rel="noopener">note</a></li>
+        <li><a href="https://prtimes.jp/main/html/searchrlp/company_id/185297" target="_blank" rel="noopener">PR TIMES</a></li>
         <li><a href="en/">English</a></li>
       </ul>
     </div>
@@ -724,7 +727,7 @@ EN_SHELL = """<!DOCTYPE html>
       <h4>Contact</h4>
       <ul>
         <li><a href="mailto:info@ichi-pj.com">info@ichi-pj.com</a></li>
-        <li><a href="https://ichi-dobuita.square.site/">Online store</a></li>
+        <li><a href="https://ichi-dobuita.square.site/" target="_blank" rel="noopener">Online store</a></li>
         <li>Ai&rsquo;s Bldg. 1F, 3-11-7 Honcho</li>
         <li>Yokosuka, Kanagawa, Japan</li>
       </ul>
@@ -732,9 +735,9 @@ EN_SHELL = """<!DOCTYPE html>
     <div>
       <h4>Follow</h4>
       <ul>
-        <li><a href="https://www.instagram.com/hiromichiyokochi/">Instagram</a></li>
-        <li><a href="https://x.com/HiromichiYKC">X</a></li>
-        <li><a href="https://note.com/hiromichiyokochi">note</a></li>
+        <li><a href="https://www.instagram.com/hiromichiyokochi/" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://x.com/HiromichiYKC" target="_blank" rel="noopener">X</a></li>
+        <li><a href="https://note.com/hiromichiyokochi" target="_blank" rel="noopener">note</a></li>
       </ul>
     </div>
     <div>

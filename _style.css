@@ -577,9 +577,9 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
 .foot a:hover{color:var(--accent)}
 /* 問い合わせ導線はフッターでも目立たせる */
 .foot__cta{display:inline-flex;align-items:center;margin-top:6px;padding:12px 20px;
-  background:var(--accent);color:#fff;font-family:var(--mono);font-size:13px;
+  background:var(--fg);color:var(--bg);font-family:var(--mono);font-size:13px;
   letter-spacing:.05em;transition:background .3s var(--ease),color .3s var(--ease)}
-.foot__cta:hover{background:#fff;color:var(--bg)}
+.foot__cta:hover{background:var(--accent);color:#fff}
 .foot__copy{display:block;margin-top:8px;color:var(--fg-mute)}
 .foot__legal a{border-bottom:1px solid var(--fg-mute)}
 .foot__legal a:hover{color:var(--accent);border-bottom-color:var(--accent)}
