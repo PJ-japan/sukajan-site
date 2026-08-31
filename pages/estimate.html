@@ -94,7 +94,7 @@
             <div class="field est__wide">
               <label for="e_due">希望納期</label>
               <select id="e_due" name="due">
-                <option value="normal">通常（ご予約から引渡しまで3〜4ヶ月）</option>
+                <option value="normal">通常（ご予約から引渡しまで3ヶ月〜）</option>
                 <option value="rush">お急ぎ（最短1ヶ月・別途特急料金）</option>
               </select>
             </div>
@@ -217,7 +217,7 @@
               <div class="field">
                 <label for="d_due">希望納期</label>
                 <select id="d_due" name="d_due">
-                  <option>通常（柄1点あたり3〜4週間）</option>
+                  <option>通常（柄1点あたり3週間〜）</option>
                   <option>お急ぎ（別途特急料金）</option>
                   <option>まだ決めていない</option>
                 </select>
@@ -562,8 +562,8 @@
     $("e_total").textContent = "内容にあわせて個別に算出します";
     $("e_from").hidden = true;
     $("e_unit").textContent = d.count > 1
-      ? "納期の目安：柄1点あたり3〜4週間 × " + d.count + "点"
-      : "納期の目安：柄1点あたり3〜4週間";
+      ? "納期の目安：柄1点あたり3週間〜 × " + d.count + "点"
+      : "納期の目安：柄1点あたり3週間〜";
 
     const rows = [
       ["柄の点数", d.count + "点"],
