@@ -75,8 +75,8 @@ def press_html():
 USES = [
     ("order",  "オーダーメイド・フルオーダー",
      "一着ずつ柄を描き起こし、横振り刺繍で仕上げる一点物。"),
-    ("oem",    "ブランド別注・OEM・コラボ",
-     "アパレルブランドとの協業。柄の提供から量産まで。"),
+    ("oem",    "スカジャンOEM・ブランド別注",
+     "自社で量産しているスカジャン。この品質で、御社の別注をお受けします。"),
     ("design", "スカジャン柄のデザイン提供",
      "スカジャン以外の媒体にのせる柄。原画のみをお納めした案件。"),
     # 掲載できる事例が出たら use に "artist" を付ければ、この見出しが現れる
@@ -107,7 +107,15 @@ def works_html(limit=None, drafts=False):
     """draft: true の事例は works2.html にだけ出す。
     公開するときは works.json から "draft" を消すだけでよい。"""
     items = [w for w in WORKS if bool(w.get("draft")) == drafts]
+    if drafts and not items:
+        return '<p class="note">いま下書き中の事例はありません。</p>'
     return rail_html(items[:limit] if limit else items)
+
+
+def works_use_html(key):
+    """特定の用途の事例だけを並べる（各サービスページ用）。下書きは除く。"""
+    items = [w for w in WORKS if not w.get("draft") and key in (w.get("use") or [])]
+    return rail_html(items)
 
 
 def works_by_use_html():
@@ -642,6 +650,9 @@ for slug in PAGE_ORDER:
         year=date.today().year,
         body=(hold(body)
               .replace("<!--PRESS-->", press_html())
+              .replace("<!--WORKS:USE:design-->", works_use_html("design"))
+              .replace("<!--WORKS:USE:order-->", works_use_html("order"))
+              .replace("<!--WORKS:USE:oem-->", works_use_html("oem"))
               .replace("<!--WORKS:BYUSE-->", works_by_use_html())
               .replace("<!--WORKS:DRAFT-->", works_html(drafts=True))
               .replace("<!--WORKS-->", works_html())

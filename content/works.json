@@ -1,11 +1,11 @@
 [
   {
     "title": "鵺（ぬえ）／JAPAN／オリジナルスカジャン",
-    "meta": "オリジナル柄／黒ボディ／背中一面",
+    "meta": "自社の量産スカジャン／黒の別珍ボディ／背中一面／猿・虎・蛇を組み合わせた鵺／柄の設計・刺繍データ・量産まで自社で",
     "image": "assets/works/nue-japan.jpg",
     "url": "https://www.instagram.com/hiromichiyokochi/p/DWjOm12kZNf/",
     "use": [
-      "order"
+      "oem"
     ]
   },
   {
@@ -69,8 +69,7 @@
     "url": "https://www.instagram.com/p/DCai3epTkm3/",
     "use": [
       "design"
-    ],
-    "draft": true
+    ]
   },
   {
     "title": "涼風ナイトショウ／Eanbe 2024AW スカジャン",
@@ -79,8 +78,7 @@
     "url": "https://www.instagram.com/p/DCakKE5Tunc/",
     "use": [
       "design"
-    ],
-    "draft": true
+    ]
   },
   {
     "title": "龍とアメノウズメ／高校ストリートダンスグランプリ2024 優勝スカジャン",
@@ -89,8 +87,7 @@
     "url": "https://www.instagram.com/p/C7FvJnmhxHx/",
     "use": [
       "design"
-    ],
-    "draft": true
+    ]
   },
   {
     "title": "横須賀市スポーツ大賞／記念スカジャン",
@@ -99,8 +96,7 @@
     "url": "https://www.instagram.com/p/C6EGjtlRQla/",
     "use": [
       "design"
-    ],
-    "draft": true
+    ]
   },
   {
     "title": "メキシコ・ベトナムスカジャン／東野幸治さん オーダーメイド",
@@ -109,8 +105,7 @@
     "url": "",
     "use": [
       "order"
-    ],
-    "draft": true
+    ]
   },
   {
     "title": "横須賀市 E-Sports大会特別柄",
@@ -119,8 +114,7 @@
     "url": "",
     "use": [
       "design"
-    ],
-    "draft": true
+    ]
   },
   {
     "title": "浦賀パワーフェスティバル／Tシャツデザイン",
@@ -129,8 +123,7 @@
     "url": "",
     "use": [
       "design"
-    ],
-    "draft": true
+    ]
   },
   {
     "title": "JUMBO NO MIKACHI／横須賀ススム選手のスカジャン柄",
@@ -139,8 +132,7 @@
     "url": "",
     "use": [
       "design"
-    ],
-    "draft": true
+    ]
   },
   {
     "title": "白狼と yokosuka／横須賀ススム選手のスカジャン",
@@ -149,8 +141,7 @@
     "url": "",
     "use": [
       "order"
-    ],
-    "draft": true
+    ]
   },
   {
     "title": "着物の柄／舞踊家 梅川壱ノ介さん 舞台衣裳",
@@ -159,8 +150,7 @@
     "url": "https://www.townnews.co.jp/0501/2022/11/25/652985.html",
     "use": [
       "design"
-    ],
-    "draft": true
+    ]
   },
   {
     "title": "ドブ板オリジナルスカジャン 1st",
@@ -169,8 +159,7 @@
     "url": "",
     "use": [
       "design"
-    ],
-    "draft": true
+    ]
   },
   {
     "title": "ドブ板オリジナルスカジャン 2nd",
@@ -179,8 +168,7 @@
     "url": "",
     "use": [
       "design"
-    ],
-    "draft": true
+    ]
   },
   {
     "title": "葵唐草鷹狩図黒天鵞絨羽織（あおいからくさ たかがりず くろびろうどはおり）",
@@ -189,7 +177,6 @@
     "url": "https://www.instagram.com/p/DP3rAJdEzU4/",
     "use": [
       "design"
-    ],
-    "draft": true
+    ]
   }
 ]
