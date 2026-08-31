@@ -70,12 +70,22 @@ def press_html():
     return "\n".join(out) or '<p class="note">掲載情報がまだ登録されていません。content/press.json に追加してください。</p>'
 
 
-def works_html(limit=None, drafts=False):
-    """draft: true の事例は works2.html にだけ出す。
-    公開するときは works.json から "draft" を消すだけでよい。"""
-    items = [w for w in WORKS if bool(w.get("draft")) == drafts]
-    if limit:
-        items = items[:limit]
+# 用途別の索引。works.json の "use" に、この key を配列で入れる。
+# 件数が 0 の用途は出力しない（空の見出しを出さないため）。
+USES = [
+    ("order",  "オーダーメイド・フルオーダー",
+     "一着ずつ柄を描き起こし、横振り刺繍で仕上げる一点物。"),
+    ("oem",    "ブランド別注・OEM・コラボ",
+     "アパレルブランドとの協業。柄の提供から量産まで。"),
+    ("design", "スカジャン柄のデザイン提供",
+     "スカジャン以外の媒体にのせる柄。原画のみをお納めした案件。"),
+    # 掲載できる事例が出たら use に "artist" を付ければ、この見出しが現れる
+    ("artist", "アーティストコラボ",
+     "ミュージシャン・作家との協業。ステージ衣装、ツアー物販。"),
+]
+
+
+def rail_html(items):
     cells = []
     for w in items:
         img = ('<img src="%s" alt="%s" loading="lazy">' % (html.escape(w["image"], quote=True), html.escape(w.get("title", "")))
@@ -87,6 +97,33 @@ def works_html(limit=None, drafts=False):
             html.escape(url, quote=True), ext, img,
             html.escape(w.get("title", "")), html.escape(w.get("meta", ""))))
     return '<div class="rail">%s</div>' % "".join(cells)
+
+
+def works_html(limit=None, drafts=False):
+    """draft: true の事例は works2.html にだけ出す。
+    公開するときは works.json から "draft" を消すだけでよい。"""
+    items = [w for w in WORKS if bool(w.get("draft")) == drafts]
+    return rail_html(items[:limit] if limit else items)
+
+
+def works_by_use_html():
+    """用途ごとに見出しで区切って並べる。下書きも含めた全件が対象。
+    絞り込みは JS ではなくアンカーで行う（URL が残り、検索にも載る）。"""
+    out = []
+    for key, label, lead in USES:
+        items = [w for w in WORKS if key in (w.get("use") or [])]
+        if not items:
+            continue
+        out.append(
+            '<h3 id="use-%s">%s<span class="note" style="font-size:11px">　%d件</span></h3>'
+            '<p class="note">%s</p>%s'
+            % (key, html.escape(label), len(items), html.escape(lead), rail_html(items)))
+    untagged = [w for w in WORKS if not w.get("use")]
+    if untagged:
+        out.append('<p class="note">※ 用途タグが未設定の事例が %d 件あります。'
+                   'works.json の "use" に %s のいずれかを配列で入れてください。</p>'
+                   % (len(untagged), " / ".join(k for k, _, _ in USES)))
+    return "".join(out)
 
 
 PERSON = {
@@ -601,6 +638,7 @@ for slug in PAGE_ORDER:
         year=date.today().year,
         body=(hold(body)
               .replace("<!--PRESS-->", press_html())
+              .replace("<!--WORKS:BYUSE-->", works_by_use_html())
               .replace("<!--WORKS:DRAFT-->", works_html(drafts=True))
               .replace("<!--WORKS-->", works_html())
               .replace("<!--WORKS:5-->", works_html(5))

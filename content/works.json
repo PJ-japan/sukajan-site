@@ -3,30 +3,47 @@
     "title": "鵺（ぬえ）／JAPAN／オリジナルスカジャン",
     "meta": "オリジナル柄／黒ボディ／背中一面",
     "image": "assets/works/nue-japan.jpg",
-    "url": "https://www.instagram.com/hiromichiyokochi/p/DWjOm12kZNf/"
+    "url": "https://www.instagram.com/hiromichiyokochi/p/DWjOm12kZNf/",
+    "use": [
+      "order"
+    ]
   },
   {
     "title": "ハワイの伝統柄／オーダースカジャン",
     "meta": "オーダースカジャン／お誕生日記念／紺ボディ／刺繍：Ami",
     "image": "assets/works/onepoint-navy.jpg",
-    "url": "https://www.instagram.com/hiromichiyokochi/p/DTvLk4gE8_Z/"
+    "url": "https://www.instagram.com/hiromichiyokochi/p/DTvLk4gE8_Z/",
+    "use": [
+      "order"
+    ]
   },
   {
     "title": "GU「OMIYAGE JAPAN POP!」スウェット",
     "meta": "ブランド別注／柄提供／全国流通",
     "image": "assets/works/gu-sweat.jpg",
-    "url": "https://www.instagram.com/hiromichiyokochi/p/DNxl_n7Zrgh/"
+    "url": "https://www.instagram.com/hiromichiyokochi/p/DNxl_n7Zrgh/",
+    "use": [
+      "oem",
+      "design"
+    ]
   },
   {
     "title": "GU「OMIYAGE JAPAN POP!」Tシャツ",
     "meta": "ブランド別注／柄提供／全国流通",
     "image": "assets/works/gu-tee.jpg",
-    "url": "https://www.instagram.com/hiromichiyokochi/p/DYLajI0E79s/"
+    "url": "https://www.instagram.com/hiromichiyokochi/p/DYLajI0E79s/",
+    "use": [
+      "oem",
+      "design"
+    ]
   },
   {
     "title": "蠍座（スコーピオ）／ICHI M-43 Zodiac JKT",
     "meta": "ペイントカスタム／WWII M-43ミリタリージャケット／横振り刺繍＋ペイント／店頭受注",
     "image": "assets/works/m43-scorpio.jpg",
-    "url": "https://www.instagram.com/p/DERHf3tT_X_/"
+    "url": "https://www.instagram.com/p/DERHf3tT_X_/",
+    "use": [
+      "order"
+    ]
   }
 ]
