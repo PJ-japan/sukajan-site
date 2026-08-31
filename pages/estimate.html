@@ -56,8 +56,8 @@
             <div class="field">
               <label for="e_fabric">生地</label>
               <select id="e_fabric" name="fabric">
-                <option>ポリエステルサテン</option>
                 <option>別珍</option>
+                <option>ポリエステルサテン</option>
                 <option>まだ決めていない</option>
               </select>
             </div>
@@ -545,7 +545,6 @@
     const v = [];
     if(!r.mass && s.colors === "complex")
       v.push("色数・柄の密度が複雑（7色以上・ぼかしや描き込み）");
-    if(!r.mass && s.fabric === "別珍") v.push("生地が別珍");
     if(r.mass && (s.place.includes("右胸") || s.place.includes("左胸") ||
                   s.place.includes("右袖") || s.place.includes("左袖")))
       v.push("背中以外の刺繍箇所（量産の刺繍代は仕様により変わるため、正式なお見積りでご提示します）");
