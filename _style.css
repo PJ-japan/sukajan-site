@@ -242,6 +242,16 @@ html{scroll-padding-top:84px}
   background-position:50% 46%}
 .hero--art.hero--design::before{background-image:url(assets/hero-design.jpg);
   background-position:50% 46%}
+.hero--art.hero--access::before{background-image:url(assets/hero-access.jpg);
+  background-position:50% 26%}
+/* 看板の照明が強いので、写真のページはさらに濃く覆う */
+.hero--art.hero--access::after{background:
+  linear-gradient(180deg,transparent 0%,transparent 48%,var(--bg) 100%),
+  linear-gradient(100deg,
+    color-mix(in srgb,var(--bg) 97%,transparent) 0%,
+    color-mix(in srgb,var(--bg) 93%,transparent) 46%,
+    color-mix(in srgb,var(--bg) 74%,transparent) 76%,
+    color-mix(in srgb,var(--bg) 46%,transparent) 100%)}
 /* 柄が明るいぶん、文字側を共通のものより濃く覆う */
 .hero--art.hero--aoi::after,
 .hero--art.hero--oem::after,
@@ -260,6 +270,13 @@ html{scroll-padding-top:84px}
   .hero--art.hero--oem::before,
   .hero--art.hero--order::before,
   .hero--art.hero--design::before{background-position:50% 50%;background-size:cover}
+  .hero--art.hero--access::before{background-position:50% 22%;background-size:cover}
+  .hero--art.hero--access::after{background:
+    linear-gradient(180deg,
+      color-mix(in srgb,var(--bg) 62%,transparent) 0%,
+      color-mix(in srgb,var(--bg) 88%,transparent) 24%,
+      color-mix(in srgb,var(--bg) 97%,transparent) 42%,
+      var(--bg) 62%)}
   .hero--art.hero--aoi::after,
   .hero--art.hero--oem::after,
   .hero--art.hero--order::after,
