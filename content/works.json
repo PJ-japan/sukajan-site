@@ -39,8 +39,8 @@
   },
   {
     "title": "ハワイの伝統柄／オーダースカジャン",
-    "meta": "オーダースカジャン／お誕生日記念／紺ボディ／刺繍：Ami",
-    "image": "assets/works/onepoint-navy.jpg",
+    "meta": "オーダースカジャン／お誕生日記念／紺の別珍ボディ／背面に Aloha とフラダンサー／刺繍：Ami",
+    "image": "assets/works/hawaii-aloha.jpg",
     "url": "https://www.instagram.com/hiromichiyokochi/p/DTvLk4gE8_Z/",
     "use": [
       "order"
@@ -111,7 +111,7 @@
   {
     "title": "メキシコ・ベトナムスカジャン／東野幸治さん オーダーメイド",
     "meta": "オーダーメイド／黒ボディ／前面にシュガースカル、背面にメキシコ地図と SOBREVIVIRÉ PASE LO QUE PASE",
-    "image": "",
+    "image": "assets/works/slide-higashino.jpg",
     "url": "",
     "use": [
       "order"
@@ -121,7 +121,7 @@
   {
     "title": "横須賀市 E-Sports大会特別柄",
     "meta": "柄デザイン／横須賀市／ブルー×白ボディ／背面に yokosuka と虎",
-    "image": "",
+    "image": "assets/works/slide-esports.jpg",
     "url": "",
     "use": [
       "design"
@@ -131,7 +131,7 @@
   {
     "title": "浦賀パワーフェスティバル／Tシャツデザイン",
     "meta": "柄デザイン／黒船・龍・虎／イベント公式Tシャツ",
-    "image": "",
+    "image": "assets/works/slide-uraga.jpg",
     "url": "",
     "use": [
       "design"
@@ -141,7 +141,7 @@
   {
     "title": "JUMBO NO MIKACHI／横須賀ススム選手のスカジャン柄",
     "meta": "柄デザイン（柄のみ提供）／紫×白ボディ／背面に必殺技の図案",
-    "image": "",
+    "image": "assets/works/slide-susumu-design.jpg",
     "url": "",
     "use": [
       "design"
@@ -151,7 +151,7 @@
   {
     "title": "白狼と yokosuka／横須賀ススム選手のスカジャン",
     "meta": "オーダーメイド（柄と刺繍を納品）／紫×白ボディ／背面に月と白狼",
-    "image": "",
+    "image": "assets/works/slide-susumu-made.jpg",
     "url": "",
     "use": [
       "order"
@@ -161,7 +161,7 @@
   {
     "title": "着物の柄／舞踊家 梅川壱ノ介さん 舞台衣裳",
     "meta": "柄デザイン／舞台衣裳の着物／ペイント：Shabon",
-    "image": "",
+    "image": "assets/works/slide-kimono.jpg",
     "url": "https://www.townnews.co.jp/0501/2022/11/25/652985.html",
     "use": [
       "design"
@@ -171,7 +171,7 @@
   {
     "title": "ドブ板オリジナルスカジャン 1st",
     "meta": "柄デザイン／ドブ板通り公認／ブルー×白ボディ／背面に YOKOSUKA・日本地図・虎・富士山",
-    "image": "",
+    "image": "assets/works/slide-dobuita1.jpg",
     "url": "",
     "use": [
       "design"
@@ -181,7 +181,7 @@
   {
     "title": "ドブ板オリジナルスカジャン 2nd",
     "meta": "柄デザイン／ドブ板通り公認／黒×白ボディ／背面に yokosuka・龍・富士山・波",
-    "image": "",
+    "image": "assets/works/slide-dobuita2.jpg",
     "url": "",
     "use": [
       "design"
