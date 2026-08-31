@@ -433,6 +433,13 @@ html{scroll-padding-top:84px}
   transition:border-color .4s var(--ease),opacity .4s var(--ease)}
 .panel .rail img{background:rgba(10,10,11,.05);border-color:rgba(10,10,11,.14)}
 .rail a:hover img{border-color:var(--accent);opacity:.88}
+/* 2枚目がある事例は、ホバーで裏面に切り替える。
+   タッチ端末にホバーは無いので、そこでは1枚目のまま（壊れない）。 */
+.flip{display:block;position:relative}
+.flip__b{position:absolute;inset:0;opacity:0;transition:opacity .45s var(--ease)}
+@media (hover:hover){
+  .rail a:hover .flip__b{opacity:1}
+}
 
 .slot{aspect-ratio:4/5;display:grid;place-items:center;text-align:center;padding:16px;
   font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;

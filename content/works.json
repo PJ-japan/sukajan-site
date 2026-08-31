@@ -2,190 +2,265 @@
   {
     "title": "鵺（ぬえ）／JAPAN／オリジナルスカジャン",
     "meta": "自社の量産スカジャン／黒の別珍ボディ／背中一面／猿・虎・蛇を組み合わせた鵺／柄の設計・刺繍データ・量産まで自社で",
-    "image": "assets/works/nue-japan.jpg",
     "url": "https://www.instagram.com/hiromichiyokochi/p/DWjOm12kZNf/",
     "use": [
       "oem"
+    ],
+    "slug": "nue-japan",
+    "images": [
+      "assets/works/nue-japan.jpg"
     ]
   },
   {
     "title": "龍／GU ヘビーウェイトスウェットプルオーバー 横地広海知",
     "meta": "ブランドコラボ／柄提供／69 NAVY／背中に龍とyokosukaの筆記体／全国流通",
-    "image": "assets/works/gu-sweat.jpg",
     "url": "https://www.instagram.com/hiromichiyokochi/p/DNxl_n7Zrgh/",
     "use": [
       "design"
+    ],
+    "slug": "gu-sweat-dragon",
+    "images": [
+      "assets/works/gu-sweat.jpg"
     ]
   },
   {
     "title": "花札の雨柄（柳の光札・小野道風以前の図案）／オーダースカジャン",
     "meta": "オーダーメイド／黒の別珍ボディ／背中一面／雷雨の中を走る笠の男と蛙／TENJIN GA HIRA／刺繍：Ami",
-    "image": "assets/works/hanafuda-ame.jpg",
     "url": "",
     "use": [
       "order"
+    ],
+    "slug": "hanafuda-ame",
+    "images": [
+      "assets/works/hanafuda-ame.jpg"
+    ]
+  },
+  {
+    "title": "愛猫の柄（MT. JAMES）／オーダースカジャン",
+    "meta": "オーダーメイド／黒の別珍ボディ／背中一面／愛猫を伝統的な虎柄の構図で／蜘蛛の巣と菊／刺繍：Ami",
+    "url": "",
+    "use": [
+      "order"
+    ],
+    "slug": "mt-james",
+    "images": [
+      "assets/works/mt-james.jpg"
     ]
   },
   {
     "title": "蠍座（スコーピオ）／ICHI M-43 Zodiac JKT",
     "meta": "ペイントカスタム／WWII M-43ミリタリージャケット／横振り刺繍＋ペイント／店頭受注",
-    "image": "assets/works/m43-scorpio.jpg",
     "url": "https://www.instagram.com/p/DERHf3tT_X_/",
     "use": [
       "order"
+    ],
+    "slug": "m43-scorpio",
+    "images": [
+      "assets/works/m43-scorpio.jpg"
     ]
   },
   {
     "title": "ハワイの伝統柄／オーダースカジャン",
     "meta": "オーダースカジャン／お誕生日記念／紺の別珍ボディ／背面に Aloha とフラダンサー／刺繍：Ami",
-    "image": "assets/works/hawaii-aloha.jpg",
     "url": "https://www.instagram.com/hiromichiyokochi/p/DTvLk4gE8_Z/",
     "use": [
       "order"
+    ],
+    "slug": "hawaii-aloha",
+    "images": [
+      "assets/works/hawaii-aloha.jpg"
     ]
   },
   {
     "title": "龍／GU グラフィックT 横地広海知",
     "meta": "ブランドコラボ／柄提供／09 BLACK／背中に龍とyokosukaの筆記体／全国流通",
-    "image": "assets/works/gu-tee-dragon.jpg",
     "url": "https://www.instagram.com/hiromichiyokochi/p/DYLajI0E79s/",
     "use": [
       "design"
+    ],
+    "slug": "gu-tee-dragon",
+    "images": [
+      "assets/works/gu-tee-dragon.jpg"
     ]
   },
   {
     "title": "虎／GU ヘビーウェイトスウェットプルオーバー 横地広海知",
     "meta": "ブランドコラボ／柄提供／09 BLACK／胸に虎／全国流通",
-    "image": "assets/works/gu-sweat-tiger.jpg",
     "url": "https://www.instagram.com/hiromichiyokochi/p/DNxl_n7Zrgh/",
     "use": [
       "design"
+    ],
+    "slug": "gu-sweat-tiger",
+    "images": [
+      "assets/works/gu-sweat-tiger.jpg"
     ]
   },
   {
     "title": "虎／GU グラフィックT 横地広海知",
     "meta": "ブランドコラボ／柄提供／08 DARK GRAY／胸に虎／全国流通",
-    "image": "assets/works/gu-tee.jpg",
     "url": "https://www.instagram.com/hiromichiyokochi/p/DYLajI0E79s/",
     "use": [
       "design"
+    ],
+    "slug": "gu-tee-tiger",
+    "images": [
+      "assets/works/gu-tee.jpg"
     ]
   },
   {
     "title": "PUMA「SKA JACKET MIJ」／スカジャン柄ベースデザイン",
     "meta": "ブランドコラボ／柄提供／T7×スカジャン／背面にドット表現の龍と yokosuka／全国のPUMAストアで販売",
-    "image": "assets/works/puma-ska-jacket-mij.jpg",
     "url": "https://www.instagram.com/p/DCai3epTkm3/",
     "use": [
       "design"
+    ],
+    "slug": "puma-ska-jacket-mij",
+    "images": [
+      "assets/works/puma-ska-jacket-mij.jpg"
     ]
   },
   {
     "title": "涼風ナイトショウ／Eanbe 2024AW スカジャン",
     "meta": "ブランドコラボ／柄提供／リバーシブル／黒面は踊るキツネと椰子の木、緑面はキツネのタイガーヘッド",
-    "image": "assets/works/eanbe-suzukaze.jpg",
     "url": "https://www.instagram.com/p/DCakKE5Tunc/",
     "use": [
       "design"
+    ],
+    "slug": "eanbe-suzukaze",
+    "images": [
+      "assets/works/eanbe-suzukaze.jpg"
     ]
   },
   {
     "title": "龍とアメノウズメ／高校ストリートダンスグランプリ2024 優勝スカジャン",
     "meta": "柄デザイン／横須賀市／優勝チームへの授与品／刺繍：DOBUITA KOBA STUDIO",
-    "image": "assets/works/dance-gp-2024.jpg",
     "url": "https://www.instagram.com/p/C7FvJnmhxHx/",
     "use": [
       "design"
+    ],
+    "slug": "dance-gp-2024",
+    "images": [
+      "assets/works/dance-gp-2024.jpg"
     ]
   },
   {
     "title": "横須賀市スポーツ大賞／記念スカジャン",
     "meta": "柄デザイン／横須賀市／副賞の記念スカジャン／刺繍：DOBUITA KOBA STUDIO",
-    "image": "assets/works/yokosuka-sports-award.jpg",
     "url": "https://www.instagram.com/p/C6EGjtlRQla/",
     "use": [
       "design"
+    ],
+    "slug": "yokosuka-sports-award",
+    "images": [
+      "assets/works/yokosuka-sports-award.jpg"
     ]
   },
   {
     "title": "メキシコ・ベトナムスカジャン／東野幸治さん オーダーメイド",
     "meta": "オーダーメイド／黒ボディ／前面にシュガースカル、背面にメキシコ地図と SOBREVIVIRÉ PASE LO QUE PASE",
-    "image": "assets/works/slide-higashino.jpg",
     "url": "",
     "use": [
       "order"
+    ],
+    "slug": "mexico-vietnam",
+    "images": [
+      "assets/works/slide-higashino.jpg"
     ]
   },
   {
     "title": "横須賀市 E-Sports大会特別柄",
     "meta": "柄デザイン／横須賀市／ブルー×白ボディ／背面に yokosuka と虎",
-    "image": "assets/works/slide-esports.jpg",
     "url": "",
     "use": [
       "design"
+    ],
+    "slug": "yokosuka-esports",
+    "images": [
+      "assets/works/slide-esports.jpg"
     ]
   },
   {
     "title": "浦賀パワーフェスティバル／Tシャツデザイン",
     "meta": "柄デザイン／黒船・龍・虎／イベント公式Tシャツ",
-    "image": "assets/works/slide-uraga.jpg",
     "url": "",
     "use": [
       "design"
+    ],
+    "slug": "uraga-power-festival",
+    "images": [
+      "assets/works/slide-uraga.jpg"
     ]
   },
   {
     "title": "JUMBO NO MIKACHI／横須賀ススム選手のスカジャン柄",
     "meta": "柄デザイン（柄のみ提供）／紫×白ボディ／背面に必殺技の図案",
-    "image": "assets/works/slide-susumu-design.jpg",
     "url": "",
     "use": [
       "design"
+    ],
+    "slug": "jumbo-no-mikachi",
+    "images": [
+      "assets/works/slide-susumu-design.jpg"
     ]
   },
   {
     "title": "白狼と yokosuka／横須賀ススム選手のスカジャン",
     "meta": "オーダーメイド（柄と刺繍を納品）／紫×白ボディ／背面に月と白狼",
-    "image": "assets/works/slide-susumu-made.jpg",
     "url": "",
     "use": [
       "order"
+    ],
+    "slug": "hakurou-yokosuka",
+    "images": [
+      "assets/works/slide-susumu-made.jpg"
     ]
   },
   {
     "title": "着物の柄／舞踊家 梅川壱ノ介さん 舞台衣裳",
     "meta": "柄デザイン／舞台衣裳の着物／ペイント：Shabon",
-    "image": "assets/works/slide-kimono.jpg",
     "url": "https://www.townnews.co.jp/0501/2022/11/25/652985.html",
     "use": [
       "design"
+    ],
+    "slug": "umekawa-kimono",
+    "images": [
+      "assets/works/slide-kimono.jpg"
     ]
   },
   {
     "title": "ドブ板オリジナルスカジャン 1st",
     "meta": "柄デザイン／ドブ板通り公認／ブルー×白ボディ／背面に YOKOSUKA・日本地図・虎・富士山",
-    "image": "assets/works/slide-dobuita1.jpg",
     "url": "",
     "use": [
       "design"
+    ],
+    "slug": "dobuita-1st",
+    "images": [
+      "assets/works/slide-dobuita1.jpg"
     ]
   },
   {
     "title": "ドブ板オリジナルスカジャン 2nd",
     "meta": "柄デザイン／ドブ板通り公認／黒×白ボディ／背面に yokosuka・龍・富士山・波",
-    "image": "assets/works/slide-dobuita2.jpg",
     "url": "",
     "use": [
       "design"
+    ],
+    "slug": "dobuita-2nd",
+    "images": [
+      "assets/works/slide-dobuita2.jpg"
     ]
   },
   {
     "title": "葵唐草鷹狩図黒天鵞絨羽織（あおいからくさ たかがりず くろびろうどはおり）",
     "meta": "フルオーダー／黒天鵞絨の羽織／中京テレビ『ムジナバケール』×徳川美術館／しかみ像から起こした葵唐草と鷹狩り／刺繍：Ami",
-    "image": "assets/works/aoi-karakusa-back.jpg",
     "url": "works-aoi-karakusa.html",
     "use": [
       "order"
+    ],
+    "slug": "aoi-karakusa",
+    "images": [
+      "assets/works/aoi-karakusa-back.jpg"
     ]
   }
 ]

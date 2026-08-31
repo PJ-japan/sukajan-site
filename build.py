@@ -85,20 +85,42 @@ USES = [
 ]
 
 
+def work_images(w):
+    """images（配列）が正。古い image（単数）も読めるようにしておく。"""
+    if w.get("images"):
+        return [i for i in w["images"] if i]
+    return [w["image"]] if w.get("image") else []
+
+
+def work_href(w):
+    """事例カードの飛び先。個別ページがあればそちら、無ければ外部リンク。"""
+    if w.get("slug"):
+        return "works-%s.html" % w["slug"]
+    return w.get("url") or ""
+
+
 def rail_html(items, wrap=False):
     cells = []
     for w in items:
-        img = ('<img src="%s" alt="%s" loading="lazy">' % (html.escape(w["image"], quote=True), html.escape(w.get("title", "")))
-               if w.get("image") else '<div class="slot">背面</div>')
-        url = w.get("url") or ""
+        imgs = work_images(w)
+        alt = html.escape(w.get("title", ""))
+        if not imgs:
+            img = '<div class="slot">背面</div>'
+        elif len(imgs) >= 2:
+            # 2枚目があるカードは、ホバーで裏面に切り替える（タッチ端末では起きない）
+            img = ('<span class="flip"><img src="%s" alt="%s" loading="lazy">'
+                   '<img class="flip__b" src="%s" alt="" aria-hidden="true" loading="lazy"></span>'
+                   % (html.escape(imgs[0], quote=True), alt, html.escape(imgs[1], quote=True)))
+        else:
+            img = '<img src="%s" alt="%s" loading="lazy">' % (html.escape(imgs[0], quote=True), alt)
         body = '%s<h3>%s</h3><p class="note">%s</p>' % (
-            img, html.escape(w.get("title", "")), html.escape(w.get("meta", "")))
+            img, alt, html.escape(w.get("meta", "")))
+        url = work_href(w)
         if url:
-            # 事例カードは Instagram の投稿へ飛ぶ。外部なので別タブで開く
             ext = ' target="_blank" rel="noopener"' if url.startswith("http") else ""
             cells.append('<a href="%s"%s>%s</a>' % (html.escape(url, quote=True), ext, body))
         else:
-            # url が空のときはリンクなしのカードにする（press.json と同じ扱い）
+            # 飛び先が無いときはリンクなしのカードにする（press.json と同じ扱い）
             cells.append('<div>%s</div>' % body)
     cls = "rail rail--wrap" if wrap else "rail"
     return '<div class="%s">%s</div>' % (cls, "".join(cells))
@@ -359,8 +381,125 @@ PAGES = {
 }
 
 # 生成するページ（サイトの構成順）
+# --------------------------------------------------------------------------
+# 事例の個別ページ。works.json の slug ごとに1枚ずつ作る。
+# pages/works-{slug}.html を置けば、そちらが優先される（手書きの記事用）。
+# --------------------------------------------------------------------------
+USE_LABEL = {
+    "order":  ("MADE TO ORDER", "オーダーメイド"),
+    "oem":    ("OEM", "スカジャンOEM・量産"),
+    "design": ("PATTERN DESIGN", "柄のデザイン提供"),
+    "artist": ("ARTIST", "アーティストコラボ"),
+}
+USE_PAGE = {"order": "order.html", "oem": "oem.html", "design": "design.html",
+            "artist": "design.html"}
+
+
+def work_page_body(w):
+    key = (w.get("use") or ["design"])[0]
+    en, ja = USE_LABEL.get(key, USE_LABEL["design"])
+    title = html.escape(w.get("title", ""))
+    meta = html.escape(w.get("meta", ""))
+    figs = []
+    for i, src in enumerate(work_images(w)):
+        cap = "背面" if i == 0 else "別のカット"
+        figs.append('<figure class="figure%s"><img src="%s" alt="%s" '
+                    'width="900" height="900" loading="lazy">'
+                    '<figcaption>%s</figcaption></figure>'
+                    % (" figure--wide" if i == 0 else "",
+                       html.escape(src, quote=True), title, cap))
+    if not figs:
+        figs.append('<div class="slot slot--wide">写真は準備中です</div>')
+    ext = ""
+    if w.get("url", "").startswith("http"):
+        ext = ('<p class="note">この事例は<a class="link" href="%s" target="_blank" '
+               'rel="noopener">Instagram の投稿</a>でもご覧いただけます。</p>'
+               % html.escape(w["url"], quote=True))
+    return """<section class="hero">
+  <h1 class="hero__title">
+    <span class="kicker">Sukajan pattern &mdash; %(en)s</span>
+    <span class="en">%(en)s</span>
+    <span class="sub">%(title)s</span>
+  </h1>
+  <p class="lead hero__lead">%(meta)s</p>
+  <div class="btns">
+    <a class="btn btn--solid" href="estimate.html">同じように柄から作る</a>
+    <a class="btn btn--ghost" href="works.html#uses">ほかの制作事例</a>
+  </div>
+</section>
+
+<div class="panel">
+  <section class="band rise">
+    <div class="band__grid">
+      <div class="band__aside">
+        <p class="tag"><span class="tag__en">THE WORK</span><span class="tag__ja">この一着</span></p>
+        <p>%(ja)s。</p>
+      </div>
+      <div class="band__main">
+        <h2>%(title)s</h2>
+        %(figs)s
+        <div class="tw">
+          <table>
+            <thead><tr><th>項目</th><th>内容</th></tr></thead>
+            <tbody>
+              <tr><th>柄の名前</th><td>%(title)s</td></tr>
+              <tr><th>ご依頼の形</th><td><a class="link" href="%(usepage)s">%(ja)s</a></td></tr>
+              <tr><th>仕様</th><td>%(meta)s</td></tr>
+            </tbody>
+          </table>
+        </div>
+        %(ext)s
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="band rise">
+  <div class="band__grid">
+    <div class="band__aside">
+      <p class="tag"><span class="tag__en">NEXT</span><span class="tag__ja">ご依頼</span></p>
+      <p>柄から起こします。</p>
+    </div>
+    <div class="band__main">
+      <h2>この作り方で、<br>あなたの柄もお描きします</h2>
+      <p class="lead">入れたいモチーフをうかがって、<strong>柄をゼロから描き起こします。</strong>一着だけのオーダーメイドから、ブランドの別注・量産、柄のデータだけのご提供まで承ります。</p>
+      <div class="btns">
+        <a class="btn btn--solid" href="estimate.html">今すぐ自動見積もり</a>
+        <a class="btn btn--ghost" href="%(usepage)s">%(ja)sについて</a>
+      </div>
+    </div>
+  </div>
+</section>
+""" % dict(en=en, ja=ja, title=title, meta=meta, figs="\n        ".join(figs),
+           usepage=USE_PAGE.get(key, "design.html"), ext=ext)
+
+
+GENERATED = {}
+for _w in WORKS:
+    _slug = _w.get("slug")
+    if not _slug:
+        continue
+    _name = "works-%s" % _slug
+    if _name in PAGES:
+        continue
+    _key = (_w.get("use") or ["design"])[0]
+    _ja = USE_LABEL.get(_key, USE_LABEL["design"])[1]
+    PAGES[_name] = dict(
+        title="%s｜%sの制作事例｜スカジャン絵師 横地広海知" % (_w["title"], _ja),
+        desc="%s %s スカジャン柄の制作事例です。" % (_w["title"], _w.get("meta", "")),
+        nav=_w["title"][:12],
+        crumbs=[("制作事例", "works.html"), (_w["title"], _name + ".html")],
+        unlisted=True,
+    )
+    if not (ROOT / "pages" / (_name + ".html")).exists():
+        GENERATED[_name] = work_page_body(_w)
+
+
 PAGE_ORDER = ["index", "about", "interview", "design", "order", "oem", "process",
               "works", "works2", "works-aoi-karakusa", "press", "brief", "spec", "access", "estimate", "contact", "privacy"]
+
+# 事例の個別ページを末尾に足す（ナビには出ない。sitemap には載る）
+PAGE_ORDER += [n for n in PAGES if n.startswith("works-") and n not in PAGE_ORDER]
 
 # ヘッダーのナビに出すページ。unlisted のものは除く
 NAV_ORDER = [s for s in PAGE_ORDER if not PAGES[s].get("unlisted")]
@@ -639,7 +778,8 @@ SHELL = """<!DOCTYPE html>
 
 for slug in PAGE_ORDER:
     meta = PAGES[slug]
-    body = (ROOT / "pages" / f"{slug}.html").read_text(encoding="utf-8")
+    src = ROOT / "pages" / f"{slug}.html"
+    body = GENERATED[slug] if slug in GENERATED else src.read_text(encoding="utf-8")
     canonical = BASE if slug == "index" else BASE + f"{slug}.html"
     page = SHELL.format(
         title=html.escape(meta["title"], quote=True),
