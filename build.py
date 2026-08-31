@@ -90,12 +90,16 @@ def rail_html(items):
     for w in items:
         img = ('<img src="%s" alt="%s" loading="lazy">' % (html.escape(w["image"], quote=True), html.escape(w.get("title", "")))
                if w.get("image") else '<div class="slot">背面</div>')
-        url = w.get("url", "works.html")
-        # 事例カードは Instagram の投稿へ飛ぶ。外部なので別タブで開く
-        ext = ' target="_blank" rel="noopener"' if url.startswith("http") else ""
-        cells.append('<a href="%s"%s>%s<h3>%s</h3><p class="note">%s</p></a>' % (
-            html.escape(url, quote=True), ext, img,
-            html.escape(w.get("title", "")), html.escape(w.get("meta", ""))))
+        url = w.get("url") or ""
+        body = '%s<h3>%s</h3><p class="note">%s</p>' % (
+            img, html.escape(w.get("title", "")), html.escape(w.get("meta", "")))
+        if url:
+            # 事例カードは Instagram の投稿へ飛ぶ。外部なので別タブで開く
+            ext = ' target="_blank" rel="noopener"' if url.startswith("http") else ""
+            cells.append('<a href="%s"%s>%s</a>' % (html.escape(url, quote=True), ext, body))
+        else:
+            # url が空のときはリンクなしのカードにする（press.json と同じ扱い）
+            cells.append('<div>%s</div>' % body)
     return '<div class="rail">%s</div>' % "".join(cells)
 
 
