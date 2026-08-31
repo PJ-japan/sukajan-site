@@ -270,6 +270,14 @@ PAGES = {
         unlisted=True,
         noindex=True,
     ),
+    # 事例の個別ページ。ナビには出さないが、検索には載せる（noindex は付けない）
+    "works-aoi-karakusa": dict(
+        title="葵唐草鷹狩図黒天鵞絨羽織｜徳川美術館の所蔵品から起こしたスカジャン柄｜横地広海知",
+        desc="中京テレビ『ムジナバケール』×徳川美術館の企画で制作した《葵唐草鷹狩図黒天鵞絨羽織》。家康公の「しかみ像」を題材に、鷹狩りと葵唐草を掛け合わせた新しい柄を描き起こしました。柄の決め方から刺繍の仕上げまで、制作の全工程を公開しています。",
+        nav="葵唐草鷹狩図",
+        crumbs=[("制作事例", "works.html"), ("葵唐草鷹狩図黒天鵞絨羽織", "works-aoi-karakusa.html")],
+        unlisted=True,
+    ),
     "press": dict(
         title="掲載・出演・受賞｜スカジャン絵師 横地広海知",
         desc="スカジャン絵師 横地広海知のメディア掲載・出演・受賞の記録。GU・PUMA・大阪関西万博などオリジナルスカジャンの案件に関する報道を、東京新聞・日本経済新聞・NHKほか38件まとめています。",
@@ -352,7 +360,7 @@ PAGES = {
 
 # 生成するページ（サイトの構成順）
 PAGE_ORDER = ["index", "about", "interview", "design", "order", "oem", "process",
-              "works", "works2", "press", "brief", "spec", "access", "estimate", "contact", "privacy"]
+              "works", "works2", "works-aoi-karakusa", "press", "brief", "spec", "access", "estimate", "contact", "privacy"]
 
 # ヘッダーのナビに出すページ。unlisted のものは除く
 NAV_ORDER = [s for s in PAGE_ORDER if not PAGES[s].get("unlisted")]
@@ -462,8 +470,11 @@ def crumbs_html(meta):
     if not meta["crumbs"]:
         return ""
     trail = '<a href="index.html">ホーム</a>'
-    for label, href in meta["crumbs"]:
-        trail += f' &rsaquo; <span>{label}</span>'
+    last = len(meta["crumbs"]) - 1
+    for i, (label, href) in enumerate(meta["crumbs"]):
+        # 末尾は現在地なのでリンクにしない
+        cell = f'<span>{label}</span>' if i == last else f'<a href="{href}">{label}</a>'
+        trail += f' &rsaquo; {cell}'
     return f'<nav class="crumbs" aria-label="パンくず">{trail}</nav>'
 
 
