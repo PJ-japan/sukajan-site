@@ -85,7 +85,7 @@ USES = [
 ]
 
 
-def rail_html(items):
+def rail_html(items, wrap=False):
     cells = []
     for w in items:
         img = ('<img src="%s" alt="%s" loading="lazy">' % (html.escape(w["image"], quote=True), html.escape(w.get("title", "")))
@@ -100,22 +100,23 @@ def rail_html(items):
         else:
             # url が空のときはリンクなしのカードにする（press.json と同じ扱い）
             cells.append('<div>%s</div>' % body)
-    return '<div class="rail">%s</div>' % "".join(cells)
+    cls = "rail rail--wrap" if wrap else "rail"
+    return '<div class="%s">%s</div>' % (cls, "".join(cells))
 
 
-def works_html(limit=None, drafts=False):
+def works_html(limit=None, drafts=False, wrap=False):
     """draft: true の事例は works2.html にだけ出す。
     公開するときは works.json から "draft" を消すだけでよい。"""
     items = [w for w in WORKS if bool(w.get("draft")) == drafts]
     if drafts and not items:
         return '<p class="note">いま下書き中の事例はありません。</p>'
-    return rail_html(items[:limit] if limit else items)
+    return rail_html(items[:limit] if limit else items, wrap=wrap)
 
 
 def works_use_html(key):
     """特定の用途の事例だけを並べる（各サービスページ用）。下書きは除く。"""
     items = [w for w in WORKS if not w.get("draft") and key in (w.get("use") or [])]
-    return rail_html(items)
+    return rail_html(items, wrap=True)
 
 
 def works_by_use_html():
@@ -129,7 +130,7 @@ def works_by_use_html():
         out.append(
             '<h3 id="use-%s">%s<span class="note" style="font-size:11px">　%d件</span></h3>'
             '<p class="note">%s</p>%s'
-            % (key, html.escape(label), len(items), html.escape(lead), rail_html(items)))
+            % (key, html.escape(label), len(items), html.escape(lead), rail_html(items, wrap=True)))
     untagged = [w for w in WORKS if not w.get("use")]
     if untagged:
         out.append('<p class="note">※ 用途タグが未設定の事例が %d 件あります。'
@@ -256,7 +257,7 @@ PAGES = {
     "works": dict(
         title="制作事例｜オーダースカジャン・ブランド別注の実績",
         desc="オリジナルスカジャンの制作事例。オーダーメイドの一点物、ブランド別注、アーティストグッズ、周年記念など、これまでに描いたスカジャン柄を掲載。最新の実績はInstagram（@hiromichiyokochi）で公開しています。",
-        nav="Works (IG)",
+        nav="Works",
         crumbs=[("制作事例", "works.html")],
     ),
     # 事例の書き溜め用。ナビ・フッター・sitemap には出さず noindex。
@@ -650,6 +651,7 @@ for slug in PAGE_ORDER:
         year=date.today().year,
         body=(hold(body)
               .replace("<!--PRESS-->", press_html())
+              .replace("<!--WORKS:WRAP-->", works_html(wrap=True))
               .replace("<!--WORKS:USE:design-->", works_use_html("design"))
               .replace("<!--WORKS:USE:order-->", works_use_html("order"))
               .replace("<!--WORKS:USE:oem-->", works_use_html("oem"))
