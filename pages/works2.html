@@ -4,7 +4,7 @@
     <span class="en">WORKS<br>DRAFT</span>
     <span class="sub">公開前の制作事例 — このページは検索にも、ナビにも出ません</span>
   </h1>
-  <p class="lead hero__lead">ここに出ているのは <code>content/works.json</code> で <code>"draft": true</code> が付いている事例です。公開ページ（<a class="link" href="works.html">works.html</a>）とトップの事例欄には出ません。<strong>公開するときは、その項目から <code>"draft": true</code> の行を消して <code>python3 build.py</code> を実行するだけです。</strong></p>
+  <p class="lead hero__lead"><strong>このページで works.html の完成版を作ります。</strong>公開してよい状態になったら、内容をそのまま works.html に移します。ここに出ているのは <code>content/works.json</code> で <code>"draft": true</code> が付いている事例です。公開ページ（<a class="link" href="works.html">works.html</a>）とトップの事例欄には出ません。<strong>公開するときは、その項目から <code>"draft": true</code> の行を消して <code>python3 build.py</code> を実行するだけです。</strong></p>
 </section>
 
 <div class="panel">
@@ -23,10 +23,37 @@
   </section>
 </div>
 
-<section class="band rise">
+
+<section class="band rise" id="uses">
   <div class="band__grid">
     <div class="band__aside">
-      <p class="tag"><span class="tag__en">HOW TO</span><span class="tag__ja">書き方</span></p>
+      <p class="tag"><span class="tag__en">INDEX</span><span class="tag__ja">用途</span></p>
+      <p>どんな理由でも作れます。</p>
+    </div>
+    <div class="band__main">
+      <h2>用途から探す</h2>
+      <p class="lead">スカジャンは「誰に、何のために作るのか」で柄が変わります。これまでにお受けしてきたのは、次のような用途です。<strong>ここにない用途でも構いません。</strong></p>
+      <div class="rows">
+        <div class="row"><div><h3>フルオーダー一着</h3></div><div><p>個人のお客様の一点物。入れたいモチーフをうかがって柄から描き起こします。<a class="link" href="order.html">オーダーメイドについて</a></p></div></div>
+        <div class="row"><div><h3>ブランド別注</h3></div><div><p>アパレルブランドとの協業。1着の試作から100着以上の量産まで。<a class="link" href="oem.html">スカジャンOEMについて</a></p></div></div>
+        <div class="row"><div><h3>アーティストグッズ</h3></div><div><p>ライブ・ツアー物販。ステージ衣装と物販を揃えた柄でお作りすることもできます。</p></div></div>
+        <div class="row"><div><h3>周年・記念品</h3></div><div><p>創業記念、退職記念、還暦。社史や思い出の意匠を柄に組み込みます。</p></div></div>
+        <div class="row"><div><h3>駐留記念</h3></div><div><p>米軍関係者向けのスーベニア。部隊名や滞在した年を入れた、スカジャン本来の使われ方です。</p></div></div>
+        <div class="row"><div><h3>インバウンド商材</h3></div><div><p>観光・土産物向け。海外のお客様に向けた柄と、まとまった数の生産に対応します。</p></div></div>
+      </div>
+      <div class="btns">
+        <a class="btn btn--solid" href="estimate.html">今すぐ自動見積もり</a>
+        <a class="btn btn--ghost" href="contact.html">用途を相談する</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="panel">
+  <section class="band rise">
+    <div class="band__grid">
+      <div class="band__aside">
+        <p class="tag"><span class="tag__en">HOW TO</span><span class="tag__ja">書き方</span></p>
       <p>1件 = JSONの1ブロック。</p>
     </div>
     <div class="band__main">
@@ -46,3 +73,4 @@
     </div>
   </div>
 </section>
+</div>
