@@ -160,8 +160,8 @@
           <input id="r_url" name="r_url" type="text" placeholder="任意。Instagram など、人となりが分かるものがあれば">
         </div>
         <div class="field">
-          <label for="r_source">当店を知ったきっかけ</label>
-          <select id="r_source" name="r_source">
+          <label for="r_source">当店を知ったきっかけ <span class="req">必須</span></label>
+          <select id="r_source" name="r_source" required>
             <option value="">選択してください</option>
             <option>検索（Google・Yahoo! など）</option>
             <option>Instagram</option>
@@ -224,6 +224,7 @@
     const a = values();
     if(!a.name || !a.email){ $("rerr").textContent = "お名前とメールアドレスをご入力ください。"; return; }
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(a.email)){ $("rerr").textContent = "メールアドレスの形式をご確認ください。"; return; }
+    if(!a.source){ $("rerr").textContent = "当店を知ったきっかけをお選びください。"; return; }
     $("rerr").textContent = "";
 
     const btn = $("rsend"); btn.disabled = true; btn.textContent = "送信中…";

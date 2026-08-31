@@ -310,8 +310,8 @@
           <textarea id="l_msg" name="msg" placeholder="入れたいモチーフ、用途、納期の事情など。決まっていなくても構いません。"></textarea>
         </div>
         <div class="field">
-          <label for="l_source">サイトを知ったきっかけ</label>
-          <select id="l_source" name="source">
+          <label for="l_source">サイトを知ったきっかけ <span class="req">必須</span></label>
+          <select id="l_source" name="source" required>
             <option value="">選択してください</option>
             <option>検索（Google・Yahoo! など）</option>
             <option>Instagram</option>
@@ -750,6 +750,7 @@
     const a = answers();
     if(!a.name || !a.email){ $("l_err").textContent = "お名前とメールアドレスをご入力ください。"; return; }
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(a.email)){ $("l_err").textContent = "メールアドレスの形式をご確認ください。"; return; }
+    if(!a.source){ $("l_err").textContent = "サイトを知ったきっかけをお選びください。"; return; }
     $("l_err").textContent = "";
 
     const btn = $("l_send"); btn.disabled = true; btn.textContent = "送信中…";
