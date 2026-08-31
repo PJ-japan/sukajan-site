@@ -23,6 +23,7 @@ const SHEET_NAME = 'briefs';        // ご依頼フォーム（brief.html）
 const CONTACT_SHEET = 'contacts';   // お問い合わせフォーム（contact.html）
 const ESTIMATE_SHEET = 'estimates'; // 自動見積もり（estimate.html）
 const DESIGN_SHEET = 'design';      // 柄のデザインのみ（estimate.html）
+const RECRUIT_SHEET = 'recruit';    // アルバイト応募（recruit.html）
 const SECRET     = 'm5u0-yxSl-ByIk';   // build.py の FORM_SECRET と同じ文字列
 const NOTIFY_TO  = 'info@ichi-pj.com';   // 通知メールの宛先。空にすると送りません
 const AUTO_REPLY = true;                 // 送信者へ受付メールを自動で返すか
@@ -51,6 +52,12 @@ const ESTIMATE_HEADERS = [
   '1着あたり概算','合計概算','補足','知ったきっかけ','UA'
 ];
 
+const RECRUIT_HEADERS = [
+  '受信日時','お名前','ふりがな','メール','電話','年代','お住まい',
+  'やってみたいこと','入れる曜日・日数','働き始められる時期',
+  '志望のきっかけ','SNS・ポートフォリオ','知ったきっかけ','UA'
+];
+
 const CONTACT_HEADERS = [
   '受信日時','ご用件','お名前・会社名','メール','電話',
   '来店希望日','時間帯','人数','見たいもの',
@@ -71,6 +78,9 @@ function doPost(e) {
 
     // 柄のデザインのみ（estimate.html）。金額は出さず、伺った条件を渡す
     if (body.form === 'design') return handleDesign_(body);
+
+    // アルバイト応募（recruit.html）
+    if (body.form === 'recruit') return handleRecruit_(body);
 
     const a = body.answers || {};
     const d = body.doc || {};
@@ -413,6 +423,78 @@ function handleContact_(body) {
         contactDetail_(a).join('\n'),
         '',
         'ご相談内容:',
+        a.msg || '（未記入）',
+        '',
+        '知ったきっかけ: ' + (a.source || ''),
+        'UA: ' + (body.ua || '')
+      ].join('\n')
+    });
+  }
+  return json({ ok: true });
+}
+
+function handleRecruit_(body) {
+  const a = body.answers || {};
+  const sh = sheet_(RECRUIT_SHEET, RECRUIT_HEADERS);
+
+  sh.appendRow([
+    new Date(),
+    a.name || '', a.kana || '', a.email || '', a.tel || '',
+    a.age || '', a.from || '',
+    (a.want || []).join(' / '),
+    a.days || '', a.start || '',
+    a.msg || '', a.url || '', a.source || '', body.ua || ''
+  ]);
+
+  // 応募者への受付メール。選考結果ではなく「受け取った」ことだけを伝える
+  if (AUTO_REPLY && a.email) {
+    MailApp.sendEmail({
+      to: a.email,
+      name: REPLY_NAME,
+      replyTo: NOTIFY_TO,
+      subject: 'アルバイトのご応募を承りました｜ICHIドブ板本店',
+      body: [
+        (a.name || '') + ' 様',
+        '',
+        'この度はご応募いただきありがとうございます。以下の内容で承りました。',
+        '内容を拝見のうえ、1週間以内にご連絡します。',
+        '',
+        '──────────────',
+        'お名前: ' + (a.name || ''),
+        'やってみたいこと: ' + ((a.want || []).join(' / ') || '未記入'),
+        '入れる曜日・日数: ' + (a.days || '未記入'),
+        '働き始められる時期: ' + (a.start || '未記入'),
+        '──────────────',
+        '',
+        'いただいた個人情報は採用選考の目的にのみ使用し、',
+        '選考終了後は責任をもって削除します。',
+        '',
+        '※ このメールは自動送信です。ご返信いただければ担当に届きます。',
+        '',
+        REPLY_NAME,
+        'ICHIドブ板本店　神奈川県横須賀市本町3-11-7 アイ\'s ビル 1F',
+        'https://hiromichiyokochi.com/recruit.html'
+      ].join('\n')
+    });
+  }
+
+  if (NOTIFY_TO) {
+    MailApp.sendEmail({
+      to: NOTIFY_TO,
+      replyTo: a.email || NOTIFY_TO,
+      subject: '【アルバイト応募】' + (a.name || '名称未記入'),
+      body: [
+        'お名前: ' + (a.name || '') + '（' + (a.kana || '') + '）',
+        'メール: ' + (a.email || ''),
+        '電話: ' + (a.tel || ''),
+        '年代: ' + (a.age || '') + '／お住まい: ' + (a.from || ''),
+        '',
+        'やってみたいこと: ' + ((a.want || []).join(' / ') || ''),
+        '入れる曜日・日数: ' + (a.days || ''),
+        '働き始められる時期: ' + (a.start || ''),
+        'SNS・ポートフォリオ: ' + (a.url || ''),
+        '',
+        '志望のきっかけ・お伝えしたいこと:',
         a.msg || '（未記入）',
         '',
         '知ったきっかけ: ' + (a.source || ''),

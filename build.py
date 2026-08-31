@@ -300,6 +300,14 @@ PAGES = {
         crumbs=[("制作事例", "works.html"), ("葵唐草鷹狩図黒天鵞絨羽織", "works-aoi-karakusa.html")],
         unlisted=True,
     ),
+    # アルバイト募集。ナビには出さないが、フッターとバナーから辿れる。検索にも載せる
+    "recruit": dict(
+        title="アルバイト募集｜ICHIドブ板本店（横須賀・ドブ板通り）｜時給1,225円・週1日〜",
+        desc="横須賀ドブ板通りのスカジャン店 ICHIドブ板本店でアルバイトを募集しています。店番・接客、コンピュータミシンによる刺繍、制作アシスタント。時給1,225円、12時〜18時、週1日から。経験不問、髪型・服装自由。",
+        nav="採用情報",
+        crumbs=[("アルバイト募集", "recruit.html")],
+        unlisted=True,
+    ),
     "press": dict(
         title="掲載・出演・受賞｜スカジャン絵師 横地広海知",
         desc="スカジャン絵師 横地広海知のメディア掲載・出演・受賞の記録。GU・PUMA・大阪関西万博などオリジナルスカジャンの案件に関する報道を、東京新聞・日本経済新聞・NHKほか38件まとめています。",
@@ -496,7 +504,7 @@ for _w in WORKS:
 
 
 PAGE_ORDER = ["index", "about", "interview", "design", "order", "oem", "process",
-              "works", "works2", "works-aoi-karakusa", "press", "brief", "spec", "access", "estimate", "contact", "privacy"]
+              "works", "works2", "works-aoi-karakusa", "recruit", "press", "brief", "spec", "access", "estimate", "contact", "privacy"]
 
 # 事例の個別ページを末尾に足す（ナビには出ない。sitemap には載る）
 PAGE_ORDER += [n for n in PAGES if n.startswith("works-") and n not in PAGE_ORDER]
@@ -729,6 +737,7 @@ SHELL = """<!DOCTYPE html>
         <li><a class="foot__cta" href="contact.html">取材・その他のお問い合わせ</a></li>
         <li><a href="https://ichi-dobuita.square.site/" target="_blank" rel="noopener">WEBストア</a></li>
         <li><a href="access.html">アクセス・ご来店</a></li>
+        <li><a href="recruit.html">アルバイト募集</a></li>
       </ul>
     </div>
     <div>
@@ -833,7 +842,7 @@ for name in ("robots.txt",):
 SITEMAP_PRIORITY = {
     "index": "1.0", "oem": "0.9", "order": "0.9", "estimate": "0.9", "design": "0.9",
     "about": "0.9", "contact": "0.8", "access": "0.8",
-    "privacy": "0.4",
+    "recruit": "0.7", "privacy": "0.4",
 }
 
 
