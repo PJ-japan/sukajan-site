@@ -107,5 +107,55 @@
       "design"
     ],
     "draft": true
+  },
+  {
+    "title": "メキシコ・ベトナムスカジャン",
+    "meta": "オーダーメイド／黒ボディ／前面にシュガースカル、背面にメキシコ地図と SOBREVIVIRÉ PASE LO QUE PASE",
+    "image": "",
+    "url": "",
+    "use": [
+      "order"
+    ],
+    "draft": true
+  },
+  {
+    "title": "横須賀市 E-Sports大会特別柄",
+    "meta": "柄デザイン／横須賀市／ブルー×白ボディ／背面に yokosuka と虎",
+    "image": "",
+    "url": "",
+    "use": [
+      "design"
+    ],
+    "draft": true
+  },
+  {
+    "title": "浦賀パワーフェスティバル／Tシャツデザイン",
+    "meta": "柄デザイン／黒船・龍・虎／イベント公式Tシャツ",
+    "image": "",
+    "url": "",
+    "use": [
+      "design"
+    ],
+    "draft": true
+  },
+  {
+    "title": "JUMBO NO MIKACHI／プロレスラーのスカジャン柄",
+    "meta": "柄デザイン（柄のみ提供）／紫×白ボディ／背面に必殺技の図案",
+    "image": "",
+    "url": "",
+    "use": [
+      "design"
+    ],
+    "draft": true
+  },
+  {
+    "title": "白狼と yokosuka／プロレスラーのスカジャン",
+    "meta": "オーダーメイド（柄と刺繍を納品）／紫×白ボディ／背面に月と白狼",
+    "image": "",
+    "url": "",
+    "use": [
+      "order"
+    ],
+    "draft": true
   }
 ]
