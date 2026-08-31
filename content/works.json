@@ -1,7 +1,17 @@
 [
   {
-    "title": "GU「OMIYAGE JAPAN POP!」スウェット（2型目・柄名未確定）",
-    "meta": "ブランドコラボ／柄提供／全国流通／2025年8月25日発売",
+    "title": "龍／GU ヘビーウェイトスウェットプルオーバー 横地広海知",
+    "meta": "ブランドコラボ／柄提供／69 NAVY／背中に龍とyokosukaの筆記体／全国流通",
+    "image": "",
+    "url": "https://www.instagram.com/hiromichiyokochi/p/DNxl_n7Zrgh/",
+    "use": [
+      "oem",
+      "design"
+    ]
+  },
+  {
+    "title": "虎／GU ヘビーウェイトスウェットプルオーバー 横地広海知",
+    "meta": "ブランドコラボ／柄提供／09 BLACK／胸に虎／全国流通",
     "image": "",
     "url": "https://www.instagram.com/hiromichiyokochi/p/DNxl_n7Zrgh/",
     "use": [
@@ -11,8 +21,18 @@
     "draft": true
   },
   {
-    "title": "GU「OMIYAGE JAPAN POP!」Tシャツ（2型目・柄名未確定）",
-    "meta": "ブランドコラボ／柄提供／全国流通／スウェットのTシャツ版",
+    "title": "龍／GU グラフィックT 横地広海知",
+    "meta": "ブランドコラボ／柄提供／09 BLACK／背中に龍とyokosukaの筆記体／全国流通",
+    "image": "",
+    "url": "https://www.instagram.com/hiromichiyokochi/p/DYLajI0E79s/",
+    "use": [
+      "oem",
+      "design"
+    ]
+  },
+  {
+    "title": "虎／GU グラフィックT 横地広海知",
+    "meta": "ブランドコラボ／柄提供／08 DARK GRAY／胸に虎／全国流通",
     "image": "",
     "url": "https://www.instagram.com/hiromichiyokochi/p/DYLajI0E79s/",
     "use": [
@@ -79,26 +99,6 @@
     "url": "https://www.instagram.com/hiromichiyokochi/p/DTvLk4gE8_Z/",
     "use": [
       "order"
-    ]
-  },
-  {
-    "title": "GU「OMIYAGE JAPAN POP!」スウェット",
-    "meta": "ブランド別注／柄提供／全国流通",
-    "image": "assets/works/gu-sweat.jpg",
-    "url": "https://www.instagram.com/hiromichiyokochi/p/DNxl_n7Zrgh/",
-    "use": [
-      "oem",
-      "design"
-    ]
-  },
-  {
-    "title": "GU「OMIYAGE JAPAN POP!」Tシャツ",
-    "meta": "ブランド別注／柄提供／全国流通",
-    "image": "assets/works/gu-tee.jpg",
-    "url": "https://www.instagram.com/hiromichiyokochi/p/DYLajI0E79s/",
-    "use": [
-      "oem",
-      "design"
     ]
   },
   {
