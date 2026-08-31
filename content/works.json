@@ -109,7 +109,7 @@
     "draft": true
   },
   {
-    "title": "メキシコ・ベトナムスカジャン",
+    "title": "メキシコ・ベトナムスカジャン／東野幸治さん オーダーメイド",
     "meta": "オーダーメイド／黒ボディ／前面にシュガースカル、背面にメキシコ地図と SOBREVIVIRÉ PASE LO QUE PASE",
     "image": "",
     "url": "",
@@ -139,7 +139,7 @@
     "draft": true
   },
   {
-    "title": "JUMBO NO MIKACHI／プロレスラーのスカジャン柄",
+    "title": "JUMBO NO MIKACHI／横須賀ススム選手のスカジャン柄",
     "meta": "柄デザイン（柄のみ提供）／紫×白ボディ／背面に必殺技の図案",
     "image": "",
     "url": "",
@@ -149,7 +149,7 @@
     "draft": true
   },
   {
-    "title": "白狼と yokosuka／プロレスラーのスカジャン",
+    "title": "白狼と yokosuka／横須賀ススム選手のスカジャン",
     "meta": "オーダーメイド（柄と刺繍を納品）／紫×白ボディ／背面に月と白狼",
     "image": "",
     "url": "",
@@ -159,10 +159,30 @@
     "draft": true
   },
   {
-    "title": "舞踊家の衣裳／着物の柄デザイン",
-    "meta": "柄デザイン／舞踊家の舞台衣裳／着物へのペイント（ペイント：Shabon）",
+    "title": "着物の柄／舞踊家 梅川壱ノ介さん 舞台衣裳",
+    "meta": "柄デザイン／舞台衣裳の着物／ペイント：Shabon",
     "image": "",
     "url": "https://www.townnews.co.jp/0501/2022/11/25/652985.html",
+    "use": [
+      "design"
+    ],
+    "draft": true
+  },
+  {
+    "title": "ドブ板オリジナルスカジャン 1st",
+    "meta": "柄デザイン／ドブ板通り公認／ブルー×白ボディ／背面に YOKOSUKA・日本地図・虎・富士山",
+    "image": "",
+    "url": "",
+    "use": [
+      "design"
+    ],
+    "draft": true
+  },
+  {
+    "title": "ドブ板オリジナルスカジャン 2nd",
+    "meta": "柄デザイン／ドブ板通り公認／黒×白ボディ／背面に yokosuka・龍・富士山・波",
+    "image": "",
+    "url": "",
     "use": [
       "design"
     ],
