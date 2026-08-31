@@ -236,8 +236,17 @@ html{scroll-padding-top:84px}
    覆いのグラデーション（::after）は共通のものをそのまま使う。 */
 .hero--art.hero--aoi::before{background-image:url(assets/hero-aoi.jpg);
   background-position:50% 42%}
+.hero--art.hero--oem::before{background-image:url(assets/hero-oem.jpg);
+  background-position:50% 46%}
+.hero--art.hero--order::before{background-image:url(assets/hero-order.jpg);
+  background-position:50% 46%}
+.hero--art.hero--design::before{background-image:url(assets/hero-design.jpg);
+  background-position:50% 46%}
 /* 柄が明るいぶん、文字側を共通のものより濃く覆う */
-.hero--art.hero--aoi::after{background:
+.hero--art.hero--aoi::after,
+.hero--art.hero--oem::after,
+.hero--art.hero--order::after,
+.hero--art.hero--design::after{background:
   linear-gradient(180deg,transparent 0%,transparent 52%,var(--bg) 100%),
   linear-gradient(100deg,
     color-mix(in srgb,var(--bg) 95%,transparent) 0%,
@@ -247,8 +256,14 @@ html{scroll-padding-top:84px}
 @media (max-width:720px){
   .hero--art::before{background-position:76% 22%;background-size:150% auto}
   /* 画像の上端は白い撮影背景なので、暗いボディが画面を埋める位置にする */
-  .hero--art.hero--aoi::before{background-position:50% 50%;background-size:cover}
-  .hero--art.hero--aoi::after{background:
+  .hero--art.hero--aoi::before,
+  .hero--art.hero--oem::before,
+  .hero--art.hero--order::before,
+  .hero--art.hero--design::before{background-position:50% 50%;background-size:cover}
+  .hero--art.hero--aoi::after,
+  .hero--art.hero--oem::after,
+  .hero--art.hero--order::after,
+  .hero--art.hero--design::after{background:
     linear-gradient(180deg,
       color-mix(in srgb,var(--bg) 62%,transparent) 0%,
       color-mix(in srgb,var(--bg) 86%,transparent) 46%,
