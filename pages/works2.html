@@ -1,0 +1,48 @@
+<section class="hero">
+  <h1 class="hero__title">
+    <span class="kicker">Working draft &mdash; not published</span>
+    <span class="en">WORKS<br>DRAFT</span>
+    <span class="sub">公開前の制作事例 — このページは検索にも、ナビにも出ません</span>
+  </h1>
+  <p class="lead hero__lead">ここに出ているのは <code>content/works.json</code> で <code>"draft": true</code> が付いている事例です。公開ページ（<a class="link" href="works.html">works.html</a>）とトップの事例欄には出ません。<strong>公開するときは、その項目から <code>"draft": true</code> の行を消して <code>python3 build.py</code> を実行するだけです。</strong></p>
+</section>
+
+<div class="panel">
+  <section class="band rise">
+    <div class="band__grid">
+      <div class="band__aside">
+        <p class="tag"><span class="tag__en">DRAFT</span><span class="tag__ja">下書き中の事例</span></p>
+        <p>公開前の確認用。</p>
+      </div>
+      <div class="band__main">
+        <h2>下書き中の事例</h2>
+        <p class="lead">公開ページと同じ見た目で表示しています。画像の色、柄の名前、リンク先をここで確かめてから公開してください。</p>
+<!--WORKS:DRAFT-->
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="band rise">
+  <div class="band__grid">
+    <div class="band__aside">
+      <p class="tag"><span class="tag__en">HOW TO</span><span class="tag__ja">書き方</span></p>
+      <p>1件 = JSONの1ブロック。</p>
+    </div>
+    <div class="band__main">
+      <h2>事例の足しかた</h2>
+      <div class="rows seq">
+        <div class="row"><div><p class="row__k">01</p><h3>画像を置く</h3></div><div><p><code>assets/works/</code> に jpg を置きます。<strong>書き出しの前に sRGB に変換してください。</strong>Display P3 のままだと色が転びます。<code>image</code> を空にすると点線の枠になるので、写真が未定でも書き溜められます。</p></div></div>
+        <div class="row"><div><p class="row__k">02</p><h3>works.json の先頭に足す</h3></div><div><p><code>"draft": true</code> を付けている間は、このページにだけ出ます。</p></div></div>
+        <div class="row"><div><p class="row__k">03</p><h3>title に柄の名前を入れる</h3></div><div><p>検索で探されるのは柄の名前です。<strong>「鵺（ぬえ）」「蠍座／M-43」のように、固有の柄名を必ず含めてください。</strong>「オーダースカジャン」だけでは埋もれます。</p></div></div>
+        <div class="row"><div><p class="row__k">04</p><h3>掲載許諾を確認する</h3></div><div><p>ブランド案件は案件ごとに掲載可否が違います。<strong>公開前に必ず確認してください。</strong></p></div></div>
+        <div class="row"><div><p class="row__k">05</p><h3>draft を消して公開</h3></div><div><p><code>"draft": true</code> の行を消して <code>python3 build.py</code>。works.html とトップに出ます。</p></div></div>
+      </div>
+      <p class="note">記入例：<br>
+        <code>{ "title": "鵺（ぬえ）／JAPAN／オリジナルスカジャン", "meta": "オリジナル柄／黒ボディ／背中一面", "image": "assets/works/nue-japan.jpg", "url": "https://...", "draft": true }</code></p>
+      <div class="btns">
+        <a class="btn btn--ghost" href="works.html">公開中の事例を見る</a>
+      </div>
+    </div>
+  </div>
+</section>

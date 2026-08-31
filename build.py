@@ -70,8 +70,12 @@ def press_html():
     return "\n".join(out) or '<p class="note">掲載情報がまだ登録されていません。content/press.json に追加してください。</p>'
 
 
-def works_html(limit=None):
-    items = WORKS[:limit] if limit else WORKS
+def works_html(limit=None, drafts=False):
+    """draft: true の事例は works2.html にだけ出す。
+    公開するときは works.json から "draft" を消すだけでよい。"""
+    items = [w for w in WORKS if bool(w.get("draft")) == drafts]
+    if limit:
+        items = items[:limit]
     cells = []
     for w in items:
         img = ('<img src="%s" alt="%s" loading="lazy">' % (html.escape(w["image"], quote=True), html.escape(w.get("title", "")))
@@ -206,6 +210,16 @@ PAGES = {
         nav="Works (IG)",
         crumbs=[("制作事例", "works.html")],
     ),
+    # 事例の書き溜め用。ナビ・フッター・sitemap には出さず noindex。
+    # works.json に "draft": true を付けた項目だけがここに出る
+    "works2": dict(
+        title="制作事例（下書き）｜公開前の作業用ページ",
+        desc="公開前の制作事例を確認するための作業用ページです。",
+        nav="Works (draft)",
+        crumbs=[("制作事例（下書き）", "works2.html")],
+        unlisted=True,
+        noindex=True,
+    ),
     "press": dict(
         title="掲載・出演・受賞｜スカジャン絵師 横地広海知",
         desc="スカジャン絵師 横地広海知のメディア掲載・出演・受賞の記録。GU・PUMA・大阪関西万博などオリジナルスカジャンの案件に関する報道を、東京新聞・日本経済新聞・NHKほか38件まとめています。",
@@ -288,7 +302,7 @@ PAGES = {
 
 # 生成するページ（サイトの構成順）
 PAGE_ORDER = ["index", "about", "interview", "design", "order", "oem", "process",
-              "works", "press", "brief", "spec", "access", "estimate", "contact", "privacy"]
+              "works", "works2", "press", "brief", "spec", "access", "estimate", "contact", "privacy"]
 
 # ヘッダーのナビに出すページ。unlisted のものは除く
 NAV_ORDER = [s for s in PAGE_ORDER if not PAGES[s].get("unlisted")]
@@ -587,6 +601,7 @@ for slug in PAGE_ORDER:
         year=date.today().year,
         body=(hold(body)
               .replace("<!--PRESS-->", press_html())
+              .replace("<!--WORKS:DRAFT-->", works_html(drafts=True))
               .replace("<!--WORKS-->", works_html())
               .replace("<!--WORKS:5-->", works_html(5))
               .replace('const ENDPOINT = "";',
