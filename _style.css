@@ -870,6 +870,9 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
 .step .checks{margin-top:18px}
 .step .checks label:has(input:checked){border-color:var(--accent);color:var(--accent)}
 
+/* ボット対策のおとり欄。人には見えず、読み上げにも出さない。
+   display:none にすると埋めないボットがいるので、画面外に逃がす。 */
+.hp{position:absolute!important;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
 .opts{display:grid;gap:8px;max-width:38em}
 .opt{display:flex;gap:14px;align-items:flex-start;cursor:pointer;
   border:1px solid var(--line);padding:16px 20px;

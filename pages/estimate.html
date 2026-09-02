@@ -328,6 +328,9 @@
 
         <div class="est__recap" id="l_recap"></div>
 
+        <div class="hp" aria-hidden="true">
+          <label>ご住所（記入不要）<input type="text" name="hp_estimate" tabindex="-1" autocomplete="off"></label>
+        </div>
         <button class="btn btn--solid" type="submit" id="l_send">この内容で正式見積もりを依頼する</button>
         <p class="wiz__err" id="l_err"></p>
         <div class="wiz__sent" id="l_sent" hidden></div>
@@ -388,6 +391,7 @@
   const REVERSIBLE_DESIGN = 2;      // リバーシブルはデザイン費が2倍
   const RUSH = 0.2;                 // 特急は2割増
 
+  const T0 = Date.now();   // 読み込みからの経過でボットを弾く
   const $ = id => document.getElementById(id);
   const f = $("estform"), lf = $("leadform");
   if(!f || !lf) return;
@@ -752,6 +756,15 @@
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(a.email)){ $("l_err").textContent = "メールアドレスの形式をご確認ください。"; return; }
     if(!a.source){ $("l_err").textContent = "サイトを知ったきっかけをお選びください。"; return; }
     $("l_err").textContent = "";
+    /* ボット対策。隠し欄が埋まっている、または読み込みから3秒未満での送信は
+       自動投稿とみなして黙って捨てる（エラーを返すとボットが学習するため） */
+    const hp = f.elements["hp_estimate"];
+    if((hp && hp.value) || Date.now() - T0 < 3000){
+      const q = $("l_sent"); q.hidden = false;
+      q.textContent = "送信しました。";
+      $("l_send").disabled = true; $("l_send").textContent = "送信済み";
+      return;
+    }
 
     const btn = $("l_send"); btn.disabled = true; btn.textContent = "送信中…";
     let ok = false;

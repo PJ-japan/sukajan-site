@@ -175,6 +175,9 @@
           </select>
         </div>
 
+          <div class="hp" aria-hidden="true">
+            <label>ご住所（記入不要）<input type="text" name="hp_recruit" tabindex="-1" autocomplete="off"></label>
+          </div>
         <button class="btn btn--solid" type="submit" id="rsend">応募する</button>
         <p class="wiz__err" id="rerr"></p>
         <div class="wiz__sent" id="rsent" hidden></div>
@@ -188,6 +191,7 @@
   const SHARED_SECRET = "change-me";
   const MAIL = "info@ichi-pj.com";
 
+  const T0 = Date.now();   // 読み込みからの経過でボットを弾く
   const $ = id => document.getElementById(id);
   const f = $("rform"); if(!f) return;
 
@@ -226,6 +230,15 @@
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(a.email)){ $("rerr").textContent = "メールアドレスの形式をご確認ください。"; return; }
     if(!a.source){ $("rerr").textContent = "当店を知ったきっかけをお選びください。"; return; }
     $("rerr").textContent = "";
+    /* ボット対策。隠し欄が埋まっている、または読み込みから3秒未満での送信は
+       自動投稿とみなして黙って捨てる（エラーを返すとボットが学習するため） */
+    const hp = f.elements["hp_recruit"];
+    if((hp && hp.value) || Date.now() - T0 < 3000){
+      const q = $("rsent"); q.hidden = false;
+      q.textContent = "送信しました。";
+      $("rsend").disabled = true; $("rsend").textContent = "送信済み";
+      return;
+    }
 
     const btn = $("rsend"); btn.disabled = true; btn.textContent = "送信中…";
     let ok = false;

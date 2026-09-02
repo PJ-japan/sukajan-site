@@ -86,7 +86,7 @@ function doPost(e) {
     const d = body.doc || {};
     const sh = sheet_();
 
-    sh.appendRow([
+    sh.appendRow(safeRow_([
       new Date(),
       body.docNo || '',
       body.hash || '',
@@ -108,7 +108,7 @@ function doPost(e) {
       a.note || '',
       d.s_concept || '',
       body.ua || ''
-    ]);
+    ]));
 
     if (NOTIFY_TO) {
       MailApp.sendEmail({
@@ -158,14 +158,14 @@ function handleDesign_(body) {
   const item  = (a.item  || []).join(' / ');
   const media = (a.media || []).join(' / ');
 
-  sh.appendRow([
+  sh.appendRow(safeRow_([
     new Date(),
     a.name || '', a.email || '', a.tel || '',
     a.count || '', a.finish || '', a.scale || '', a.colors || '', item,
     media, a.period || '', a.area || '', a.right || '', a.volume || '',
     a.due || '', a.ip || '', a.credit || '', a.pr || '',
     a.motif || '', a.msg || '', a.source || '', body.ua || ''
-  ]);
+  ]));
 
   if (AUTO_REPLY && a.email) {
     MailApp.sendEmail({
@@ -263,14 +263,14 @@ function handleEstimate_(body) {
   const sh = sheet_(ESTIMATE_SHEET, ESTIMATE_HEADERS);
   const place = (a.place || []).join(' / ');
 
-  sh.appendRow([
+  sh.appendRow(safeRow_([
     new Date(),
     a.name || '', a.email || '', a.tel || '',
     a.kind || '', a.qty || '', a.body || '', place,
     a.colors || '', a.fabric || '', a.side || '', a.due || '',
     a.unit || '', a.total || '',
     a.msg || '', a.source || '', body.ua || ''
-  ]);
+  ]));
 
   // 送信者への受付メール。画面に出したのと同じ概算をそのまま控えとして返す。
   // 契約上の見積書ではないことを必ず明記する。
@@ -371,13 +371,13 @@ function handleContact_(body) {
   const a = body.answers || {};
   const sh = sheet_(CONTACT_SHEET, CONTACT_HEADERS);
 
-  sh.appendRow([
+  sh.appendRow(safeRow_([
     new Date(), a.kind || '',
     a.name || '', a.email || '', a.tel || '',
     a.v_date || '', a.v_time || '', a.v_num || '', (a.v_see || []).join(' / '),
     a.p_outlet || '', a.p_type || '', a.p_form || '', a.p_when || '', a.p_pub || '', a.p_where || '',
     a.msg || '', a.source || '', body.ua || ''
-  ]);
+  ]));
 
   // 送信者への受付メール。金額は書かない（自動見積りはしない）
   if (AUTO_REPLY && a.email) {
@@ -437,14 +437,14 @@ function handleRecruit_(body) {
   const a = body.answers || {};
   const sh = sheet_(RECRUIT_SHEET, RECRUIT_HEADERS);
 
-  sh.appendRow([
+  sh.appendRow(safeRow_([
     new Date(),
     a.name || '', a.kana || '', a.email || '', a.tel || '',
     a.age || '', a.from || '',
     (a.want || []).join(' / '),
     a.days || '', a.start || '',
     a.msg || '', a.url || '', a.source || '', body.ua || ''
-  ]);
+  ]));
 
   // 応募者への受付メール。選考結果ではなく「受け取った」ことだけを伝える
   if (AUTO_REPLY && a.email) {
@@ -509,6 +509,20 @@ function doGet() {
   return json({ ok: true, message: 'endpoint alive' });
 }
 
+/* スプレッドシートは = + - @ で始まる文字列を数式として解釈する。
+   フォームからの値をそのまま書くと、外部から数式を仕込めてしまう（CSVインジェクション）。
+   先頭にアポストロフィを付けて、必ず文字列として入るようにする。 */
+function safe_(v) {
+  if (v === null || v === undefined) return '';
+  if (v instanceof Date) return v;
+  const s = String(v);
+  return /^[=+\-@\t\r]/.test(s) ? "'" + s : s;
+}
+
+function safeRow_(row) {
+  return row.map(safe_);
+}
+
 function sheet_(name, headers) {
   if (!SHEET_ID) {
     throw new Error(
@@ -535,7 +549,7 @@ function json(o) {
 
 /** 動作確認用。エディタから実行してシートに1行入ることを確かめる */
 function testAppend() {
-  sheet_().appendRow([new Date(), 'TEST-0000', 'hash', 'テスト株式会社', '担当A',
+  sheet_().appendRow(safeRow_([new Date(), 'TEST-0000', 'hash', 'テスト株式会社', '担当A',
     'test@example.com', 'ブランド別注・量産', '販売用の商品', 'テスト送信', '100着以上',
-    '', '', '商用利用', '日本国内', '2年間', 'SNS / Webサイト', '', '', '', '', '']);
+    '', '', '商用利用', '日本国内', '2年間', 'SNS / Webサイト', '', '', '', '', '']));
 }
