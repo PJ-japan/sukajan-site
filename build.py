@@ -661,7 +661,7 @@ SHELL = """<!DOCTYPE html>
 <a href="#main" class="skip">本文へ</a>
 <header class="masthead" id="masthead">
   <div class="masthead__in">
-    <a class="brand" href="index.html"><b>Hiromichi Yokochi</b><span>Sukajan Pattern Designer</span></a>
+    <a class="brand" href="index.html"><b>Hiromichi Yokochi</b><span>Sukajan Artist</span></a>
     <button class="menu__btn" type="button" id="menubtn" aria-label="メニュー"
             aria-expanded="false" aria-controls="nav" hidden>
       <span class="menu__bars" aria-hidden="true"></span>
@@ -907,8 +907,8 @@ EN_SHELL = """<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sukajan Pattern Designer Hiromichi Yokochi | Custom souvenir jackets from Yokosuka</title>
-<meta name="description" content="Sukajan pattern designer based in Dobuita Street, Yokosuka. One-off custom jackets from 165,000 yen, brand collaboration and OEM from 1 to 100+ pieces. Patterns drawn for GU, PUMA and Expo 2025 Osaka. English enquiries welcome.">
+<title>Sukajan Artist Hiromichi Yokochi | Custom souvenir jackets from Yokosuka</title>
+<meta name="description" content="Sukajan artist based in Dobuita Street, Yokosuka. One-off custom jackets from 165,000 yen, brand collaboration and OEM from 1 to 100+ pieces. Patterns drawn for GU, PUMA and Expo 2025 Osaka. English enquiries welcome.">
 <link rel="canonical" href="{en_url}">
 <link rel="alternate" hreflang="en" href="{en_url}">
 <link rel="alternate" hreflang="ja" href="{base}">
@@ -917,8 +917,8 @@ EN_SHELL = """<!DOCTYPE html>
 <link rel="icon" href="../assets/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Sukajan Pattern Designer Hiromichi Yokochi">
-<meta property="og:title" content="Sukajan Pattern Designer Hiromichi Yokochi">
+<meta property="og:site_name" content="Sukajan Artist Hiromichi Yokochi">
+<meta property="og:title" content="Sukajan Artist Hiromichi Yokochi">
 <meta property="og:description" content="Custom sukajan from Dobuita Street, Yokosuka. One jacket or a full production run. English enquiries welcome.">
 <meta property="og:url" content="{en_url}">
 <meta property="og:image" content="{base}assets/ogp.jpg">
@@ -939,7 +939,7 @@ EN_SHELL = """<!DOCTYPE html>
 <a href="#main" class="skip">Skip to content</a>
 <header class="masthead">
   <div class="masthead__in">
-    <a class="brand" href="./"><b>Hiromichi Yokochi</b><span>Sukajan Pattern Designer</span></a>
+    <a class="brand" href="./"><b>Hiromichi Yokochi</b><span>Sukajan Artist</span></a>
     <nav class="nav" aria-label="Language">
       <a href="./" aria-current="page">EN</a>
       <a href="../">JA</a>
@@ -993,7 +993,7 @@ EN_LD = json.dumps({
     "@context": "https://schema.org",
     "@graph": [
         {"@type": "WebSite", "@id": EN_URL + "#website", "url": EN_URL,
-         "name": "Sukajan Pattern Designer Hiromichi Yokochi", "inLanguage": "en",
+         "name": "Sukajan Artist Hiromichi Yokochi", "inLanguage": "en",
          "publisher": {"@id": BASE + "#person"}},
         PERSON, LOCAL,
         {"@type": "Service", "name": "Custom sukajan design and production",
