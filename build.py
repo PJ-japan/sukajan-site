@@ -493,8 +493,8 @@ for _w in WORKS:
     _key = (_w.get("use") or ["design"])[0]
     _ja = USE_LABEL.get(_key, USE_LABEL["design"])[1]
     PAGES[_name] = dict(
-        title="%s｜%sの制作事例｜スカジャン絵師 横地広海知" % (_w["title"], _ja),
-        desc="%s %s スカジャン柄の制作事例です。" % (_w["title"], _w.get("meta", "")),
+        title=_w.get("pageTitle") or ("%s｜%sの制作事例｜スカジャン絵師 横地広海知" % (_w["title"], _ja)),
+        desc=_w.get("pageDesc") or ("%s %s スカジャン柄の制作事例です。" % (_w["title"], _w.get("meta", ""))),
         nav=_w["title"][:12],
         crumbs=[("制作事例", "works.html"), (_w["title"], _name + ".html")],
         unlisted=True,

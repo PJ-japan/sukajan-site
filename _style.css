@@ -244,6 +244,8 @@ html{scroll-padding-top:84px}
   background-position:50% 46%}
 .hero--art.hero--access::before{background-image:url(assets/hero-access.jpg);
   background-position:50% 26%}
+.hero--art.hero--nue::before{background-image:url(assets/hero-oem.jpg);
+  background-position:50% 46%}
 /* 人物が右、空いた床が左。文字を左に置けるようトリミング済み */
 .hero--art.hero--about::before{background-image:url(assets/hero-about.jpg);
   background-position:50% 40%}
@@ -260,6 +262,7 @@ html{scroll-padding-top:84px}
 .hero--art.hero--aoi::after,
 .hero--art.hero--oem::after,
 .hero--art.hero--order::after,
+.hero--art.hero--nue::after,
 .hero--art.hero--design::after{background:
   linear-gradient(180deg,transparent 0%,transparent 52%,var(--bg) 100%),
   linear-gradient(100deg,
@@ -273,6 +276,7 @@ html{scroll-padding-top:84px}
   .hero--art.hero--aoi::before,
   .hero--art.hero--oem::before,
   .hero--art.hero--order::before,
+  .hero--art.hero--nue::before,
   .hero--art.hero--design::before{background-position:50% 50%;background-size:cover}
   .hero--art.hero--access::before{background-position:50% 22%;background-size:cover}
   .hero--art.hero--about::before{background-position:86% 30%;background-size:cover}
@@ -286,7 +290,8 @@ html{scroll-padding-top:84px}
   .hero--art.hero--aoi::after,
   .hero--art.hero--oem::after,
   .hero--art.hero--order::after,
-  .hero--art.hero--design::after{background:
+  .hero--art.hero--nue::after,
+.hero--art.hero--design::after{background:
     linear-gradient(180deg,
       color-mix(in srgb,var(--bg) 62%,transparent) 0%,
       color-mix(in srgb,var(--bg) 86%,transparent) 46%,
