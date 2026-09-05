@@ -454,8 +454,18 @@ html{scroll-padding-top:84px}
 a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--fg)}
 .slot--wide{aspect-ratio:16/9}
 
+/* 用途別の索引。見出しと中身の距離より、グループ同士の距離をはっきり広くとる。
+   近接の原則。どの見出しがどの列を指しているかは余白でしか伝わらない。 */
+.usegrp + .usegrp{margin-top:clamp(76px,8vw,124px)}
+.usegrp > h3{margin-bottom:.55em}
+.usegrp > .note{margin-bottom:0}
+.usegrp .rail{margin-top:clamp(18px,1.8vw,26px);padding-bottom:0}
+
 /* 本文中の写真 */
+/* 図版と本文の距離は、本文の行送りより明らかに広くする。
+   下が 0 だと画像が次の段落に貼りつき、行間より近く見える。 */
 .figure{margin:clamp(26px,3vw,42px) 0 0;max-width:34em}
+.figure:not(:last-child){margin-bottom:clamp(38px,3.4vw,52px)}
 .figure--wide{max-width:none}
 .figure img{display:block;width:100%;height:auto;border:1px solid var(--line);background:var(--bg-2)}
 .panel .figure img{border-color:rgba(10,10,11,.14);background:rgba(10,10,11,.05)}
@@ -466,6 +476,7 @@ a:hover .slot,.rail > *:hover .slot{border-color:var(--accent);color:var(--fg)}
 /* 写真グリッド（刺繍の仕上がりなど）。図版は 4:5 に揃える */
 .shots{display:grid;grid-template-columns:repeat(2,1fr);
   gap:clamp(10px,1.2vw,18px);margin-top:clamp(20px,2.2vw,32px)}
+.shots:not(:last-child){margin-bottom:clamp(38px,3.4vw,52px)}
 .shots figure{margin:0}
 .shots img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;
   background:var(--bg-2);border:1px solid var(--line)}

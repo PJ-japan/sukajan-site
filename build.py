@@ -150,8 +150,10 @@ def works_by_use_html():
         if not items:
             continue
         out.append(
+            '<section class="usegrp">'
             '<h3 id="use-%s">%s<span class="note" style="font-size:11px">　%d件</span></h3>'
             '<p class="note">%s</p>%s'
+            '</section>'
             % (key, html.escape(label), len(items), html.escape(lead), rail_html(items, wrap=True)))
     untagged = [w for w in WORKS if not w.get("use")]
     if untagged:
