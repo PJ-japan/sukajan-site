@@ -244,8 +244,8 @@ html{scroll-padding-top:84px}
   background-position:50% 46%}
 .hero--art.hero--access::before{background-image:url(assets/hero-access.jpg);
   background-position:50% 26%}
-.hero--art.hero--nue::before{background-image:url(assets/hero-oem.jpg);
-  background-position:50% 46%}
+.hero--art.hero--nue::before{background-image:url(assets/hero-nue.jpg);
+  background-position:50% 54%}
 /* 人物が右、空いた床が左。文字を左に置けるようトリミング済み */
 .hero--art.hero--about::before{background-image:url(assets/hero-about.jpg);
   background-position:50% 40%}
