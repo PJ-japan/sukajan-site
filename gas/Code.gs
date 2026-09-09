@@ -75,7 +75,7 @@ const CONTACT_HEADERS = [
    これをサーバー側でやらないと、ウィジェットを置いただけで素通しになる。 */
 function turnstileOk_(token) {
   if (!TURNSTILE_SECRET) return true;   // 未設定のあいだは素通し
-  if (!token) return false;
+  if (!token) { tsLog_('トークンが届いていません'); return false; }
   try {
     const res = UrlFetchApp.fetch(
       'https://challenges.cloudflare.com/turnstile/v0/siteverify', {
@@ -83,10 +83,24 @@ function turnstileOk_(token) {
         payload: { secret: TURNSTILE_SECRET, response: token },
         muteHttpExceptions: true
       });
-    return JSON.parse(res.getContentText()).success === true;
+    const r = JSON.parse(res.getContentText());
+    if (r.success === true) return true;
+    tsLog_((r['error-codes'] || ['(コードなし)']).join(' / '));
+    return false;
   } catch (err) {
+    tsLog_(String(err));
     return false;
   }
+}
+
+/* 直近の判定失敗を1件だけ残す。診断URLから読めるようにして、
+   ブラウザの開発者ツールを開かなくても理由が分かるようにする。 */
+function tsLog_(msg) {
+  try {
+    PropertiesService.getScriptProperties().setProperty(
+      'TURNSTILE_LAST_ERROR',
+      Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'MM-dd HH:mm') + '  ' + msg);
+  } catch (err) { /* 記録できなくても本処理は止めない */ }
 }
 
 /* メールは1通ずつ独立して送る。自動返信が失敗しても、運営への通知だけは
@@ -567,7 +581,9 @@ function doGet(e) {
      原因がメールの送信残量なのか、シートなのかを切り分けるために使う。
      シートは存在確認だけで、作成はしない。 */
   const out = { ok: true, mailQuotaLeft: null, sheetId: !!SHEET_ID,
-                turnstile: TURNSTILE_SECRET ? '有効' : '未設定（素通し）', sheets: {} };
+                turnstile: TURNSTILE_SECRET ? '有効' : '未設定（素通し）',
+                turnstileLastError: PropertiesService.getScriptProperties()
+                  .getProperty('TURNSTILE_LAST_ERROR') || 'なし', sheets: {} };
   try { out.mailQuotaLeft = MailApp.getRemainingDailyQuota(); }
   catch (err) { out.mailQuotaLeft = String(err); }
   if (SHEET_ID) {

@@ -142,9 +142,6 @@
             </select>
           </div>
 
-          <div class="hp" aria-hidden="true">
-            <label aria-hidden="true">この欄は空のままにしてください<input type="text" name="hp_contact" tabindex="-1" autocomplete="off"></label>
-          </div>
           <div class="ts" id="cts" hidden></div>
           <button class="btn btn--solid" type="submit" id="csend">送信する</button>
           <p class="wiz__err" id="cerr"></p>
@@ -260,18 +257,13 @@
       $("cerr").textContent = "「ロボットではありません」の確認が済んでいません。数秒おいて、もう一度お試しください。";
       return;
     }
-    /* 隠し欄が埋まっているのは自動投稿の疑い。ただしブラウザの住所自動入力で
-       人が埋めてしまうことがあるため、黙って捨てない。送信失敗と同じ扱いにして、
-       メールで送る道を必ず残す */
-    const hp = f.elements["hp_contact"];
-    const trapped = !!(hp && hp.value);
     /* 読み込み直後の送信も自動投稿の疑いがあるが、捨てずに待たせるだけにする */
     const wait = 1500 - (Date.now() - T0);
     if(wait > 0){ await new Promise(function(r){ setTimeout(r, wait); }); }
 
     const btn = $("csend"); btn.disabled = true; btn.textContent = "送信中…";
     let ok = false;
-    if(ENDPOINT && !trapped){
+    if(ENDPOINT){
       try{
         const r = await fetch(ENDPOINT, {method:"POST",
           headers:{"Content-Type":"text/plain;charset=utf-8"},
