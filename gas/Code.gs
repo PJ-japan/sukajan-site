@@ -545,7 +545,17 @@ function doGet(e) {
       const ss = SpreadsheetApp.openById(SHEET_ID);
       [SHEET_NAME, CONTACT_SHEET, ESTIMATE_SHEET, DESIGN_SHEET, RECRUIT_SHEET]
         .forEach(function (n) {
-          out.sheets[n] = ss.getSheetByName(n) ? 'ok' : '未作成（初回送信時に作られます）';
+          const sh = ss.getSheetByName(n);
+          if (!sh) { out.sheets[n] = '未作成（初回送信時に作られます）'; return; }
+          /* 件数と最終受信日時だけを返す。氏名やメールは返さない */
+          const last = sh.getLastRow();
+          const info = { rows: Math.max(0, last - 1) };
+          if (last > 1) {
+            const t = sh.getRange(last, 1).getValue();
+            info.lastAt = (t instanceof Date) ? Utilities.formatDate(
+              t, Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm') : String(t);
+          }
+          out.sheets[n] = info;
         });
     } catch (err) { out.sheets.error = String(err); }
   }
