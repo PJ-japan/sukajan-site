@@ -65,7 +65,31 @@ const CONTACT_HEADERS = [
   'ご相談内容','知ったきっかけ','UA'
 ];
 
+/* メールは1通ずつ独立して送る。自動返信が失敗しても、運営への通知だけは
+   必ず試みる。1日あたりの送信上限に達したときに、問い合わせが丸ごと
+   消えるのを防ぐため。シートへの行追加はメール送信より前に済ませている。 */
+let MAIL_ERRORS = [];
+
+function sendMail_(opts) {
+  try { MailApp.sendEmail(opts); return true; }
+  catch (err) {
+    MAIL_ERRORS.push((opts.to === NOTIFY_TO ? '[通知] ' : '[自動返信] ') + String(err));
+    return false;
+  }
+}
+
+/* 運営への通知が送れたかどうかを ok とする。自動返信だけが失敗した場合は
+   受付は成立しているので、送信者に「失敗」と出して二重送信させない。 */
+function done_(extra) {
+  const out = extra || {};
+  const critical = MAIL_ERRORS.filter(function (m) { return m.indexOf('[通知] ') === 0; });
+  out.ok = critical.length === 0;
+  if (MAIL_ERRORS.length) out.mailError = MAIL_ERRORS.join(' / ');
+  return json(out);
+}
+
 function doPost(e) {
+  MAIL_ERRORS = [];
   try {
     const body = JSON.parse(e.postData.contents);
     if (body.secret !== SECRET) return json({ ok: false, error: 'unauthorized' });
@@ -111,7 +135,7 @@ function doPost(e) {
     ]));
 
     if (NOTIFY_TO) {
-      MailApp.sendEmail({
+      sendMail_({
         to: NOTIFY_TO,
         subject: '【ご依頼フォーム】' + (a.company || '名称未記入') + '／' + (body.docNo || ''),
         body: [
@@ -145,7 +169,7 @@ function doPost(e) {
       });
     }
 
-    return json({ ok: true, docNo: body.docNo });
+    return done_({ docNo: body.docNo });
   } catch (err) {
     return json({ ok: false, error: String(err) });
   }
@@ -168,7 +192,7 @@ function handleDesign_(body) {
   ]));
 
   if (AUTO_REPLY && a.email) {
-    MailApp.sendEmail({
+    sendMail_({
       to: a.email,
       name: REPLY_NAME,
       replyTo: NOTIFY_TO,
@@ -215,7 +239,7 @@ function handleDesign_(body) {
   }
 
   if (NOTIFY_TO) {
-    MailApp.sendEmail({
+    sendMail_({
       to: NOTIFY_TO,
       replyTo: a.email || NOTIFY_TO,
       subject: '【柄のデザイン】' + (a.name || '名称未記入') + '／' + (a.count || '') +
@@ -254,7 +278,7 @@ function handleDesign_(body) {
     });
   }
 
-  return json({ ok: true });
+  return done_();
 }
 
 
@@ -275,7 +299,7 @@ function handleEstimate_(body) {
   // 送信者への受付メール。画面に出したのと同じ概算をそのまま控えとして返す。
   // 契約上の見積書ではないことを必ず明記する。
   if (AUTO_REPLY && a.email) {
-    MailApp.sendEmail({
+    sendMail_({
       to: a.email,
       name: REPLY_NAME,
       replyTo: NOTIFY_TO,
@@ -316,7 +340,7 @@ function handleEstimate_(body) {
   }
 
   if (NOTIFY_TO) {
-    MailApp.sendEmail({
+    sendMail_({
       to: NOTIFY_TO,
       replyTo: a.email || NOTIFY_TO,
       subject: '【自動見積もり】' + (a.name || '名称未記入') + '／' + (a.qty || '') + '／' + (a.total || ''),
@@ -345,7 +369,7 @@ function handleEstimate_(body) {
     });
   }
 
-  return json({ ok: true });
+  return done_();
 }
 
 
@@ -381,7 +405,7 @@ function handleContact_(body) {
 
   // 送信者への受付メール。金額は書かない（自動見積りはしない）
   if (AUTO_REPLY && a.email) {
-    MailApp.sendEmail({
+    sendMail_({
       to: a.email,
       name: REPLY_NAME,
       replyTo: NOTIFY_TO,
@@ -410,7 +434,7 @@ function handleContact_(body) {
   }
 
   if (NOTIFY_TO) {
-    MailApp.sendEmail({
+    sendMail_({
       to: NOTIFY_TO,
       replyTo: a.email || NOTIFY_TO,
       subject: '【お問い合わせ】' + (a.name || '名称未記入') + '／' + (a.kind || ''),
@@ -430,7 +454,7 @@ function handleContact_(body) {
       ].join('\n')
     });
   }
-  return json({ ok: true });
+  return done_();
 }
 
 function handleRecruit_(body) {
@@ -448,7 +472,7 @@ function handleRecruit_(body) {
 
   // 応募者への受付メール。選考結果ではなく「受け取った」ことだけを伝える
   if (AUTO_REPLY && a.email) {
-    MailApp.sendEmail({
+    sendMail_({
       to: a.email,
       name: REPLY_NAME,
       replyTo: NOTIFY_TO,
@@ -479,7 +503,7 @@ function handleRecruit_(body) {
   }
 
   if (NOTIFY_TO) {
-    MailApp.sendEmail({
+    sendMail_({
       to: NOTIFY_TO,
       replyTo: a.email || NOTIFY_TO,
       subject: '【アルバイト応募】' + (a.name || '名称未記入'),
@@ -502,7 +526,7 @@ function handleRecruit_(body) {
       ].join('\n')
     });
   }
-  return json({ ok: true });
+  return done_();
 }
 
 function doGet(e) {
