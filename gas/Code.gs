@@ -505,8 +505,27 @@ function handleRecruit_(body) {
   return json({ ok: true });
 }
 
-function doGet() {
-  return json({ ok: true, message: 'endpoint alive' });
+function doGet(e) {
+  const p = (e && e.parameter) || {};
+  if (p.diag !== SECRET) return json({ ok: true, message: 'endpoint alive' });
+
+  /* 診断用。?diag=<SECRET> を付けて開くと状態を返す。
+     フォームが「送信しました」と出るのにメールが届かないとき、
+     原因がメールの送信残量なのか、シートなのかを切り分けるために使う。
+     シートは存在確認だけで、作成はしない。 */
+  const out = { ok: true, mailQuotaLeft: null, sheetId: !!SHEET_ID, sheets: {} };
+  try { out.mailQuotaLeft = MailApp.getRemainingDailyQuota(); }
+  catch (err) { out.mailQuotaLeft = String(err); }
+  if (SHEET_ID) {
+    try {
+      const ss = SpreadsheetApp.openById(SHEET_ID);
+      [SHEET_NAME, CONTACT_SHEET, ESTIMATE_SHEET, DESIGN_SHEET, RECRUIT_SHEET]
+        .forEach(function (n) {
+          out.sheets[n] = ss.getSheetByName(n) ? 'ok' : '未作成（初回送信時に作られます）';
+        });
+    } catch (err) { out.sheets.error = String(err); }
+  }
+  return json(out);
 }
 
 /* スプレッドシートは = + - @ で始まる文字列を数式として解釈する。

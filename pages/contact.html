@@ -247,7 +247,10 @@
         const r = await fetch(ENDPOINT, {method:"POST",
           headers:{"Content-Type":"text/plain;charset=utf-8"},
           body: JSON.stringify({secret:SHARED_SECRET, form:"contact", answers:a, ua:navigator.userAgent})});
-        ok = r.ok;
+        /* GAS は失敗しても HTTP 200 を返す。r.ok だけを見ていると、
+           サーバー側で弾かれていても「送信しました」と出てしまう */
+        const j = await r.json().catch(function(){ return null; });
+        ok = r.ok && !!(j && j.ok === true);
       }catch(err){ ok = false; }
     }
     const box = $("csent"); box.hidden = false;
