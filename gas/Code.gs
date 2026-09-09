@@ -84,7 +84,7 @@ function turnstileOk_(token) {
         muteHttpExceptions: true
       });
     const r = JSON.parse(res.getContentText());
-    if (r.success === true) return true;
+    if (r.success === true) { tsClear_(); return true; }
     tsLog_((r['error-codes'] || ['(コードなし)']).join(' / '));
     return false;
   } catch (err) {
@@ -101,6 +101,12 @@ function tsLog_(msg) {
       'TURNSTILE_LAST_ERROR',
       Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'MM-dd HH:mm') + '  ' + msg);
   } catch (err) { /* 記録できなくても本処理は止めない */ }
+}
+
+function tsClear_() {
+  try {
+    PropertiesService.getScriptProperties().deleteProperty('TURNSTILE_LAST_ERROR');
+  } catch (err) { /* 消せなくても本処理は止めない */ }
 }
 
 /* メールは1通ずつ独立して送る。自動返信が失敗しても、運営への通知だけは
@@ -644,6 +650,29 @@ function sheet_(name, headers) {
 function json(o) {
   return ContentService.createTextOutput(JSON.stringify(o))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * 外部リクエストの権限を承認するための関数。
+ * UrlFetchApp を後から足した場合、コードを貼り替えても承認内容は更新されない。
+ * エディタでこの関数を1度実行し、出てくる確認画面で承認すると、
+ * Turnstile の検証が動くようになる。承認後はもう実行しなくてよい。
+ */
+function authorizeExternalRequest() {
+  try {
+    const res = UrlFetchApp.fetch(
+      'https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'post',
+        payload: { secret: TURNSTILE_SECRET || 'dummy', response: 'dummy' },
+        muteHttpExceptions: true
+      });
+    tsClear_();
+    Logger.log('外部リクエストの権限は取得できています。');
+    Logger.log('Cloudflare の応答: ' + res.getContentText());
+    Logger.log('※ ダミーのトークンを送っているので success:false が正常です。');
+  } catch (err) {
+    Logger.log('まだ権限がありません: ' + err);
+  }
 }
 
 /** 動作確認用。エディタから実行してシートに1行入ることを確かめる */
