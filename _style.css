@@ -888,6 +888,8 @@ details p{margin:0 0 24px 28px;font-size:13.5px;line-height:2.05}
 
 /* ボット対策のおとり欄。人には見えず、読み上げにも出さない。
    display:none にすると埋めないボットがいるので、画面外に逃がす。 */
+/* Cloudflare Turnstile の枠。サイトキー未設定のときは hidden のまま出ない */
+.ts{margin:clamp(18px,2vw,26px) 0 0;min-height:65px}
 .hp{position:absolute!important;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
 .opts{display:grid;gap:8px;max-width:38em}
 .opt{display:flex;gap:14px;align-items:flex-start;cursor:pointer;

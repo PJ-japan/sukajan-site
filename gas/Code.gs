@@ -19,6 +19,12 @@
  */
 const SHEET_ID = PropertiesService.getScriptProperties().getProperty('SHEET_ID');
 
+/* Cloudflare Turnstile のシークレットキー。SHEET_ID と同じ理由でここには書かない。
+   「プロジェクトの設定」→「スクリプト プロパティ」に TURNSTILE_SECRET を追加する。
+   未設定のあいだは検証をせず素通しする（サイト側もウィジェットを出さない）。 */
+const TURNSTILE_SECRET =
+  PropertiesService.getScriptProperties().getProperty('TURNSTILE_SECRET');
+
 const SHEET_NAME = 'briefs';        // ご依頼フォーム（brief.html）
 const CONTACT_SHEET = 'contacts';   // お問い合わせフォーム（contact.html）
 const ESTIMATE_SHEET = 'estimates'; // 自動見積もり（estimate.html）
@@ -65,6 +71,24 @@ const CONTACT_HEADERS = [
   'ご相談内容','知ったきっかけ','UA'
 ];
 
+/* Turnstile のトークンを Cloudflare に問い合わせて確かめる。
+   これをサーバー側でやらないと、ウィジェットを置いただけで素通しになる。 */
+function turnstileOk_(token) {
+  if (!TURNSTILE_SECRET) return true;   // 未設定のあいだは素通し
+  if (!token) return false;
+  try {
+    const res = UrlFetchApp.fetch(
+      'https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'post',
+        payload: { secret: TURNSTILE_SECRET, response: token },
+        muteHttpExceptions: true
+      });
+    return JSON.parse(res.getContentText()).success === true;
+  } catch (err) {
+    return false;
+  }
+}
+
 /* メールは1通ずつ独立して送る。自動返信が失敗しても、運営への通知だけは
    必ず試みる。1日あたりの送信上限に達したときに、問い合わせが丸ごと
    消えるのを防ぐため。シートへの行追加はメール送信より前に済ませている。 */
@@ -93,6 +117,11 @@ function doPost(e) {
   try {
     const body = JSON.parse(e.postData.contents);
     if (body.secret !== SECRET) return json({ ok: false, error: 'unauthorized' });
+
+    /* ボット判定。ここを通らないものはシートにも書かず、メールも送らない */
+    if (!turnstileOk_(body.turnstile)) {
+      return json({ ok: false, error: 'bot-check-failed' });
+    }
 
     // お問い合わせフォーム（contact.html）はこちらで処理する
     if (body.form === 'contact') return handleContact_(body);
@@ -537,7 +566,8 @@ function doGet(e) {
      フォームが「送信しました」と出るのにメールが届かないとき、
      原因がメールの送信残量なのか、シートなのかを切り分けるために使う。
      シートは存在確認だけで、作成はしない。 */
-  const out = { ok: true, mailQuotaLeft: null, sheetId: !!SHEET_ID, sheets: {} };
+  const out = { ok: true, mailQuotaLeft: null, sheetId: !!SHEET_ID,
+                turnstile: TURNSTILE_SECRET ? '有効' : '未設定（素通し）', sheets: {} };
   try { out.mailQuotaLeft = MailApp.getRemainingDailyQuota(); }
   catch (err) { out.mailQuotaLeft = String(err); }
   if (SHEET_ID) {

@@ -26,6 +26,11 @@ BASE = "https://hiromichiyokochi.com/"
 FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbyqXhWO6n93qLfer90h07fHA9CvWFR469xffpViUB5dY6s70F1Q_dPwlXuAXxNsVARL/exec"
 FORM_SECRET   = "m5u0-yxSl-ByIk"  # gas/Code.gs の SECRET と同じ文字列にする
 FORM_MAIL     = "info@ichi-pj.com"
+# Cloudflare Turnstile のサイトキー。公開してよい値なのでここに書く。
+# 対になるシークレットキーは Apps Script のスクリプトプロパティ
+# TURNSTILE_SECRET に入れる（リポジトリが公開のため、絶対に書かない）。
+# 空のあいだはウィジェットを読み込まず、検証もしない。
+TURNSTILE_SITEKEY = ""
 CSS = (ROOT / "_style.css").read_text(encoding="utf-8")
 DOCJS = (ROOT / "_doc.js").read_text(encoding="utf-8")
 
@@ -826,7 +831,9 @@ for slug in PAGE_ORDER:
               .replace('const SHARED_SECRET = "change-me";',
                        'const SHARED_SECRET = "%s";' % FORM_SECRET)
               .replace('const MAIL = "info@ichi-pj.com";',
-                       'const MAIL = "%s";' % FORM_MAIL)),
+                       'const MAIL = "%s";' % FORM_MAIL)
+              .replace('const TURNSTILE_SITEKEY = "";',
+                       'const TURNSTILE_SITEKEY = "%s";' % TURNSTILE_SITEKEY)),
     )
     (OUT / f"{slug}.html").write_text(page, encoding="utf-8")
     mark = "  [非公開]" if meta.get("unlisted") else ""

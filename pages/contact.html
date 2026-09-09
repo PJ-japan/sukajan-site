@@ -145,6 +145,7 @@
           <div class="hp" aria-hidden="true">
             <label aria-hidden="true">この欄は空のままにしてください<input type="text" name="hp_contact" tabindex="-1" autocomplete="off"></label>
           </div>
+          <div class="ts" id="cts" hidden></div>
           <button class="btn btn--solid" type="submit" id="csend">送信する</button>
           <p class="wiz__err" id="cerr"></p>
           <div class="wiz__sent" id="csent" hidden></div>
@@ -159,6 +160,29 @@
   const MAIL = "info@ichi-pj.com";
 
   const T0 = Date.now();   // 読み込みからの経過でボットを弾く
+
+  /* Cloudflare Turnstile。サイトキーが空のうちは読み込まず、従来どおり動く。
+     トークンは1回きりなので、送信に失敗したら reset して取り直す */
+  const TURNSTILE_SITEKEY = "";
+  let tsToken = "", tsWidget = null;
+  (function(){
+    if(!TURNSTILE_SITEKEY) return;
+    const box = document.getElementById("cts"); if(!box) return;
+    box.hidden = false;
+    window.onTurnstile_contact = function(){
+      tsWidget = window.turnstile.render(box, {
+        sitekey: TURNSTILE_SITEKEY, language: "ja",
+        callback: function(t){ tsToken = t; },
+        "expired-callback": function(){ tsToken = ""; },
+        "error-callback": function(){ tsToken = ""; }
+      });
+    };
+    const sc = document.createElement("script");
+    sc.src = "https://challenges.cloudflare.com/turnstile/v0/api.js"
+           + "?render=explicit&onload=onTurnstile_contact";
+    sc.async = true; sc.defer = true;
+    document.head.appendChild(sc);
+  })();
   const $ = id => document.getElementById(id);
   const f = $("cform"); if(!f) return;
 
@@ -230,6 +254,10 @@
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(a.email)){ $("cerr").textContent = "メールアドレスの形式をご確認ください。"; return; }
     if(!a.source){ $("cerr").textContent = "当サイトを知ったきっかけをお選びください。"; return; }
     $("cerr").textContent = "";
+    if(TURNSTILE_SITEKEY && !tsToken){
+      $("cerr").textContent = "「ロボットではありません」の確認が済んでいません。少し待ってからもう一度お試しください。";
+      return;
+    }
     /* 隠し欄が埋まっているのは自動投稿の疑い。ただしブラウザの住所自動入力で
        人が埋めてしまうことがあるため、黙って捨てない。送信失敗と同じ扱いにして、
        メールで送る道を必ず残す */
@@ -245,7 +273,8 @@
       try{
         const r = await fetch(ENDPOINT, {method:"POST",
           headers:{"Content-Type":"text/plain;charset=utf-8"},
-          body: JSON.stringify({secret:SHARED_SECRET, form:"contact", answers:a, ua:navigator.userAgent})});
+          body: JSON.stringify({secret:SHARED_SECRET, form:"contact", answers:a,
+            turnstile: tsToken, ua:navigator.userAgent})});
         /* GAS は失敗しても HTTP 200 を返す。r.ok だけを見ていると、
            サーバー側で弾かれていても「送信しました」と出てしまう */
         const j = await r.json().catch(function(){ return null; });
@@ -261,6 +290,8 @@
         '<br><a class="link" href="' + mailtoFallback(a) + '">' + MAIL + " へメールで送る</a>";
       window.location.href = mailtoFallback(a);
       btn.disabled = false; btn.textContent = "再送する";
+      /* トークンは1回きり。取り直さないと2回目が必ず失敗する */
+      tsToken = ""; if(tsWidget && window.turnstile) window.turnstile.reset(tsWidget);
     }
   });
 })();
