@@ -171,7 +171,7 @@
     box.hidden = false;
     window.onTurnstile_contact = function(){
       tsWidget = window.turnstile.render(box, {
-        sitekey: TURNSTILE_SITEKEY, language: "ja",
+        sitekey: TURNSTILE_SITEKEY, language: "ja", theme: "light",
         callback: function(t){ tsToken = t; },
         "expired-callback": function(){ tsToken = ""; },
         "error-callback": function(){ tsToken = ""; tsError = true; }
