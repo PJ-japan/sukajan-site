@@ -397,7 +397,7 @@
   /* Cloudflare Turnstile。サイトキーが空のうちは読み込まず、従来どおり動く。
      トークンは1回きりなので、送信に失敗したら reset して取り直す */
   const TURNSTILE_SITEKEY = "";
-  let tsToken = "", tsWidget = null;
+  let tsToken = "", tsWidget = null, tsError = false;
   (function(){
     if(!TURNSTILE_SITEKEY) return;
     const box = document.getElementById("lts"); if(!box) return;
@@ -407,7 +407,7 @@
         sitekey: TURNSTILE_SITEKEY, language: "ja",
         callback: function(t){ tsToken = t; },
         "expired-callback": function(){ tsToken = ""; },
-        "error-callback": function(){ tsToken = ""; }
+        "error-callback": function(){ tsToken = ""; tsError = true; }
       });
     };
     const sc = document.createElement("script");
@@ -780,8 +780,10 @@
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(a.email)){ $("l_err").textContent = "メールアドレスの形式をご確認ください。"; return; }
     if(!a.source){ $("l_err").textContent = "サイトを知ったきっかけをお選びください。"; return; }
     $("l_err").textContent = "";
-    if(TURNSTILE_SITEKEY && !tsToken){
-      $("l_err").textContent = "「ロボットではありません」の確認が済んでいません。少し待ってからもう一度お試しください。";
+    /* まだ確認中なら待ってもらう。ただし判定そのものが読み込めなかった場合は
+       止めない。そのまま送信させ、サーバーに弾かれたらメールの送信口に流す */
+    if(TURNSTILE_SITEKEY && !tsToken && !tsError){
+      $("l_err").textContent = "「ロボットではありません」の確認が済んでいません。数秒おいて、もう一度お試しください。";
       return;
     }
     /* 隠し欄が埋まっているのは自動投稿の疑い。ただしブラウザの住所自動入力で

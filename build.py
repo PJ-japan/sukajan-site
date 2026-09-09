@@ -30,7 +30,7 @@ FORM_MAIL     = "info@ichi-pj.com"
 # 対になるシークレットキーは Apps Script のスクリプトプロパティ
 # TURNSTILE_SECRET に入れる（リポジトリが公開のため、絶対に書かない）。
 # 空のあいだはウィジェットを読み込まず、検証もしない。
-TURNSTILE_SITEKEY = ""
+TURNSTILE_SITEKEY = "0x4AAAAAAEtunS8qlLhv4mHr"
 CSS = (ROOT / "_style.css").read_text(encoding="utf-8")
 DOCJS = (ROOT / "_doc.js").read_text(encoding="utf-8")
 
