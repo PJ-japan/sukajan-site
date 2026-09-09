@@ -4,6 +4,12 @@
 実行しても承認画面が出ず、`You do not have permission to call UrlFetchApp.fetch`
 のまま終わる。**`appsscript.json` に `oauthScopes` を明示すると、必ず承認画面が出る。**
 
+## 承認関数で try/catch をしない
+
+権限不足の例外は、**外に投げて初めて承認ダイアログが出る。**
+`try/catch` で捕まえてログに書くと、ダイアログが出ないまま「実行完了」になり、
+何度実行しても承認できない。`authorizeExternalRequest()` に catch を書かないのはそのため。
+
 ## 手順
 
 1. Apps Script エディタ → 左の歯車「プロジェクトの設定」

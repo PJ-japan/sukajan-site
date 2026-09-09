@@ -659,20 +659,18 @@ function json(o) {
  * Turnstile の検証が動くようになる。承認後はもう実行しなくてよい。
  */
 function authorizeExternalRequest() {
-  try {
-    const res = UrlFetchApp.fetch(
-      'https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-        method: 'post',
-        payload: { secret: TURNSTILE_SECRET || 'dummy', response: 'dummy' },
-        muteHttpExceptions: true
-      });
-    tsClear_();
-    Logger.log('外部リクエストの権限は取得できています。');
-    Logger.log('Cloudflare の応答: ' + res.getContentText());
-    Logger.log('※ ダミーのトークンを送っているので success:false が正常です。');
-  } catch (err) {
-    Logger.log('まだ権限がありません: ' + err);
-  }
+  /* ここで try/catch をしてはいけない。権限不足の例外を捕まえてしまうと、
+     承認ダイアログが出ないまま「実行完了」になる。例外はそのまま投げる。 */
+  const res = UrlFetchApp.fetch(
+    'https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'post',
+      payload: { secret: TURNSTILE_SECRET || 'dummy', response: 'dummy' },
+      muteHttpExceptions: true
+    });
+  tsClear_();
+  Logger.log('外部リクエストの権限は取得できています。');
+  Logger.log('Cloudflare の応答: ' + res.getContentText());
+  Logger.log('※ ダミーのトークンを送っているので success:false が正常です。');
 }
 
 /** 動作確認用。エディタから実行してシートに1行入ることを確かめる */
