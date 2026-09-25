@@ -446,6 +446,8 @@ def work_page_body(w):
                        html.escape(src, quote=True), title, cap))
     if not figs:
         figs.append('<div class="slot slot--wide">写真は準備中です</div>')
+    story = "".join(
+        '<p class="lead">%s</p>' % para for para in (w.get("story") or []))
     ext = ""
     if w.get("url", "").startswith("http"):
         ext = ('<p class="note">この事例は<a class="link" href="%s" target="_blank" '
@@ -474,6 +476,7 @@ def work_page_body(w):
       <div class="band__main">
         <h2>%(title)s</h2>
         %(figs)s
+        %(story)s
         <div class="tw">
           <table>
             <thead><tr><th>項目</th><th>内容</th></tr></thead>
@@ -510,7 +513,7 @@ def work_page_body(w):
 """ % dict(en=en, ja=ja, title=title, meta=meta, figs="\n        ".join(figs),
            usepage=USE_PAGE.get(key, "design.html"),
            cta=USE_CTA.get(key, USE_CTA["design"]), ext=ext,
-           related=related_html(w, key))
+           story=story, related=related_html(w, key))
 
 
 GENERATED = {}
