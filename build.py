@@ -1044,6 +1044,22 @@ EN_SHELL = """<!DOCTYPE html>
 </html>
 """
 
+def en_works_html(limit=8):
+    """英語ページ用の事例列。/en/ は1階層下なので、画像とリンクの
+    パスを ../ に直す。titleEn / metaEn があればそちらを使う。"""
+    items = []
+    for w in WORKS[:limit]:
+        x = dict(w)
+        if w.get("titleEn"):
+            x["title"] = w["titleEn"]
+        if w.get("metaEn"):
+            x["meta"] = w["metaEn"]
+        items.append(x)
+    return (rail_html(items, wrap=True)
+            .replace('src="assets/', 'src="../assets/')
+            .replace('href="works-', 'href="../works-'))
+
+
 EN_LD = json.dumps({
     "@context": "https://schema.org",
     "@graph": [
@@ -1063,7 +1079,8 @@ en_dir.mkdir(parents=True, exist_ok=True)
     EN_SHELL.format(css=CSS.replace("url(assets/", "url(../assets/"),
                     ld=EN_LD, base=BASE, en_url=EN_URL,
                     year=date.today().year,
-                    body=hold((ROOT / "pages" / "en.html").read_text(encoding="utf-8"))),
+                    body=hold((ROOT / "pages" / "en.html").read_text(encoding="utf-8"))
+                         .replace("<!--WORKS:EN-->", en_works_html())),
     encoding="utf-8")
 print("built  en/index.html")
 
