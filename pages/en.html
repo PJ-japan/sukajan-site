@@ -148,11 +148,173 @@
     </div>
     <div class="band__main">
       <h2>Tell us what you want on the jacket</h2>
-      <p class="lead">Quantity, where you want the embroidery, roughly how many colours, and the date you need it. That is enough for us to come back with an estimate.</p>
+      <p class="lead">Quantity, where you want the embroidery, roughly how many colours, and the date you need it. That is enough for us to come back with an estimate. <strong>We reply in English within one or two working days.</strong></p>
+
+      <form id="eform" novalidate>
+        <div class="field">
+          <label for="e_name">Your name <span class="req">required</span></label>
+          <input id="e_name" name="name" type="text" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="e_email">Email <span class="req">required</span></label>
+          <input id="e_email" name="email" type="email" required autocomplete="email" inputmode="email">
+        </div>
+        <div class="field">
+          <label for="e_country">Where would we be shipping to?</label>
+          <input id="e_country" name="country" type="text" autocomplete="country-name" placeholder="Country or region">
+        </div>
+        <div class="field">
+          <label for="e_kind">What are you after? <span class="req">required</span></label>
+          <select id="e_kind" name="kind" required>
+            <option value="">Please choose</option>
+            <option>One jacket, made for me</option>
+            <option>A run of jackets for my brand</option>
+            <option>Pattern design only (I have my own production)</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="e_qty">How many?</label>
+          <input id="e_qty" name="qty" type="text" placeholder="1, 30, 100&hellip;">
+        </div>
+        <div class="field">
+          <label for="e_msg">What do you want on the jacket? <span class="req">required</span></label>
+          <textarea id="e_msg" name="msg" required placeholder="A motif, a story, a place, an animal &mdash; anything. It does not need to be worked out yet."></textarea>
+        </div>
+        <div class="field">
+          <label for="e_due">When do you need it?</label>
+          <input id="e_due" name="due" type="text" placeholder="A month, a date, or &ldquo;no rush&rdquo;">
+        </div>
+        <div class="field">
+          <label for="e_source">How did you hear about us? <span class="req">required</span></label>
+          <select id="e_source" name="source" required>
+            <option value="">Please choose</option>
+            <option>Instagram</option>
+            <option>Search (Google and so on)</option>
+            <option>YouTube</option>
+            <option>X (Twitter)</option>
+            <option>Press, TV or a magazine</option>
+            <option>A collaboration product (GU, PUMA, EXPO 2025&hellip;)</option>
+            <option>At the ICHI store in Yokosuka</option>
+            <option>Someone recommended you</option>
+            <option>I have known about you for a while</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="ts" id="ets" hidden></div>
+        <button class="btn btn--solid" type="submit" id="esend">Send</button>
+        <p class="wiz__err" id="eerr"></p>
+        <div class="wiz__sent" id="esent" hidden></div>
+        <p class="note" style="margin-top:18px">By sending this you agree to our <a class="link" href="../privacy.html">privacy policy</a> (Japanese). What you write is sent to us and stored.<br>
+          If the form will not go through, email <a class="link" href="mailto:info@ichi-pj.com?subject=Sukajan%20enquiry">info@ichi-pj.com</a> directly.</p>
+      </form>
+
       <div class="btns">
-        <a class="btn btn--solid" href="mailto:info@ichi-pj.com?subject=Sukajan%20enquiry">info@ichi-pj.com</a>
         <a class="btn btn--ghost" href="/">日本語のページへ</a>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+(function(){
+  const ENDPOINT = "";           // 例: "https://script.google.com/macros/s/XXXX/exec"
+  const SHARED_SECRET = "change-me";
+  const MAIL = "info@ichi-pj.com";
+
+  const T0 = Date.now();   // 読み込みからの経過でボットを弾く
+
+  /* Cloudflare Turnstile。サイトキーが空のうちは読み込まず、従来どおり動く。
+     トークンは1回きりなので、送信に失敗したら reset して取り直す */
+  const TURNSTILE_SITEKEY = "";
+  let tsToken = "", tsWidget = null, tsError = false;
+  (function(){
+    if(!TURNSTILE_SITEKEY) return;
+    const box = document.getElementById("ets"); if(!box) return;
+    box.hidden = false;
+    window.onTurnstile_en = function(){
+      tsWidget = window.turnstile.render(box, {
+        sitekey: TURNSTILE_SITEKEY, language: "en", theme: "light",
+        callback: function(t){ tsToken = t; },
+        "expired-callback": function(){ tsToken = ""; },
+        "error-callback": function(){ tsToken = ""; tsError = true; }
+      });
+    };
+    const sc = document.createElement("script");
+    sc.src = "https://challenges.cloudflare.com/turnstile/v0/api.js"
+           + "?render=explicit&onload=onTurnstile_en";
+    sc.async = true; sc.defer = true;
+    document.head.appendChild(sc);
+  })();
+
+  const $ = id => document.getElementById(id);
+  const f = $("eform"); if(!f) return;
+
+  function values(){
+    const a = {};
+    ["name","email","country","kind","qty","msg","due","source"].forEach(function(k){
+      a[k] = (f.elements[k] && f.elements[k].value || "").trim();
+    });
+    return a;
+  }
+
+  function mailtoFallback(a){
+    const rows = ["Name: " + a.name, "Email: " + a.email, "Shipping to: " + a.country,
+                  "", "Looking for: " + a.kind, "Quantity: " + a.qty,
+                  "Needed by: " + a.due, "", "What they want on the jacket:", a.msg,
+                  "", "Heard about us via: " + a.source];
+    return "mailto:" + MAIL + "?subject=" +
+      encodeURIComponent("Sukajan enquiry - " + (a.name || "")) +
+      "&body=" + encodeURIComponent(rows.join("\n"));
+  }
+
+  f.addEventListener("submit", async function(e){
+    e.preventDefault();
+    const a = values();
+    if(!a.name || !a.email){ $("eerr").textContent = "Please give us your name and email address."; return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(a.email)){ $("eerr").textContent = "That email address does not look right."; return; }
+    if(!a.kind){ $("eerr").textContent = "Please tell us what you are after."; return; }
+    if(!a.msg){ $("eerr").textContent = "Please tell us what you want on the jacket."; return; }
+    if(!a.source){ $("eerr").textContent = "Please tell us how you heard about us."; return; }
+    $("eerr").textContent = "";
+
+    /* まだ確認中なら待ってもらう。ただし判定そのものが読み込めなかった場合は
+       止めない。そのまま送信させ、サーバーに弾かれたらメールの送信口に流す */
+    if(TURNSTILE_SITEKEY && !tsToken && !tsError){
+      $("eerr").textContent = "The “I am human” check has not finished. Give it a few seconds and try again.";
+      return;
+    }
+    /* 読み込み直後の送信も自動投稿の疑いがあるが、捨てずに待たせるだけにする */
+    const wait = 1500 - (Date.now() - T0);
+    if(wait > 0){ await new Promise(function(r){ setTimeout(r, wait); }); }
+
+    const btn = $("esend"); btn.disabled = true; btn.textContent = "Sending…";
+    let ok = false;
+    if(ENDPOINT){
+      try{
+        const r = await fetch(ENDPOINT, {method:"POST",
+          headers:{"Content-Type":"text/plain;charset=utf-8"},
+          body: JSON.stringify({secret:SHARED_SECRET, form:"contact_en", answers:a,
+            turnstile: tsToken, ua:navigator.userAgent})});
+        /* GAS は失敗しても HTTP 200 を返す。r.ok だけを見ていると、
+           サーバー側で弾かれていても「送信しました」と出てしまう */
+        const j = await r.json().catch(function(){ return null; });
+        ok = r.ok && !!(j && j.ok === true);
+      }catch(err){ ok = false; }
+    }
+    const box = $("esent"); box.hidden = false;
+    if(ok){
+      box.textContent = "Thank you. We will get back to you in English within one or two working days.";
+      btn.textContent = "Sent";
+    }else{
+      box.innerHTML = "We could not send that automatically. Your email app will open — please send the message as it is." +
+        '<br><a class="link" href="' + mailtoFallback(a) + '">Email ' + MAIL + '</a>';
+      window.location.href = mailtoFallback(a);
+      btn.disabled = false; btn.textContent = "Try again";
+      /* トークンは1回きり。取り直さないと2回目が必ず失敗する */
+      tsToken = ""; if(tsWidget && window.turnstile) window.turnstile.reset(tsWidget);
+    }
+  });
+})();
+</script>

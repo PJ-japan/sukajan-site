@@ -30,6 +30,7 @@ const CONTACT_SHEET = 'contacts';   // お問い合わせフォーム（contact.
 const ESTIMATE_SHEET = 'estimates'; // 自動見積もり（estimate.html）
 const DESIGN_SHEET = 'design';      // 柄のデザインのみ（estimate.html）
 const RECRUIT_SHEET = 'recruit';    // アルバイト応募（recruit.html）
+const CONTACT_EN_SHEET = 'contacts_en'; // 英語ページの問い合わせ（en/）
 const SECRET     = 'm5u0-yxSl-ByIk';   // build.py の FORM_SECRET と同じ文字列
 const NOTIFY_TO  = 'info@ichi-pj.com';   // 通知メールの宛先。空にすると送りません
 const AUTO_REPLY = true;                 // 送信者へ受付メールを自動で返すか
@@ -62,6 +63,11 @@ const RECRUIT_HEADERS = [
   '受信日時','お名前','ふりがな','メール','電話','年代','お住まい',
   'やってみたいこと','入れる曜日・日数','働き始められる時期',
   '志望のきっかけ','SNS・ポートフォリオ','知ったきっかけ','UA'
+];
+
+const CONTACT_EN_HEADERS = [
+  '受信日時','お名前','メール','送り先の国・地域','ご用件','着数',
+  'ご要望','希望時期','知ったきっかけ','UA'
 ];
 
 const CONTACT_HEADERS = [
@@ -154,6 +160,9 @@ function doPost(e) {
 
     // アルバイト応募（recruit.html）
     if (body.form === 'recruit') return handleRecruit_(body);
+
+    // 英語ページからの問い合わせ（en/）。自動返信を英語で返すため別にする
+    if (body.form === 'contact_en') return handleContactEn_(body);
 
     const a = body.answers || {};
     const d = body.doc || {};
@@ -506,6 +515,80 @@ function handleContact_(body) {
   return done_();
 }
 
+/* 英語ページからの問い合わせ。日本語の自動返信を海外の方に送らないよう、
+   contact とは別の handler にしている。シートも別（contacts_en）。 */
+function handleContactEn_(body) {
+  const a = body.answers || {};
+  const sh = sheet_(CONTACT_EN_SHEET, CONTACT_EN_HEADERS);
+
+  sh.appendRow(safeRow_([
+    new Date(),
+    a.name || '', a.email || '', a.country || '',
+    a.kind || '', a.qty || '', a.msg || '', a.due || '',
+    a.source || '', body.ua || ''
+  ]));
+
+  if (AUTO_REPLY && a.email) {
+    sendMail_({
+      to: a.email,
+      name: 'Hiromichi Yokochi / ICHI',
+      replyTo: NOTIFY_TO,
+      subject: 'We have your sukajan enquiry',
+      body: [
+        'Dear ' + (a.name || '') + ',',
+        '',
+        'Thank you for getting in touch. We have your enquiry, written down as below.',
+        'We will come back to you in English within one or two working days.',
+        '',
+        '──────────────',
+        'Looking for: ' + (a.kind || 'not given'),
+        'Quantity: ' + (a.qty || 'not given'),
+        'Shipping to: ' + (a.country || 'not given'),
+        'Needed by: ' + (a.due || 'not given'),
+        '──────────────',
+        '',
+        'What you want on the jacket:',
+        a.msg || '(not given)',
+        '',
+        'Everything can be done by email. We ship internationally.',
+        'A jacket takes from three months from the day we start.',
+        '',
+        'This message was sent automatically. Replying to it reaches us.',
+        '',
+        'Hiromichi Yokochi / ICHI',
+        "ICHI Dobuita, 3-11-7 Honcho, Yokosuka, Kanagawa, Japan",
+        'https://hiromichiyokochi.com/en/'
+      ].join('\n')
+    });
+  }
+
+  if (NOTIFY_TO) {
+    sendMail_({
+      to: NOTIFY_TO,
+      replyTo: a.email || NOTIFY_TO,
+      subject: '【英語ページ】' + (a.name || '名称未記入') + '／' + (a.kind || ''),
+      body: [
+        '※ 英語ページからの問い合わせです。返信は英語でお願いします。',
+        '',
+        'お名前: ' + (a.name || ''),
+        'メール: ' + (a.email || ''),
+        '送り先の国・地域: ' + (a.country || ''),
+        '',
+        'ご用件: ' + (a.kind || ''),
+        '着数: ' + (a.qty || ''),
+        '希望時期: ' + (a.due || ''),
+        '',
+        'ご要望:',
+        a.msg || '（未記入）',
+        '',
+        '知ったきっかけ: ' + (a.source || ''),
+        'UA: ' + (body.ua || '')
+      ].join('\n')
+    });
+  }
+  return done_();
+}
+
 function handleRecruit_(body) {
   const a = body.answers || {};
   const sh = sheet_(RECRUIT_SHEET, RECRUIT_HEADERS);
@@ -595,7 +678,8 @@ function doGet(e) {
   if (SHEET_ID) {
     try {
       const ss = SpreadsheetApp.openById(SHEET_ID);
-      [SHEET_NAME, CONTACT_SHEET, ESTIMATE_SHEET, DESIGN_SHEET, RECRUIT_SHEET]
+      [SHEET_NAME, CONTACT_SHEET, CONTACT_EN_SHEET, ESTIMATE_SHEET,
+       DESIGN_SHEET, RECRUIT_SHEET]
         .forEach(function (n) {
           const sh = ss.getSheetByName(n);
           if (!sh) { out.sheets[n] = '未作成（初回送信時に作られます）'; return; }

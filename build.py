@@ -1080,7 +1080,17 @@ en_dir.mkdir(parents=True, exist_ok=True)
                     ld=EN_LD, base=BASE, en_url=EN_URL,
                     year=date.today().year,
                     body=hold((ROOT / "pages" / "en.html").read_text(encoding="utf-8"))
-                         .replace("<!--WORKS:EN-->", en_works_html())),
+                         .replace("<!--WORKS:EN-->", en_works_html())
+                         # 日本語ページと同じ差し替えを英語ページにも通す。
+                         # 通し忘れるとフォームが送信先を持たない
+                         .replace('const ENDPOINT = "";',
+                                  'const ENDPOINT = "%s";' % FORM_ENDPOINT)
+                         .replace('const SHARED_SECRET = "change-me";',
+                                  'const SHARED_SECRET = "%s";' % FORM_SECRET)
+                         .replace('const MAIL = "info@ichi-pj.com";',
+                                  'const MAIL = "%s";' % FORM_MAIL)
+                         .replace('const TURNSTILE_SITEKEY = "";',
+                                  'const TURNSTILE_SITEKEY = "%s";' % TURNSTILE_SITEKEY)),
     encoding="utf-8")
 print("built  en/index.html")
 
