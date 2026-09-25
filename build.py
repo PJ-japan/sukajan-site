@@ -285,7 +285,7 @@ PAGES = {
     ),
     "works": dict(
         title="制作事例｜オーダースカジャン・ブランド別注の実績",
-        desc="オリジナルスカジャンの制作事例。オーダーメイドの一点物、ブランド別注、アーティストグッズ、周年記念など、これまでに描いたスカジャン柄を掲載。最新の実績はInstagram（@hiromichiyokochi）で公開しています。",
+        desc="オリジナルスカジャンの制作事例。オーダーメイドの一点物、ブランド別注、アーティストグッズ、周年記念まで、これまでに描いたスカジャン柄を用途別に掲載。柄ごとに、なぜその図案になったのか、横振り刺繍で気をつけたところまで書いています。",
         nav="Works",
         crumbs=[("制作事例", "works.html")],
     ),
@@ -868,6 +868,7 @@ for slug in PAGE_ORDER:
               .replace("<!--WORKS:USE:design-->", works_use_html("design"))
               .replace("<!--WORKS:USE:order-->", works_use_html("order"))
               .replace("<!--WORKS:USE:oem-->", works_use_html("oem"))
+              .replace("<!--WORKS:COUNT-->", str(len(WORKS)))
               .replace("<!--WORKS:BYUSE-->", works_by_use_html())
               .replace("<!--WORKS:DRAFT-->", works_html(drafts=True))
               .replace("<!--WORKS-->", works_html())
