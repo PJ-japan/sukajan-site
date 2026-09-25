@@ -178,6 +178,10 @@
     sc.src = "https://challenges.cloudflare.com/turnstile/v0/api.js"
            + "?render=explicit&onload=onTurnstile_contact";
     sc.async = true; sc.defer = true;
+    /* Cloudflare に届かない・判定が動かないまま無言で止まることがある。
+       error-callback すら来ないので、時間で見切らないと送信できなくなる */
+    sc.onerror = function(){ tsError = true; };
+    setTimeout(function(){ if(!tsToken) tsError = true; }, 12000);
     document.head.appendChild(sc);
   })();
   const $ = id => document.getElementById(id);
