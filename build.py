@@ -408,6 +408,27 @@ USE_LABEL = {
 }
 USE_PAGE = {"order": "order.html", "oem": "oem.html", "design": "design.html",
             "artist": "design.html"}
+# 事例ページの主導線。全部を自動見積もり（量産向け）に流すと、
+# オーダーメイドの事例を見た人がオーダーのページに辿り着けない。
+USE_CTA = {
+    "order":  "オーダーメイドスカジャンを相談する",
+    "oem":    "スカジャンOEMを相談する",
+    "design": "スカジャン柄のデザインを相談する",
+    "artist": "コラボについて相談する",
+}
+
+
+def related_html(w, key, limit=4):
+    """同じ用途のほかの事例。事例どうしが繋がっていないと、
+    1件ずつの孤立したページになって固まりとして評価されない。"""
+    others = [x for x in WORKS
+              if x.get("slug") and x.get("slug") != w.get("slug")
+              and key in (x.get("use") or [])]
+    if not others:
+        return ""
+    return ('<h3>%sのほかの事例</h3>%s'
+            % (html.escape(USE_LABEL.get(key, USE_LABEL["design"])[1]),
+               rail_html(others[:limit], wrap=True)))
 
 
 def work_page_body(w):
@@ -438,7 +459,7 @@ def work_page_body(w):
   </h1>
   <p class="lead hero__lead">%(meta)s</p>
   <div class="btns">
-    <a class="btn btn--solid" href="estimate.html">同じように柄から作る</a>
+    <a class="btn btn--solid" href="%(usepage)s">%(cta)s</a>
     <a class="btn btn--ghost" href="works.html#uses">ほかの制作事例</a>
   </div>
 </section>
@@ -478,15 +499,18 @@ def work_page_body(w):
     <div class="band__main">
       <h2>この作り方で、<br>あなたの柄もお描きします</h2>
       <p class="lead">入れたいモチーフをうかがって、<strong>柄をゼロから描き起こします。</strong>一着だけのオーダーメイドから、ブランドの別注・量産、柄のデータだけのご提供まで承ります。</p>
+      %(related)s
       <div class="btns">
-        <a class="btn btn--solid" href="estimate.html">今すぐ自動見積もり</a>
-        <a class="btn btn--ghost" href="%(usepage)s">%(ja)sについて</a>
+        <a class="btn btn--solid" href="%(usepage)s">%(cta)s</a>
+        <a class="btn btn--ghost" href="estimate.html">今すぐ自動見積もり</a>
       </div>
     </div>
   </div>
 </section>
 """ % dict(en=en, ja=ja, title=title, meta=meta, figs="\n        ".join(figs),
-           usepage=USE_PAGE.get(key, "design.html"), ext=ext)
+           usepage=USE_PAGE.get(key, "design.html"),
+           cta=USE_CTA.get(key, USE_CTA["design"]), ext=ext,
+           related=related_html(w, key))
 
 
 GENERATED = {}
@@ -549,7 +573,22 @@ def cta_html(slug):
             '</div>' % (html.escape(label), p_href, html.escape(p_txt), s_href, ext, html.escape(s_txt)))
 
 
-def jsonld(slug, meta):
+def faq_from_body(body):
+    """FAQ の構造化データは本文の <details> から作る。
+    build.py 側に質問を別で書くと本文とずれる（実際に5問中3問しか
+    渡っていなかった）。Google は本文に見えている内容しか認めないので、
+    見えているものをそのまま拾うのが正しい。"""
+    out = []
+    for m in re.finditer(r"<details[^>]*>\s*<summary>(.*?)</summary>(.*?)</details>",
+                         body, re.S):
+        q = " ".join(html.unescape(re.sub(r"<[^>]+>", " ", m.group(1))).split())
+        a = " ".join(html.unescape(re.sub(r"<[^>]+>", " ", m.group(2))).split())
+        if q and a:
+            out.append((q, a))
+    return out
+
+
+def jsonld(slug, meta, body=""):
     graph = []
     graph.append({
         "@type": "WebSite",
@@ -569,13 +608,16 @@ def jsonld(slug, meta):
             "areaServed": "JP",
             "serviceType": "スカジャンのデザイン・制作",
         })
-    if meta.get("faq"):
+    # PAGES に faq を書いたページだけを対象にする（挙動を広げない）
+    faq = faq_from_body(body) if meta.get("faq") else None
+    faq = faq or meta.get("faq")
+    if faq:
         graph.append({
             "@type": "FAQPage",
             "mainEntity": [
                 {"@type": "Question", "name": q,
                  "acceptedAnswer": {"@type": "Answer", "text": a}}
-                for q, a in meta["faq"]
+                for q, a in faq
             ],
         })
     items = [{"@type": "ListItem", "position": 1, "name": "ホーム", "item": BASE}]
@@ -796,6 +838,7 @@ for slug in PAGE_ORDER:
     meta = PAGES[slug]
     src = ROOT / "pages" / f"{slug}.html"
     body = GENERATED[slug] if slug in GENERATED else src.read_text(encoding="utf-8")
+    body_src = hold(body)
     canonical = BASE if slug == "index" else BASE + f"{slug}.html"
     page = SHELL.format(
         title=html.escape(meta["title"], quote=True),
@@ -810,13 +853,13 @@ for slug in PAGE_ORDER:
              % (BASE, BASE, BASE)) if slug == "index" else "",
         css=CSS,
         docjs=("<script>\n" + DOCJS + "\n</script>") if meta.get("js") else "",
-        ld=jsonld(slug, meta),
+        ld=jsonld(slug, meta, body_src),
         nav=nav_html(slug),
         crumbs=crumbs_html(meta),
         notice=notice_html(),
         cta=cta_html(slug),
         year=date.today().year,
-        body=(hold(body)
+        body=(body_src
               .replace("<!--PRESS-->", press_html())
               .replace("<!--WORKS:WRAP-->", works_html(wrap=True))
               .replace("<!--WORKS:USE:design-->", works_use_html("design"))
