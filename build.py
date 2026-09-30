@@ -662,6 +662,9 @@ def nav_html(current):
         # 見積もりは主導線なのでナビでもボタンにする
         cls = ' class="nav--cta"' if slug == "estimate" else ""
         out.append(f'<a href="{href}"{cls}{cur}>{PAGES[slug]["nav"]}</a>')
+    # 英語ページへの導線。フッターの奥にしかないと、海外から来た人が
+    # 日本語のトップで行き止まりになる
+    out.append('<a href="en/" class="nav--lang" hreflang="en" lang="en">EN</a>')
     return "\n        ".join(out)
 
 
@@ -750,7 +753,7 @@ SHELL = """<!DOCTYPE html>
     if(h.hasAttribute("data-open") && !h.contains(e.target)) set(false);
   }});
   // 画面が広がったら開閉状態を捨てる
-  var mq = window.matchMedia("(min-width:881px)");
+  var mq = window.matchMedia("(min-width:1081px)");
   (mq.addEventListener ? mq.addEventListener.bind(mq, "change") : mq.addListener.bind(mq))(function(){{ set(false); }});
 }})();
 

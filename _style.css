@@ -121,7 +121,7 @@ a.link:hover{color:var(--fg);border-bottom-color:var(--accent)}
    -------------------------------------------------------------------------- */
 /* 固定ヘッダーの下にアンカー先が潜らないようにする */
 html{scroll-padding-top:84px}
-@media (max-width:880px){html{scroll-padding-top:112px}}
+@media (max-width:1080px){html{scroll-padding-top:112px}}
 
 .masthead{position:sticky;top:0;z-index:70;
   background:color-mix(in srgb,var(--bg) 82%,transparent);
@@ -148,6 +148,11 @@ html{scroll-padding-top:84px}
   padding:7px 14px;margin:-7px 0;letter-spacing:.05em;text-transform:none}
 .nav a.nav--cta:hover{background:#fff;color:var(--bg)}
 .nav a.nav--cta[aria-current="page"]{color:#fff}
+/* 言語切り替え。見積もりボタンの隣に朱で並べると主導線が2つに見えるため、
+   罫線で囲むだけの控えめな見た目にする */
+.nav a.nav--lang{border:1px solid var(--line);padding:5px 9px;margin:-5px 0;
+  letter-spacing:.08em}
+.nav a.nav--lang:hover{border-color:var(--fg-mute)}
 /* --------------------------------------------------------------------------
    ハンバーガー
    JSが動く環境（.masthead[data-js]）でだけ有効。動かない場合はボタンが出ず、
@@ -170,7 +175,7 @@ html{scroll-padding-top:84px}
 .masthead[data-open] .menu__bars::after{top:4px;transform:rotate(-45deg)}
 .masthead[data-open] .menu__label::after{content:"Close"}
 
-@media (max-width:880px){
+@media (max-width:1080px){
   .masthead__in{flex-direction:column;align-items:flex-start;gap:9px;padding:12px var(--gut) 11px}
   /* ブランド名が2行に折り返し、固定ヘッダーが画面の15%を占めていた */
   .brand{gap:9px;min-width:0}
