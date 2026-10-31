@@ -255,13 +255,19 @@
   /* ------------------------------------------------------------------
      画像。assets/pattern/ に置けば自動で使われる。無いあいだは
      ボディはシルエット、柄と文字は点線の四角で代わりに出す。
-       body/front.png  body/back.png          ボディ（4:5、例 1200×1500）
-       chest-r/{eagle,tiger,dragon}.png       右胸の柄（背景透過）
-       chest-l/{eagle,tiger,dragon}.png       左胸の柄（背景透過）
-       back/{eagle,tiger,dragon}.png          背中の柄（背景透過）
-       text/{arch,straight,script}/{地名}.png 文字（背景透過。地名は PLACES の v）
+       body/front.png  body/back.png        ボディ（4:5、800×1000）
+       chest-r/{eagle,tiger,dragon}.png     右胸の柄（背景透過）
+       chest-l/{eagle,tiger,dragon}.png     左胸の柄（背景透過）
+       back/{eagle,tiger,dragon}.png        背中の柄（背景透過）
+       text/{script,slab,sans}/{地名}.png   文字（背景透過。地名は PLACES の v）
      柄と文字は、下の BOX の枠に収まるよう縦横比を保って縮小される。
      枠は画像に対する % で、[左, 上, 幅, 高さ]。
+
+     柄の持ち出し対策。画像ファイル自体は通信を見れば取れてしまうので、
+     ・柄の画像は表示に要る大きさまで落として書き出す（背中で長辺500px程度）。
+       刺繍データや印刷の原稿に使えない解像度にしておくのが一番効く
+     ・画面では1枚の canvas に合成し、透かしを焼き込む。右クリック保存・
+       ドラッグ・長押し保存も止める（手軽な持ち出しを防ぐだけで、完全ではない）
      ------------------------------------------------------------------ */
   const IMG = "assets/pattern/";
   const BOX = {
@@ -269,9 +275,9 @@
     chestL: [57, 25, 20, 17],
     back:   [20, 31, 60, 46],
     font: {
-      arch:     [20, 13, 60, 16],
-      straight: [24, 18, 52, 9],
-      script:   [22, 15, 56, 13]
+      script: [22, 15, 56, 13],
+      slab:   [22, 16, 56, 11],
+      sans:   [24, 17, 52, 10]
     }
   };
   const MOTIFS = [
@@ -279,11 +285,15 @@
     { v:"tiger",  ja:"虎" },
     { v:"dragon", ja:"龍" }
   ];
-  /* 文字の形。名前は仮。見本ができたら ja を書き換える */
+  /* 文字の形。書体の名前（筆記体・ラウンドスラブ・サンセリフ）を知らない人にも
+     分かる呼び名にしている。canvas は文字画像が無いあいだの代わりの書体 */
   const FONTS = [
-    { v:"arch",     ja:"アーチ" },
-    { v:"straight", ja:"ストレート" },
-    { v:"script",   ja:"筆記体" }
+    { v:"script", ja:"筆記体", desc:"手書きのようにつながった文字",
+      canvas:'italic 700 %dpx "Brush Script MT","Snell Roundhand",cursive' },
+    { v:"slab",   ja:"レトロ", desc:"文字の端に丸みのある“足”がついた、ヴィンテージ風",
+      canvas:'700 %dpx Rockwell,"Roboto Slab","Courier New",serif' },
+    { v:"sans",   ja:"シンプル", desc:"飾りのない、すっきりした太い文字",
+      canvas:'800 %dpx Archivo,"Helvetica Neue",Arial,sans-serif' }
   ];
   const PLACES = [["japan","JAPAN","JAPAN"]].concat([
     ["hokkaido","北海道","HOKKAIDO"],["aomori","青森","AOMORI"],["iwate","岩手","IWATE"],
@@ -304,19 +314,20 @@
     ["kagoshima","鹿児島","KAGOSHIMA"],["okinawa","沖縄","OKINAWA"]
   ]).map(function(p){ return { v:p[0], ja:p[1], en:p[2] }; });
 
-  /* 画像が無いときのボディ。別珍の黒を想定した近黒のシルエット */
+  /* 画像が無いときのボディ。別珍の黒を想定した近黒のシルエット。
+     canvas に描くので、色は CSS ではなく SVG に直接書く */
   const SIL = {
-    front: '<svg class="po__sil" viewBox="0 0 400 500" aria-hidden="true">'
-      + '<path d="M150 52 L120 60 L40 108 L8 328 L48 340 L72 196 L72 446 L328 446 L328 196 L352 340 L392 328 L360 108 L280 60 L250 52 Q200 104 150 52 Z"/>'
-      + '<path class="po__rib" d="M150 52 Q200 104 250 52 L262 58 Q200 126 138 58 Z"/>'
-      + '<rect class="po__rib" x="72" y="446" width="256" height="30"/>'
-      + '<path class="po__rib" d="M8 328 L48 340 L44 366 L4 354 Z M392 328 L352 340 L356 366 L396 354 Z"/>'
-      + '<line class="po__zip" x1="200" y1="96" x2="200" y2="476"/></svg>',
-    back: '<svg class="po__sil" viewBox="0 0 400 500" aria-hidden="true">'
-      + '<path d="M150 52 L120 60 L40 108 L8 328 L48 340 L72 196 L72 446 L328 446 L328 196 L352 340 L392 328 L360 108 L280 60 L250 52 Q200 66 150 52 Z"/>'
-      + '<path class="po__rib" d="M150 52 Q200 66 250 52 L258 60 Q200 80 142 60 Z"/>'
-      + '<rect class="po__rib" x="72" y="446" width="256" height="30"/>'
-      + '<path class="po__rib" d="M8 328 L48 340 L44 366 L4 354 Z M392 328 L352 340 L356 366 L396 354 Z"/></svg>'
+    front: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="800" height="1000">'
+      + '<path fill="#0A0A0B" d="M150 52 L120 60 L40 108 L8 328 L48 340 L72 196 L72 446 L328 446 L328 196 L352 340 L392 328 L360 108 L280 60 L250 52 Q200 104 150 52 Z"/>'
+      + '<path fill="#1C1C1F" d="M150 52 Q200 104 250 52 L262 58 Q200 126 138 58 Z"/>'
+      + '<rect fill="#1C1C1F" x="72" y="446" width="256" height="30"/>'
+      + '<path fill="#1C1C1F" d="M8 328 L48 340 L44 366 L4 354 Z M392 328 L352 340 L356 366 L396 354 Z"/>'
+      + '<line stroke="#3A3A3E" stroke-width="2" x1="200" y1="96" x2="200" y2="476"/></svg>',
+    back: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="800" height="1000">'
+      + '<path fill="#0A0A0B" d="M150 52 L120 60 L40 108 L8 328 L48 340 L72 196 L72 446 L328 446 L328 196 L352 340 L392 328 L360 108 L280 60 L250 52 Q200 66 150 52 Z"/>'
+      + '<path fill="#1C1C1F" d="M150 52 Q200 66 250 52 L258 60 Q200 80 142 60 Z"/>'
+      + '<rect fill="#1C1C1F" x="72" y="446" width="256" height="30"/>'
+      + '<path fill="#1C1C1F" d="M8 328 L48 340 L44 366 L4 354 Z M392 328 L352 340 L356 366 L396 354 Z"/></svg>'
   };
 
   const T0 = Date.now();
@@ -355,6 +366,7 @@
     box.innerHTML = list.map(function(o, i){
       return '<label><input type="radio" name="' + group + '" value="' + o.v + '"'
         + (o.v === first || (!first && i === 0) ? " checked" : "") + '>' + esc(o.ja)
+        + (o.desc ? '<small class="po__desc">' + esc(o.desc) + '</small>' : "")
         + (o.yen !== undefined ? '<span class="po__yen">' + (o.yen ? yen(o.yen) + (o.from ? "〜" : "") : "0円") + '</span>' : "")
         + '</label>';
     }).join("");
@@ -380,55 +392,102 @@
     };
   }
 
-  /* 画像の有無は一度だけ調べて覚えておく。選ぶたびに404を出さないため */
+  /* 画像は一度だけ読んで覚えておく。選ぶたびに読み直さない（404 も1回で済む） */
   const seen = {};
-  function probe(src){
+  function load(src){
     if(!seen[src]){
       seen[src] = new Promise(function(res){
         const im = new Image();
-        im.onload = function(){ res(true); };
-        im.onerror = function(){ res(false); };
+        im.onload = function(){ res(im); };
+        im.onerror = function(){ res(null); };
         im.src = src;
       });
     }
     return seen[src];
   }
+  const svgUrl = svg => "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
 
-  function layer(box, src, label, kind){
-    const el = document.createElement("div");
-    el.className = "po__layer";
-    el.style.cssText = "left:" + box[0] + "%;top:" + box[1] + "%;width:" + box[2] + "%;height:" + box[3] + "%";
-    probe(src).then(function(ok){
-      if(ok){ el.innerHTML = '<img src="' + src + '" alt="">'; }
-      else{ el.classList.add("po__ph"); if(kind) el.classList.add("po__ph--" + kind); el.textContent = label; }
-    });
-    return el;
+  /* 前・後ろとも 800×1000 の canvas 1枚に合成する。
+     <img> を重ねると、柄だけを右クリックで保存できてしまうため */
+  const W = 800, H = 1000;
+  const cv = {};
+  ["front", "back"].forEach(function(side){
+    const c = document.createElement("canvas");
+    c.width = W; c.height = H;
+    c.setAttribute("role", "img");
+    $("po_" + side).appendChild(c);
+    cv[side] = c.getContext("2d");
+  });
+  /* 右クリック保存・ドラッグ・長押し保存を止める */
+  document.querySelector(".po__view").addEventListener("contextmenu", e => e.preventDefault());
+  document.querySelector(".po__view").addEventListener("dragstart", e => e.preventDefault());
+
+  function px(box){ return [box[0] * W / 100, box[1] * H / 100, box[2] * W / 100, box[3] * H / 100]; }
+  function fit(ctx, im, r){
+    const k = Math.min(r[2] / im.naturalWidth, r[3] / im.naturalHeight);
+    const w = im.naturalWidth * k, h = im.naturalHeight * k;
+    ctx.drawImage(im, r[0] + (r[2] - w) / 2, r[1] + (r[3] - h) / 2, w, h);
+  }
+  function placeholder(ctx, r, label, font, accent){
+    ctx.save();
+    ctx.setLineDash([6, 5]); ctx.lineWidth = 2;
+    ctx.strokeStyle = accent ? "#E00022" : "rgba(237,237,234,.55)";
+    ctx.strokeRect(r[0], r[1], r[2], r[3]);
+    ctx.fillStyle = "#EDEDEA"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    let size = Math.min(r[3] * .55, 30);
+    ctx.font = font.replace("%d", size);
+    while(ctx.measureText(label).width > r[2] * .9 && size > 10){
+      size -= 1; ctx.font = font.replace("%d", size);
+    }
+    ctx.fillText(label, r[0] + r[2] / 2, r[1] + r[3] / 2);
+    ctx.restore();
+  }
+  /* 透かし。柄の画像が1枚でも出ているときだけ、斜めに敷き詰める */
+  function watermark(ctx){
+    ctx.save();
+    ctx.translate(W / 2, H / 2); ctx.rotate(-Math.PI / 6);
+    ctx.font = '700 22px "Space Mono",ui-monospace,monospace';
+    ctx.fillStyle = "rgba(237,237,234,.16)"; ctx.textAlign = "center";
+    for(let y = -H; y < H; y += 90){
+      for(let x = -W; x < W; x += 420){
+        ctx.fillText("SAMPLE  HIROMICHI YOKOCHI", x + (y / 90 % 2 ? 210 : 0), y);
+      }
+    }
+    ctx.restore();
   }
 
+  const JP = '500 %dpx "Noto Sans JP","Hiragino Kaku Gothic ProN",sans-serif';
   const seq = { front: 0, back: 0 };
   function draw(side, s){
-    const stage = $("po_" + side), my = ++seq[side];
-    const body = IMG + "body/" + side + ".png";
-    probe(body).then(function(ok){
-      if(my !== seq[side]) return;   // 連打で古い描画が後から被らないように
-      const frag = document.createDocumentFragment();
-      const base = document.createElement("div");
-      base.className = "po__body";
-      base.innerHTML = ok ? '<img src="' + body + '" alt="">' : SIL[side];
-      frag.appendChild(base);
-      if(side === "front"){
-        frag.appendChild(layer(BOX.chestR, IMG + "chest-r/" + s.chestR.v + ".png", s.chestR.ja + "（右胸）"));
-        frag.appendChild(layer(BOX.chestL, IMG + "chest-l/" + s.chestL.v + ".png", s.chestL.ja + "（左胸）"));
-      }else{
-        frag.appendChild(layer(BOX.font[s.font.v], IMG + "text/" + s.font.v + "/" + s.place.v + ".png",
-          s.place.en, "text"));
-        frag.appendChild(layer(BOX.back, IMG + "back/" + s.back.v + ".png", s.back.ja + "（背中）"));
-      }
-      stage.replaceChildren(frag);
-      stage.setAttribute("aria-label", side === "front"
-        ? "前：右胸に" + s.chestR.ja + "、左胸に" + s.chestL.ja
-        : "後ろ：背中に" + s.back.ja + "、文字は" + s.place.en + "（" + s.font.ja + "）");
-    });
+    const my = ++seq[side];
+    const layers = side === "front"
+      ? [ { box:BOX.chestR, src:IMG + "chest-r/" + s.chestR.v + ".png", label:s.chestR.ja + "（右胸）" },
+          { box:BOX.chestL, src:IMG + "chest-l/" + s.chestL.v + ".png", label:s.chestL.ja + "（左胸）" } ]
+      : [ { box:BOX.font[s.font.v], src:IMG + "text/" + s.font.v + "/" + s.place.v + ".png",
+            label:s.place.en, font:s.font.canvas, accent:true },
+          { box:BOX.back, src:IMG + "back/" + s.back.v + ".png", label:s.back.ja + "（背中）" } ];
+    Promise.all([load(IMG + "body/" + side + ".png")].concat(layers.map(l => load(l.src))))
+      .then(function(ims){
+        if(my !== seq[side]) return;   // 連打で古い描画が後から被らないように
+        const body = ims[0];
+        const draw2 = function(base){
+          const ctx = cv[side];
+          ctx.clearRect(0, 0, W, H);
+          if(base) fit(ctx, base, [0, 0, W, H]);
+          let any = false;
+          layers.forEach(function(l, i){
+            const im = ims[i + 1], r = px(l.box);
+            if(im){ fit(ctx, im, r); any = true; }
+            else placeholder(ctx, r, l.label, l.font || JP, l.accent);
+          });
+          if(any) watermark(ctx);
+        };
+        if(body) draw2(body);
+        else load(svgUrl(SIL[side])).then(function(sil){ if(my === seq[side]) draw2(sil); });
+        cv[side].canvas.setAttribute("aria-label", side === "front"
+          ? "前：右胸に" + s.chestR.ja + "、左胸に" + s.chestL.ja
+          : "後ろ：背中に" + s.back.ja + "、文字は" + s.place.en + "（" + s.font.ja + "）");
+      });
   }
 
   function total(s){
