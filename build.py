@@ -382,6 +382,16 @@ PAGES = {
         service="スカジャンのオーダーメイド・OEMの概算見積もり",
         extra=[PERSON],
     ),
+    # パターンオーダーのLP。ナビには出さないが、検索には載せる
+    "pattern": dict(
+        title="パターンオーダースカジャン｜鷲・虎・龍の柄と都道府県の文字を選ぶ｜スカジャン絵師 横地広海知",
+        desc="鷲・虎・龍のスカジャン柄を右胸・左胸・背中から選び、背中にJAPANか47都道府県の名前を入れるパターンオーダー。選んだ組み合わせをその場で画面に合成。100,000円（税別）〜、別珍の黒ジャケット付きは120,000円（税別）。ジャケットの持ち込みも可。",
+        nav="Pattern order",
+        crumbs=[("パターンオーダー", "pattern.html")],
+        service="パターンオーダースカジャンの制作",
+        unlisted=True,
+        extra=[PERSON],
+    ),
     "contact": dict(
         title="ご相談・お問い合わせ｜スカジャン絵師 横地広海知",
         desc="オリジナルスカジャンのオーダーメイド、スカジャンOEM・ブランド別注、柄デザインのご相談。用途と希望納期をお知らせいただければ、可否とおおよその日程を最初にお答えします。",
@@ -538,7 +548,7 @@ for _w in WORKS:
 
 
 PAGE_ORDER = ["index", "about", "interview", "design", "order", "oem", "process",
-              "works", "works2", "works-aoi-karakusa", "recruit", "press", "brief", "spec", "access", "estimate", "contact", "privacy"]
+              "works", "works2", "works-aoi-karakusa", "pattern", "recruit", "press", "brief", "spec", "access", "estimate", "contact", "privacy"]
 
 # 事例の個別ページを末尾に足す（ナビには出ない。sitemap には載る）
 PAGE_ORDER += [n for n in PAGES if n.startswith("works-") and n not in PAGE_ORDER]

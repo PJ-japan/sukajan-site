@@ -1,0 +1,498 @@
+<section class="hero">
+  <h1 class="hero__title">
+    <span class="kicker">Pattern order &mdash; eagle, tiger, dragon</span>
+    <span class="en">PATTERN<br>ORDER</span>
+    <span class="sub">パターンオーダースカジャン — 鷲・虎・龍の柄と地名を選んで、一着を仕立てます</span>
+  </h1>
+  <p class="lead hero__lead">胸と背中の柄を鷲・虎・龍から選び、背中に入れる文字を「JAPAN」と47都道府県から選びます。ジャケットはお持ち込みか、別珍の黒から。選んだ組み合わせはその場で画面に描き出され、金額もそのまま出ます。</p>
+  <div class="btns">
+    <a class="btn btn--solid" href="#builder">柄を選ぶ</a>
+    <a class="btn btn--ghost" href="order.html">柄から描き起こすフルオーダーはこちら</a>
+  </div>
+</section>
+
+<section class="band rise">
+  <div class="band__grid">
+    <div class="band__aside">
+      <p class="tag"><span class="tag__en">HOW IT WORKS</span><span class="tag__ja">選べるもの</span></p>
+      <p>柄は描き下ろし済み。選ぶだけです。</p>
+    </div>
+    <div class="band__main">
+      <h2>選べるのは、<br>柄・文字・ジャケットの3つです</h2>
+      <p class="lead">柄はスカジャンの定番である<strong>鷲・虎・龍</strong>を、横地広海知がこのパターンオーダーのために描き下ろしました。右胸・左胸・背中のそれぞれに、3つの柄から好きなものを選べます。組み合わせは27通りです。</p>
+      <p class="lead">背中には<strong>「JAPAN」か、47都道府県のどれか</strong>を文字で入れます。文字の形は3種類からお選びください。地元の名前を背負う、スーベニアジャケット本来の着方です。</p>
+      <div class="rows">
+        <div class="row">
+          <div><h3>柄</h3></div>
+          <div><p>右胸・左胸・背中に、それぞれ鷲・虎・龍のいずれか</p></div>
+        </div>
+        <div class="row">
+          <div><h3>文字</h3></div>
+          <div><p>「JAPAN」または47都道府県の名前。文字の形は3種類</p></div>
+        </div>
+        <div class="row">
+          <div><h3>ジャケット</h3></div>
+          <div><p>お持ち込み、または別珍の黒（中綿なし）20,000円（税別）。ご希望があれば、ジャケットの購入代行やジャケットそのもののカスタム製作も承ります</p></div>
+        </div>
+      </div>
+      <p class="note">※ 柄をゼロから描き起こしたい方は<a class="link" href="order.html">フルオーダー</a>をご覧ください。</p>
+    </div>
+  </div>
+</section>
+
+<div class="panel">
+  <section class="band rise" id="builder">
+    <div class="band__grid">
+      <div class="band__aside">
+        <p class="tag"><span class="tag__en">BUILD YOURS</span><span class="tag__ja">組み合わせる</span></p>
+        <p>選ぶたびに、画面の一着が描き変わります。</p>
+      </div>
+      <div class="band__main">
+        <h2>柄と文字を選ぶ</h2>
+
+        <div class="po">
+          <div class="po__view" aria-live="polite">
+            <figure class="po__fig">
+              <div class="po__stage" id="po_front"></div>
+              <figcaption>FRONT &mdash; 前</figcaption>
+            </figure>
+            <figure class="po__fig">
+              <div class="po__stage" id="po_back"></div>
+              <figcaption>BACK &mdash; 後ろ</figcaption>
+            </figure>
+            <p class="note po__cap">※ 画面上の合成イメージです。刺繍の色味・位置・大きさは、実物と多少異なります。<br>※ 四角の枠は、文字が入る位置を示しています。文字の見本は順次掲載します。</p>
+          </div>
+
+          <form class="po__opts" id="poform" novalidate>
+            <div class="field">
+              <label>右胸の柄</label>
+              <div class="checks" data-group="chestR"></div>
+            </div>
+            <div class="field">
+              <label>左胸の柄</label>
+              <div class="checks" data-group="chestL"></div>
+            </div>
+            <div class="field">
+              <label>背中の柄</label>
+              <div class="checks" data-group="back"></div>
+            </div>
+            <div class="field">
+              <label for="po_place">背中に入れる文字</label>
+              <select id="po_place" name="place"></select>
+            </div>
+            <div class="field">
+              <label>文字の形</label>
+              <div class="checks" data-group="font"></div>
+            </div>
+            <div class="field">
+              <label>ジャケット</label>
+              <div class="checks po__jackets" data-group="jacket"></div>
+              <p class="field__echo" id="po_jnote"></p>
+            </div>
+          </form>
+        </div>
+
+        <div class="est__out" id="po_out">
+          <p class="est__cap">PRICE &mdash; この組み合わせの金額</p>
+          <p class="est__total" id="po_total"></p>
+          <p class="est__unit" id="po_tax"></p>
+          <ul class="est__break" id="po_break"></ul>
+        </div>
+        <p class="note">※ 金額はすべて1着あたりです。送料は別途かかります。<br>
+          ※ ジャケットの購入代行とカスタム製作は、ジャケットの仕様によって金額が変わります。ご希望をうかがってから確定した金額をお出しします。<br>
+          ※ お持ち込みの場合、刺繍できる素材・状態かどうかを事前に確認します。刺繍に向かない場合は、その旨をお伝えします。</p>
+<!--HOLD-->
+        <h3>納期</h3>
+        <p class="lead">お申し込みからお渡しまで <span class="tbd">○週間</span> が目安です。</p>
+<!--/HOLD-->
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="band rise">
+  <div class="band__grid">
+    <div class="band__aside">
+      <p class="tag"><span class="tag__en">ORDER</span><span class="tag__ja">お申し込み</span></p>
+      <p>1営業日以内にご返信します。</p>
+    </div>
+    <div class="band__main">
+      <h2>この組み合わせで<br>申し込む</h2>
+      <p class="lead">上で選んだ柄・文字・ジャケットは、そのまま引き継がれます。<strong>ご連絡先だけご記入ください。</strong>担当から内容の確認とお支払い方法をご案内します。<strong>お支払いが済むまで、ご注文は確定しません。</strong></p>
+
+      <form id="leadform" novalidate>
+        <div class="field">
+          <label for="l_name">お名前 <span class="req">必須</span></label>
+          <input id="l_name" name="name" type="text" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="l_email">メールアドレス <span class="req">必須</span></label>
+          <input id="l_email" name="email" type="email" required autocomplete="email" inputmode="email">
+        </div>
+        <div class="field">
+          <label for="l_tel">お電話番号</label>
+          <input id="l_tel" name="tel" type="tel" autocomplete="tel" placeholder="任意">
+        </div>
+        <div class="field" id="l_sizebox">
+          <label for="l_size">サイズ（別珍・黒の場合）</label>
+          <select id="l_size" name="size">
+            <option>R</option>
+            <option>XL</option>
+            <option>XXL</option>
+            <option>相談して決めたい</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="l_msg">補足</label>
+          <textarea id="l_msg" name="msg" placeholder="お持ち込みのジャケットの種類、購入・製作したいジャケットのご希望、渡したい日など。"></textarea>
+        </div>
+        <div class="field">
+          <label for="l_source">サイトを知ったきっかけ <span class="req">必須</span></label>
+          <select id="l_source" name="source" required>
+            <option value="">選択してください</option>
+            <option>検索（Google・Yahoo! など）</option>
+            <option>Instagram</option>
+            <option>YouTube</option>
+            <option>X（旧Twitter）</option>
+            <option>テレビ・新聞・雑誌などのメディア</option>
+            <option>コラボ商品を見て（GU・PUMA・万博・モンハンなど）</option>
+            <option>ICHI ドブ板本店・ドブ板通りで</option>
+            <option>知人からの紹介</option>
+            <option>以前から知っていた</option>
+            <option>その他</option>
+          </select>
+        </div>
+
+        <div class="est__recap" id="l_recap"></div>
+
+        <div class="ts" id="lts" hidden></div>
+        <button class="btn btn--solid" type="submit" id="l_send">この内容で申し込む</button>
+        <p class="wiz__err" id="l_err"></p>
+        <div class="wiz__sent" id="l_sent" hidden></div>
+        <p class="note" style="margin-top:18px">送信をもって<a class="link" href="privacy.html">プライバシーポリシー</a>にご同意いただいたものとします。入力内容と上記の選択内容は受注者へ送信され、記録されます。<br>
+          うまく送信できない場合は <a class="link" href="mailto:info@ichi-pj.com">info@ichi-pj.com</a> まで直接お送りください。</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="band rise">
+  <div class="band__grid">
+    <div class="band__aside"><p class="tag"><span class="tag__en">FAQ</span><span class="tag__ja">よくある質問</span></p></div>
+    <div class="band__main">
+      <h2>パターンオーダーについてよくある質問</h2>
+      <details><summary>フルオーダーとの違いは何ですか</summary><p>フルオーダーは、うかがったお話から柄をゼロから描き起こす一点物です。パターンオーダーは、描き下ろし済みの鷲・虎・龍の柄と地名の文字を組み合わせてお作りします。柄を描く工程がないぶん、価格を抑えています。</p></details>
+      <details><summary>どんなジャケットでも持ち込めますか</summary><p>刺繍できるかどうかは、素材と縫製によります。お申し込みの際にジャケットの種類をお知らせください。刺繍に向かない場合は、その旨をお伝えします。</p></details>
+      <details><summary>ジャケットを用意していないのですが</summary><p>別珍の黒（中綿なし）を20,000円（税別）でご用意しています。ほかの色や素材をご希望の場合は、こちらで購入して手配するか（20,000円〜）、ジャケットそのものをカスタムでお作りします（20,000円〜）。</p></details>
+      <details><summary>文字を自分の好きな言葉にできますか</summary><p>パターンオーダーでは「JAPAN」と47都道府県からお選びいただきます。ほかの地名や言葉を入れたい場合は、<a class="link" href="order.html">フルオーダー</a>でお受けします。</p></details>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  /* ------------------------------------------------------------------
+     送信先。contact.html と同じ Google Apps Script に、
+     form:"contact"・ご用件「パターンオーダー」として送る。
+     build.py が公開時に差し込むので、ここは空のままにしておく。
+     ------------------------------------------------------------------ */
+  const ENDPOINT = "";
+  const SHARED_SECRET = "change-me";
+  const MAIL = "info@ichi-pj.com";
+
+  /* ------------------------------------------------------------------
+     金額（税別）。パターンオーダーの価格表と同じ数字にすること。
+       デザイン＋進行費 40,000 ／ 刺繍代 60,000 ＝ 100,000（税別）
+     ジャケット代は選んだものを足す。from:true は「〜」付きで出す。
+     ------------------------------------------------------------------ */
+  const PRICE = { design: 40000, emb: 60000 };
+  const TAX = 0.1;
+  const JACKETS = [
+    { v:"velvet", ja:"別珍・黒（中綿なし）", yen:20000,
+      note:"こちらでご用意する別珍の黒です。中綿は入りません。" },
+    { v:"bring",  ja:"持ち込み", yen:0,
+      note:"お手持ちのジャケットに刺繍します。刺繍できる素材・状態かどうかを事前に確認します。" },
+    { v:"buy",    ja:"購入を代行する", yen:20000, from:true,
+      note:"ご希望のジャケットをこちらで購入して手配します。金額はジャケットの代金によって変わります。" },
+    { v:"custom", ja:"カスタムで製作する", yen:20000, from:true,
+      note:"色・素材・形を指定して、ジャケットそのものをお作りします。金額は仕様によって変わります。" }
+  ];
+
+  /* ------------------------------------------------------------------
+     画像。assets/pattern/ に置けば自動で使われる。無いあいだは
+     ボディはシルエット、柄と文字は点線の四角で代わりに出す。
+       body/front.png  body/back.png          ボディ（4:5、例 1200×1500）
+       chest-r/{eagle,tiger,dragon}.png       右胸の柄（背景透過）
+       chest-l/{eagle,tiger,dragon}.png       左胸の柄（背景透過）
+       back/{eagle,tiger,dragon}.png          背中の柄（背景透過）
+       text/{arch,straight,script}/{地名}.png 文字（背景透過。地名は PLACES の v）
+     柄と文字は、下の BOX の枠に収まるよう縦横比を保って縮小される。
+     枠は画像に対する % で、[左, 上, 幅, 高さ]。
+     ------------------------------------------------------------------ */
+  const IMG = "assets/pattern/";
+  const BOX = {
+    chestR: [23, 25, 20, 17],     // 着る人の右胸＝正面から見て左
+    chestL: [57, 25, 20, 17],
+    back:   [20, 31, 60, 46],
+    font: {
+      arch:     [20, 13, 60, 16],
+      straight: [24, 18, 52, 9],
+      script:   [22, 15, 56, 13]
+    }
+  };
+  const MOTIFS = [
+    { v:"eagle",  ja:"鷲" },
+    { v:"tiger",  ja:"虎" },
+    { v:"dragon", ja:"龍" }
+  ];
+  /* 文字の形。名前は仮。見本ができたら ja を書き換える */
+  const FONTS = [
+    { v:"arch",     ja:"アーチ" },
+    { v:"straight", ja:"ストレート" },
+    { v:"script",   ja:"筆記体" }
+  ];
+  const PLACES = [["japan","JAPAN","JAPAN"]].concat([
+    ["hokkaido","北海道","HOKKAIDO"],["aomori","青森","AOMORI"],["iwate","岩手","IWATE"],
+    ["miyagi","宮城","MIYAGI"],["akita","秋田","AKITA"],["yamagata","山形","YAMAGATA"],
+    ["fukushima","福島","FUKUSHIMA"],["ibaraki","茨城","IBARAKI"],["tochigi","栃木","TOCHIGI"],
+    ["gunma","群馬","GUNMA"],["saitama","埼玉","SAITAMA"],["chiba","千葉","CHIBA"],
+    ["tokyo","東京","TOKYO"],["kanagawa","神奈川","KANAGAWA"],["niigata","新潟","NIIGATA"],
+    ["toyama","富山","TOYAMA"],["ishikawa","石川","ISHIKAWA"],["fukui","福井","FUKUI"],
+    ["yamanashi","山梨","YAMANASHI"],["nagano","長野","NAGANO"],["gifu","岐阜","GIFU"],
+    ["shizuoka","静岡","SHIZUOKA"],["aichi","愛知","AICHI"],["mie","三重","MIE"],
+    ["shiga","滋賀","SHIGA"],["kyoto","京都","KYOTO"],["osaka","大阪","OSAKA"],
+    ["hyogo","兵庫","HYOGO"],["nara","奈良","NARA"],["wakayama","和歌山","WAKAYAMA"],
+    ["tottori","鳥取","TOTTORI"],["shimane","島根","SHIMANE"],["okayama","岡山","OKAYAMA"],
+    ["hiroshima","広島","HIROSHIMA"],["yamaguchi","山口","YAMAGUCHI"],["tokushima","徳島","TOKUSHIMA"],
+    ["kagawa","香川","KAGAWA"],["ehime","愛媛","EHIME"],["kochi","高知","KOCHI"],
+    ["fukuoka","福岡","FUKUOKA"],["saga","佐賀","SAGA"],["nagasaki","長崎","NAGASAKI"],
+    ["kumamoto","熊本","KUMAMOTO"],["oita","大分","OITA"],["miyazaki","宮崎","MIYAZAKI"],
+    ["kagoshima","鹿児島","KAGOSHIMA"],["okinawa","沖縄","OKINAWA"]
+  ]).map(function(p){ return { v:p[0], ja:p[1], en:p[2] }; });
+
+  /* 画像が無いときのボディ。別珍の黒を想定した近黒のシルエット */
+  const SIL = {
+    front: '<svg class="po__sil" viewBox="0 0 400 500" aria-hidden="true">'
+      + '<path d="M150 52 L120 60 L40 108 L8 328 L48 340 L72 196 L72 446 L328 446 L328 196 L352 340 L392 328 L360 108 L280 60 L250 52 Q200 104 150 52 Z"/>'
+      + '<path class="po__rib" d="M150 52 Q200 104 250 52 L262 58 Q200 126 138 58 Z"/>'
+      + '<rect class="po__rib" x="72" y="446" width="256" height="30"/>'
+      + '<path class="po__rib" d="M8 328 L48 340 L44 366 L4 354 Z M392 328 L352 340 L356 366 L396 354 Z"/>'
+      + '<line class="po__zip" x1="200" y1="96" x2="200" y2="476"/></svg>',
+    back: '<svg class="po__sil" viewBox="0 0 400 500" aria-hidden="true">'
+      + '<path d="M150 52 L120 60 L40 108 L8 328 L48 340 L72 196 L72 446 L328 446 L328 196 L352 340 L392 328 L360 108 L280 60 L250 52 Q200 66 150 52 Z"/>'
+      + '<path class="po__rib" d="M150 52 Q200 66 250 52 L258 60 Q200 80 142 60 Z"/>'
+      + '<rect class="po__rib" x="72" y="446" width="256" height="30"/>'
+      + '<path class="po__rib" d="M8 328 L48 340 L44 366 L4 354 Z M392 328 L352 340 L356 366 L396 354 Z"/></svg>'
+  };
+
+  const T0 = Date.now();
+  const TURNSTILE_SITEKEY = "";
+  let tsToken = "", tsWidget = null, tsError = false;
+  (function(){
+    if(!TURNSTILE_SITEKEY) return;
+    const box = document.getElementById("lts"); if(!box) return;
+    box.hidden = false;
+    window.onTurnstile_pattern = function(){
+      tsWidget = window.turnstile.render(box, {
+        sitekey: TURNSTILE_SITEKEY, language: "ja", theme: "light",
+        callback: function(t){ tsToken = t; },
+        "expired-callback": function(){ tsToken = ""; },
+        "error-callback": function(){ tsToken = ""; tsError = true; }
+      });
+    };
+    const sc = document.createElement("script");
+    sc.src = "https://challenges.cloudflare.com/turnstile/v0/api.js"
+           + "?render=explicit&onload=onTurnstile_pattern";
+    sc.async = true; sc.defer = true;
+    /* estimate.html と同じ。判定が無言で止まっても送信できるようにする */
+    sc.onerror = function(){ tsError = true; };
+    setTimeout(function(){ if(!tsToken) tsError = true; }, 12000);
+    document.head.appendChild(sc);
+  })();
+
+  const $ = id => document.getElementById(id);
+  const yen = n => n.toLocaleString("ja-JP") + "円";
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const form = $("poform");
+
+  /* 選択肢を作る。.checks の見た目をそのまま使う（ラジオボタン） */
+  function chips(group, list, first){
+    const box = form.querySelector('[data-group="' + group + '"]');
+    box.innerHTML = list.map(function(o, i){
+      return '<label><input type="radio" name="' + group + '" value="' + o.v + '"'
+        + (o.v === first || (!first && i === 0) ? " checked" : "") + '>' + esc(o.ja)
+        + (o.yen !== undefined ? '<span class="po__yen">' + (o.yen ? yen(o.yen) + (o.from ? "〜" : "") : "0円") + '</span>' : "")
+        + '</label>';
+    }).join("");
+  }
+  chips("chestR", MOTIFS, "tiger");
+  chips("chestL", MOTIFS, "dragon");
+  chips("back", MOTIFS, "eagle");
+  chips("font", FONTS);
+  chips("jacket", JACKETS);
+  $("po_place").innerHTML = PLACES.map(function(p){
+    return '<option value="' + p.v + '">' + esc(p.ja === p.en ? p.en : p.ja + "　" + p.en) + '</option>';
+  }).join("");
+  $("po_place").value = "kanagawa";
+
+  const pick = name => (form.querySelector('input[name="' + name + '"]:checked') || {}).value;
+  const find = (list, v) => list.filter(o => o.v === v)[0];
+
+  function state(){
+    return {
+      chestR: find(MOTIFS, pick("chestR")), chestL: find(MOTIFS, pick("chestL")),
+      back: find(MOTIFS, pick("back")), font: find(FONTS, pick("font")),
+      place: find(PLACES, $("po_place").value), jacket: find(JACKETS, pick("jacket"))
+    };
+  }
+
+  /* 画像の有無は一度だけ調べて覚えておく。選ぶたびに404を出さないため */
+  const seen = {};
+  function probe(src){
+    if(!seen[src]){
+      seen[src] = new Promise(function(res){
+        const im = new Image();
+        im.onload = function(){ res(true); };
+        im.onerror = function(){ res(false); };
+        im.src = src;
+      });
+    }
+    return seen[src];
+  }
+
+  function layer(box, src, label, kind){
+    const el = document.createElement("div");
+    el.className = "po__layer";
+    el.style.cssText = "left:" + box[0] + "%;top:" + box[1] + "%;width:" + box[2] + "%;height:" + box[3] + "%";
+    probe(src).then(function(ok){
+      if(ok){ el.innerHTML = '<img src="' + src + '" alt="">'; }
+      else{ el.classList.add("po__ph"); if(kind) el.classList.add("po__ph--" + kind); el.textContent = label; }
+    });
+    return el;
+  }
+
+  const seq = { front: 0, back: 0 };
+  function draw(side, s){
+    const stage = $("po_" + side), my = ++seq[side];
+    const body = IMG + "body/" + side + ".png";
+    probe(body).then(function(ok){
+      if(my !== seq[side]) return;   // 連打で古い描画が後から被らないように
+      const frag = document.createDocumentFragment();
+      const base = document.createElement("div");
+      base.className = "po__body";
+      base.innerHTML = ok ? '<img src="' + body + '" alt="">' : SIL[side];
+      frag.appendChild(base);
+      if(side === "front"){
+        frag.appendChild(layer(BOX.chestR, IMG + "chest-r/" + s.chestR.v + ".png", s.chestR.ja + "（右胸）"));
+        frag.appendChild(layer(BOX.chestL, IMG + "chest-l/" + s.chestL.v + ".png", s.chestL.ja + "（左胸）"));
+      }else{
+        frag.appendChild(layer(BOX.font[s.font.v], IMG + "text/" + s.font.v + "/" + s.place.v + ".png",
+          s.place.en, "text"));
+        frag.appendChild(layer(BOX.back, IMG + "back/" + s.back.v + ".png", s.back.ja + "（背中）"));
+      }
+      stage.replaceChildren(frag);
+      stage.setAttribute("aria-label", side === "front"
+        ? "前：右胸に" + s.chestR.ja + "、左胸に" + s.chestL.ja
+        : "後ろ：背中に" + s.back.ja + "、文字は" + s.place.en + "（" + s.font.ja + "）");
+    });
+  }
+
+  function total(s){
+    const j = s.jacket, sub = PRICE.design + PRICE.emb + j.yen;
+    return { sub: sub, inc: Math.round(sub * (1 + TAX)), from: !!j.from };
+  }
+
+  function render(){
+    const s = state(), t = total(s);
+    draw("front", s); draw("back", s);
+    $("po_total").innerHTML = yen(t.sub) + (t.from ? '<span class="est__from">〜</span>' : "")
+      + '<span class="est__from">（税別）</span>';
+    $("po_tax").textContent = "税込 " + yen(t.inc) + (t.from ? "〜" : "");
+    $("po_break").innerHTML = [
+      ["デザイン・進行費", yen(PRICE.design)],
+      ["刺繍代（右胸・左胸・背中・文字）", yen(PRICE.emb)],
+      ["ジャケット：" + s.jacket.ja, s.jacket.yen ? yen(s.jacket.yen) + (s.jacket.from ? "〜" : "") : "0円"]
+    ].map(r => "<li><span>" + esc(r[0]) + "</span><span>" + r[1] + "</span></li>").join("");
+    $("po_jnote").textContent = s.jacket.note;
+    $("l_sizebox").hidden = s.jacket.v !== "velvet";
+    $("l_recap").innerHTML = '<p class="est__recapcap">選んだ内容</p><ul class="est__break">'
+      + lines(s, t).map(function(l){
+          const k = l.split(": ");
+          return "<li><span>" + esc(k[0]) + "</span><span>" + esc(k.slice(1).join(": ")) + "</span></li>";
+        }).join("") + "</ul>";
+  }
+
+  function lines(s, t){
+    return [
+      "右胸: " + s.chestR.ja, "左胸: " + s.chestL.ja, "背中: " + s.back.ja,
+      "文字: " + s.place.en + (s.place.ja !== s.place.en ? "（" + s.place.ja + "）" : ""),
+      "文字の形: " + s.font.ja, "ジャケット: " + s.jacket.ja,
+      "金額: " + yen(t.sub) + (t.from ? "〜" : "") + "（税別）／" + yen(t.inc) + (t.from ? "〜" : "") + "（税込）"
+    ];
+  }
+
+  form.addEventListener("change", render);
+  render();
+
+  /* ---------------- 送信 ---------------- */
+  const lf = $("leadform");
+  function answers(){
+    const s = state(), t = total(s);
+    const sel = lines(s, t);
+    if(s.jacket.v === "velvet") sel.push("サイズ: " + $("l_size").value);
+    return {
+      form: "contact", kind: "パターンオーダー",
+      name: $("l_name").value.trim(), email: $("l_email").value.trim(),
+      tel: $("l_tel").value.trim(), source: $("l_source").value,
+      sel: sel,
+      msg: ["【パターンオーダーで選んだ内容】"].concat(sel, ["", "【補足】", $("l_msg").value.trim() || "（なし）"]).join("\n")
+    };
+  }
+  function mailtoFallback(a){
+    const b = ["お名前: " + a.name, "メール: " + a.email, "電話: " + a.tel, "", a.msg,
+               "", "知ったきっかけ: " + a.source].join("\n");
+    return "mailto:" + MAIL + "?subject=" + encodeURIComponent("【パターンオーダーのお申し込み】" + (a.name || ""))
+      + "&body=" + encodeURIComponent(b);
+  }
+
+  lf.addEventListener("submit", async function(e){
+    e.preventDefault();
+    const a = answers();
+    if(!a.name || !a.email){ $("l_err").textContent = "お名前とメールアドレスをご入力ください。"; return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(a.email)){ $("l_err").textContent = "メールアドレスの形式をご確認ください。"; return; }
+    if(!a.source){ $("l_err").textContent = "サイトを知ったきっかけをお選びください。"; return; }
+    $("l_err").textContent = "";
+    if(TURNSTILE_SITEKEY && !tsToken && !tsError){
+      $("l_err").textContent = "「ロボットではありません」の確認が済んでいません。数秒おいて、もう一度お試しください。";
+      return;
+    }
+    const wait = 1500 - (Date.now() - T0);
+    if(wait > 0){ await new Promise(function(r){ setTimeout(r, wait); }); }
+
+    const btn = $("l_send"); btn.disabled = true; btn.textContent = "送信中…";
+    let ok = false;
+    if(ENDPOINT){
+      try{
+        const r = await fetch(ENDPOINT, {method:"POST",
+          headers:{"Content-Type":"text/plain;charset=utf-8"},
+          body: JSON.stringify({secret:SHARED_SECRET, form:a.form, answers:a,
+            turnstile: tsToken, ua:navigator.userAgent})});
+        /* GAS は失敗しても HTTP 200 を返す。中身の ok を見る */
+        const j = await r.json().catch(function(){ return null; });
+        ok = r.ok && !!(j && j.ok === true);
+      }catch(err){ ok = false; }
+    }
+    const box = $("l_sent"); box.hidden = false;
+    if(ok){
+      box.textContent = "承りました。1営業日以内に、内容の確認とお支払い方法をご案内します。";
+      btn.textContent = "送信済み";
+    }else{
+      box.innerHTML = "自動送信ができませんでした。メールソフトを開きますので、そのままお送りください。" +
+        '<br><a class="link" href="' + mailtoFallback(a) + '">' + MAIL + " へメールで送る</a>";
+      window.location.href = mailtoFallback(a);
+      btn.disabled = false; btn.textContent = "再送する";
+      tsToken = ""; if(tsWidget && window.turnstile) window.turnstile.reset(tsWidget);
+    }
+  });
+})();
+</script>
