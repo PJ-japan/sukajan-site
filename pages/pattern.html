@@ -1,3 +1,5 @@
+<!-- 筆記体の地名に使う書体（Parisienne）。このページだけで読む -->
+<link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
 <section class="hero">
   <h1 class="hero__title">
     <span class="kicker">Pattern order &mdash; eagle, tiger, dragon</span>
@@ -291,7 +293,7 @@
      分かる呼び名にしている。canvas は文字画像が無いあいだの代わりの書体 */
   const FONTS = [
     { v:"script", ja:"筆記体", desc:"手書きのようにつながった文字",
-      canvas:'italic 700 %dpx "Brush Script MT","Snell Roundhand",cursive' },
+      canvas:'400 %dpx Parisienne,"Snell Roundhand",cursive' },
     { v:"slab",   ja:"レトロ", desc:"文字の端に丸みのある“足”がついた、ヴィンテージ風",
       canvas:'700 %dpx Rockwell,"Roboto Slab","Courier New",serif' },
     { v:"sans",   ja:"シンプル", desc:"飾りのない、すっきりした太い文字",
@@ -440,12 +442,25 @@
     ctx.strokeStyle = accent ? "#E00022" : "rgba(237,237,234,.55)";
     ctx.strokeRect(r[0], r[1], r[2], r[3]);
     ctx.fillStyle = "#EDEDEA"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    let size = Math.min(r[3] * .55, 30);
+    /* 地名（accent）は枠いっぱいに。高さは字面の実寸で合わせ、幅を超えたら縮める */
+    let size = accent ? r[3] * 1.4 : Math.min(r[3] * .55, 30);
+    const room = accent ? .97 : .9;
+    const over = function(){
+      const m = ctx.measureText(label);
+      const h = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
+      return m.width > r[2] * room || (accent && h > r[3] * room);
+    };
     ctx.font = font.replace("%d", size);
-    while(ctx.measureText(label).width > r[2] * .9 && size > 10){
-      size -= 1; ctx.font = font.replace("%d", size);
+    while(over() && size > 10){ size -= 1; ctx.font = font.replace("%d", size); }
+    if(accent){
+      /* 字面の上下の余白を揃えて、枠の中央に置く */
+      ctx.textBaseline = "alphabetic";
+      const m = ctx.measureText(label);
+      ctx.fillText(label, r[0] + r[2] / 2,
+        r[1] + r[3] / 2 + (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2);
+    }else{
+      ctx.fillText(label, r[0] + r[2] / 2, r[1] + r[3] / 2);
     }
-    ctx.fillText(label, r[0] + r[2] / 2, r[1] + r[3] / 2);
     ctx.restore();
   }
   /* 透かし。柄の画像が1枚でも出ているときだけ、斜めに敷き詰める */
@@ -532,6 +547,10 @@
 
   form.addEventListener("change", render);
   render();
+  /* canvas は読み込み前の書体では描き直されないので、届いたらもう一度描く */
+  if(document.fonts && document.fonts.load){
+    document.fonts.load('40px Parisienne', 'Japan').then(render, function(){});
+  }
 
   /* ---------------- 送信 ---------------- */
   const lf = $("leadform");
