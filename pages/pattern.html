@@ -34,7 +34,7 @@
         </div>
         <div class="row">
           <div><h3>ジャケット</h3></div>
-          <div><p>お持ち込み、または別珍の黒（中綿なし）20,000円（税別）。ご希望があれば、ジャケットの購入代行やジャケットそのもののカスタム製作も承ります</p></div>
+          <div><p>お持ち込み、または別珍の黒（中綿なし）22,000円（税込）。ご希望があれば、ジャケットの購入代行やジャケットそのもののカスタム製作も承ります</p></div>
         </div>
       </div>
       <p class="note">※ 柄をゼロから描き起こしたい方は<a class="link" href="order.html">フルオーダー</a>をご覧ください。</p>
@@ -100,7 +100,7 @@
           <p class="est__unit" id="po_tax"></p>
           <ul class="est__break" id="po_break"></ul>
         </div>
-        <p class="note">※ 金額はすべて1着あたりです。送料は別途かかります。<br>
+        <p class="note">※ 金額はすべて1着あたり、税込です。送料は別途かかります。<br>
           ※ ジャケットの購入代行とカスタム製作は、ジャケットの仕様によって金額が変わります。ご希望をうかがってから確定した金額をお出しします。<br>
           ※ お持ち込みの場合は、ジャケットの種類・厚みによって刺繍できないことがあります。詳しくは下の「<a class="link" href="#bring">お持ち込みのジャケットについて</a>」をご覧ください。</p>
 
@@ -131,7 +131,7 @@
         </div>
         <p class="lead"><strong>お申し込みの際に、ジャケットの種類・素材・厚みをお知らせください。</strong>写真をお送りいただければ、まずそれで刺繍できるかどうかを判断します。お預かりしたあとも、実物を見て最終的に確認してから作業に入ります。刺繍できないと判断した場合は、作業に入る前にご連絡し、別珍の黒などへの変更か、ジャケットのご返却かをご相談します。</p>
         <p class="note">※ 刺繍できるジャケットでも、針と糸の張りによって、刺繍のまわりに多少の縮みやシワ、風合いの変化が出ることがあります。あらかじめご了承ください。<br>
-          ※ 判断に迷う場合は、別珍の黒（20,000円・税別）をおすすめします。刺繍を前提に選んだ生地なので、柄がいちばんきれいに出ます。</p>
+          ※ 判断に迷う場合は、別珍の黒（22,000円・税込）をおすすめします。刺繍を前提に選んだ生地なので、柄がいちばんきれいに出ます。</p>
         <h3 id="copyright">柄の著作権について</h3>
         <p class="lead">このページの鷲・虎・龍の柄と文字のデザインは、スカジャン絵師 横地広海知がこのパターンオーダーのために描き下ろした著作物です。<strong>著作権は制作者に帰属し、このページで作成したシミュレーション画像（合成イメージ）も同じ扱いです。</strong></p>
         <p class="lead">シミュレーション画像や柄を、画面の保存・スクリーンショット・撮影・模写などの方法で持ち出し、<strong>当方以外でスカジャンや衣類・グッズを製作すること、製作を依頼すること、販売・配布することはできません。</strong>柄を一部だけ変えたもの、ほかの柄と組み合わせたものも同様です。</p>
@@ -219,7 +219,7 @@
       <h2>パターンオーダーについてよくある質問</h2>
       <details><summary>フルオーダーとの違いは何ですか</summary><p>フルオーダーは、うかがったお話から柄をゼロから描き起こす一点物です。パターンオーダーは、描き下ろし済みの鷲・虎・龍の柄と地名の文字を組み合わせてお作りします。柄を描く工程がないぶん、価格を抑えています。</p></details>
       <details><summary>どんなジャケットでも持ち込めますか</summary><p>刺繍できるかどうかは、素材と縫製によります。お申し込みの際にジャケットの種類をお知らせください。刺繍に向かない場合は、その旨をお伝えします。詳しくは「<a class="link" href="#bring">お持ち込みのジャケットについて</a>」をご覧ください。</p></details>
-      <details><summary>ジャケットを用意していないのですが</summary><p>別珍の黒（中綿なし）を20,000円（税別）でご用意しています。ほかの色や素材をご希望の場合は、こちらで購入して手配するか（20,000円〜）、ジャケットそのものをカスタムでお作りします（20,000円〜）。</p></details>
+      <details><summary>ジャケットを用意していないのですが</summary><p>別珍の黒（中綿なし）を22,000円（税込）でご用意しています。ほかの色や素材をご希望の場合は、こちらで購入して手配するか（22,000円〜）、ジャケットそのものをカスタムでお作りします（22,000円〜）。</p></details>
       <details><summary>文字を自分の好きな言葉にできますか</summary><p>パターンオーダーでは「JAPAN」と47都道府県からお選びいただきます。ほかの地名や言葉を入れたい場合は、<a class="link" href="order.html">フルオーダー</a>でお受けします。</p></details>
     </div>
   </div>
@@ -237,12 +237,14 @@
   const MAIL = "info@ichi-pj.com";
 
   /* ------------------------------------------------------------------
-     金額（税別）。最初に10万円で見せるため、持ち込みを先頭（既定）にしている。パターンオーダーの価格表と同じ数字にすること。
+     金額は税別で持ち、画面には税込（総額表示）で出す。
+     最初に税込11万円で見せるため、持ち込みを先頭（既定）にしている。パターンオーダーの価格表と同じ数字にすること。
        デザイン＋進行費 40,000 ／ 刺繍代 60,000 ＝ 100,000（税別）
      ジャケット代は選んだものを足す。from:true は「〜」付きで出す。
      ------------------------------------------------------------------ */
   const PRICE = { design: 40000, emb: 60000 };
   const TAX = 0.1;
+  const inc = n => Math.round(n * (1 + TAX));   // 税込
   const JACKETS = [
     { v:"bring",  ja:"持ち込み", yen:0,
       note:"お手持ちのジャケットに刺繍します。ジャケットの種類や厚みによっては刺繍できない場合があります。下の「お持ち込みのジャケットについて」を必ずお読みください。" },
@@ -371,7 +373,7 @@
       return '<label><input type="radio" name="' + group + '" value="' + o.v + '"'
         + (o.v === first || (!first && i === 0) ? " checked" : "") + '>' + esc(o.ja)
         + (o.desc ? '<small class="po__desc">' + esc(o.desc) + '</small>' : "")
-        + (o.yen !== undefined ? '<span class="po__yen">' + (o.yen ? yen(o.yen) + (o.from ? "〜" : "") : "0円") + '</span>' : "")
+        + (o.yen !== undefined ? '<span class="po__yen">' + (o.yen ? yen(inc(o.yen)) + (o.from ? "〜" : "") : "0円") + '</span>' : "")
         + '</label>';
     }).join("");
   }
@@ -519,13 +521,13 @@
   function render(){
     const s = state(), t = total(s);
     draw("front", s); draw("back", s);
-    $("po_total").innerHTML = yen(t.sub) + (t.from ? '<span class="est__from">〜</span>' : "")
-      + '<span class="est__from">（税別）</span>';
-    $("po_tax").textContent = "税込 " + yen(t.inc) + (t.from ? "〜" : "");
+    $("po_total").innerHTML = yen(t.inc) + (t.from ? '<span class="est__from">〜</span>' : "")
+      + '<span class="est__from">（税込）</span>';
+    $("po_tax").textContent = "税別 " + yen(t.sub) + (t.from ? "〜" : "");
     $("po_break").innerHTML = [
-      ["デザイン・進行費", yen(PRICE.design)],
-      ["刺繍代（右胸・左胸・背中・文字）", yen(PRICE.emb)],
-      ["ジャケット：" + s.jacket.ja, s.jacket.yen ? yen(s.jacket.yen) + (s.jacket.from ? "〜" : "") : "0円"]
+      ["デザイン・進行費", yen(inc(PRICE.design))],
+      ["刺繍代（右胸・左胸・背中・文字）", yen(inc(PRICE.emb))],
+      ["ジャケット：" + s.jacket.ja, s.jacket.yen ? yen(inc(s.jacket.yen)) + (s.jacket.from ? "〜" : "") : "0円"]
     ].map(r => "<li><span>" + esc(r[0]) + "</span><span>" + r[1] + "</span></li>").join("");
     $("po_jnote").textContent = s.jacket.note;
     $("l_sizebox").hidden = s.jacket.v !== "velvet";
@@ -541,7 +543,7 @@
       "右胸: " + s.chestR.ja, "左胸: " + s.chestL.ja, "背中: " + s.back.ja,
       "文字: " + word(s.place, s.font) + (s.place.ja !== s.place.en ? "（" + s.place.ja + "）" : ""),
       "文字の形: " + s.font.ja, "ジャケット: " + s.jacket.ja,
-      "金額: " + yen(t.sub) + (t.from ? "〜" : "") + "（税別）／" + yen(t.inc) + (t.from ? "〜" : "") + "（税込）"
+      "金額: " + yen(t.inc) + (t.from ? "〜" : "") + "（税込）／税別 " + yen(t.sub) + (t.from ? "〜" : "")
     ];
   }
 
