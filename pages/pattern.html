@@ -381,6 +381,10 @@
   }).join("");
   $("po_place").value = "kanagawa";
 
+  /* 背中の文字の綴り。筆記体は頭文字だけ大文字（Kanagawa）、ほかは全部大文字 */
+  const word = (place, font) => font.v === "script"
+    ? place.en.charAt(0) + place.en.slice(1).toLowerCase() : place.en;
+
   const pick = name => (form.querySelector('input[name="' + name + '"]:checked') || {}).value;
   const find = (list, v) => list.filter(o => o.v === v)[0];
 
@@ -464,7 +468,7 @@
       ? [ { box:BOX.chestR, src:IMG + "chest-r/" + s.chestR.v + ".png", label:s.chestR.ja + "（右胸）" },
           { box:BOX.chestL, src:IMG + "chest-l/" + s.chestL.v + ".png", label:s.chestL.ja + "（左胸）" } ]
       : [ { box:BOX.font[s.font.v], src:IMG + "text/" + s.font.v + "/" + s.place.v + ".png",
-            label:s.place.en, font:s.font.canvas, accent:true },
+            label:word(s.place, s.font), font:s.font.canvas, accent:true },
           { box:BOX.back, src:IMG + "back/" + s.back.v + ".png", label:s.back.ja + "（背中）" } ];
     Promise.all([load(IMG + "body/" + side + ".png")].concat(layers.map(l => load(l.src))))
       .then(function(ims){
@@ -486,7 +490,7 @@
         else load(svgUrl(SIL[side])).then(function(sil){ if(my === seq[side]) draw2(sil); });
         cv[side].canvas.setAttribute("aria-label", side === "front"
           ? "前：右胸に" + s.chestR.ja + "、左胸に" + s.chestL.ja
-          : "後ろ：背中に" + s.back.ja + "、文字は" + s.place.en + "（" + s.font.ja + "）");
+          : "後ろ：背中に" + s.back.ja + "、文字は" + word(s.place, s.font) + "（" + s.font.ja + "）");
       });
   }
 
@@ -518,7 +522,7 @@
   function lines(s, t){
     return [
       "右胸: " + s.chestR.ja, "左胸: " + s.chestL.ja, "背中: " + s.back.ja,
-      "文字: " + s.place.en + (s.place.ja !== s.place.en ? "（" + s.place.ja + "）" : ""),
+      "文字: " + word(s.place, s.font) + (s.place.ja !== s.place.en ? "（" + s.place.ja + "）" : ""),
       "文字の形: " + s.font.ja, "ジャケット: " + s.jacket.ja,
       "金額: " + yen(t.sub) + (t.from ? "〜" : "") + "（税別）／" + yen(t.inc) + (t.from ? "〜" : "") + "（税込）"
     ];
