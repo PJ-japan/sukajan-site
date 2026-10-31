@@ -255,7 +255,7 @@
   /* ------------------------------------------------------------------
      画像。assets/pattern/ に置けば自動で使われる。無いあいだは
      ボディはシルエット、柄と文字は点線の四角で代わりに出す。
-       body/front.png  body/back.png        ボディ（4:5、800×1000）
+       body/front.png  body/back.png        ボディ（1300×1000、背景透過）
        chest-r/{eagle,tiger,dragon}.png     右胸の柄（背景透過）
        chest-l/{eagle,tiger,dragon}.png     左胸の柄（背景透過）
        back/{eagle,tiger,dragon}.png        背中の柄（背景透過）
@@ -270,14 +270,16 @@
        ドラッグ・長押し保存も止める（手軽な持ち出しを防ぐだけで、完全ではない）
      ------------------------------------------------------------------ */
   const IMG = "assets/pattern/";
+  /* 意匠部の pattern_order_body.svg の目印（レイヤー_2 の赤い四角）から写した値。
+     ボディを描き直したら、目印の x・y・幅・高さを 1300×1000 に対する % にして入れ直す */
   const BOX = {
-    chestR: [23, 25, 20, 17],     // 着る人の右胸＝正面から見て左
-    chestL: [57, 25, 20, 17],
-    back:   [20, 31, 60, 46],
-    font: {
-      script: [22, 15, 56, 13],
-      slab:   [22, 16, 56, 11],
-      sans:   [24, 17, 52, 10]
+    chestR: [33.90, 30.31, 11.44, 16.62],   // 着る人の右胸＝正面から見て左
+    chestL: [54.66, 30.31, 11.44, 16.62],
+    back:   [34.52, 36.14, 30.95, 40.24],
+    font: {                                  // 目印は1つなので3種とも同じ枠
+      script: [34.52, 23.49, 30.95, 9.41],
+      slab:   [34.52, 23.49, 30.95, 9.41],
+      sans:   [34.52, 23.49, 30.95, 9.41]
     }
   };
   const MOTIFS = [
@@ -411,9 +413,9 @@
   }
   const svgUrl = svg => "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
 
-  /* 前・後ろとも 800×1000 の canvas 1枚に合成する。
+  /* 前・後ろとも 1300×1000 の canvas 1枚に合成する。
      <img> を重ねると、柄だけを右クリックで保存できてしまうため */
-  const W = 800, H = 1000;
+  const W = 1300, H = 1000;
   const cv = {};
   ["front", "back"].forEach(function(side){
     const c = document.createElement("canvas");
@@ -453,8 +455,8 @@
     ctx.font = '700 22px "Space Mono",ui-monospace,monospace';
     ctx.fillStyle = "rgba(237,237,234,.16)"; ctx.textAlign = "center";
     for(let y = -H; y < H; y += 90){
-      for(let x = -W; x < W; x += 420){
-        ctx.fillText("SAMPLE  HIROMICHI YOKOCHI", x + (y / 90 % 2 ? 210 : 0), y);
+      for(let x = -W; x < W; x += 440){
+        ctx.fillText("SAMPLE  HIROMICHI YOKOCHI", x + (y / 90 % 2 ? 220 : 0), y);
       }
     }
     ctx.restore();
