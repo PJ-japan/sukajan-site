@@ -390,14 +390,13 @@ PAGES = {
         service="スカジャンのオーダーメイド・OEMの概算見積もり",
         extra=[PERSON],
     ),
-    # パターンオーダーのLP。ナビには出さないが、検索には載せる
+    # パターンオーダーのLP。ナビにも出す（フルオーダーの隣）
     "pattern": dict(
         title="パターンオーダースカジャン｜鷲・虎・龍の柄と都道府県の文字を選ぶ｜スカジャン絵師 横地広海知",
         desc="鷲・虎・龍のスカジャン柄を右胸・左胸・背中から選び、背中にJAPANか47都道府県の名前を入れるパターンオーダー。選んだ組み合わせをその場で画面に合成。110,000円（税込）〜、別珍の黒ジャケット付きは132,000円（税込）。ジャケットの持ち込みも可。",
-        nav="Pattern order",
+        nav="柄を選ぶ",   # 短くしないとナビが1280px幅に収まらない
         crumbs=[("パターンオーダー", "pattern.html")],
         service="パターンオーダースカジャンの制作",
-        unlisted=True,
         extra=[PERSON],
     ),
     "contact": dict(
@@ -555,8 +554,8 @@ for _w in WORKS:
         GENERATED[_name] = work_page_body(_w)
 
 
-PAGE_ORDER = ["index", "about", "interview", "design", "order", "oem", "process",
-              "works", "works2", "works-aoi-karakusa", "pattern", "recruit", "press", "brief", "spec", "access", "estimate", "contact", "privacy", "tokushoho"]
+PAGE_ORDER = ["index", "about", "interview", "design", "order", "pattern", "oem", "process",
+              "works", "works2", "works-aoi-karakusa", "recruit", "press", "brief", "spec", "access", "estimate", "contact", "privacy", "tokushoho"]
 
 # 事例の個別ページを末尾に足す（ナビには出ない。sitemap には載る）
 PAGE_ORDER += [n for n in PAGES if n.startswith("works-") and n not in PAGE_ORDER]
@@ -666,10 +665,14 @@ def hold(body):
 
 
 def notice_html():
+    """告知帯。notice.json に items（配列）があれば1件1行で並べる。
+    items が無い古い形（date / text / href を直に持つ）もそのまま読む。"""
     if not NOTICE or not NOTICE.get("enabled"):
         return ""
-    return ('<a class="notice" href="%s"><time>%s</time><span>%s</span><em>&rarr;</em></a>'
-            % (NOTICE["href"], html.escape(NOTICE["date"]), html.escape(NOTICE["text"])))
+    items = NOTICE.get("items") or [NOTICE]
+    return "\n".join(
+        '<a class="notice" href="%s"><time>%s</time><span>%s</span><em>&rarr;</em></a>'
+        % (n["href"], html.escape(n["date"]), html.escape(n["text"])) for n in items)
 
 
 def nav_html(current):

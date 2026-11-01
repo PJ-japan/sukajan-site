@@ -135,7 +135,8 @@ html{scroll-padding-top:84px}
 .brand span{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
   color:var(--fg-mute);text-transform:uppercase}
 
-.nav{display:flex;gap:clamp(14px,1.7vw,26px);overflow-x:auto;scrollbar-width:none}
+/* 項目が10個になったので、間隔を少し詰めて1280px幅でも EN まで収める */
+.nav{display:flex;gap:clamp(12px,1.25vw,26px);overflow-x:auto;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
 .nav a{font-family:var(--mono);font-size:13px;letter-spacing:.06em;
   text-transform:uppercase;white-space:nowrap;color:var(--fg-dim);

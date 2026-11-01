@@ -1,6 +1,15 @@
 {
   "enabled": true,
-  "date": "販売中",
-  "text": "ICHI初のオリジナルスカジャン「鵺（ぬえ）」。黒の別珍に背中一面の刺繍",
-  "href": "works-nue-japan.html"
+  "items": [
+    {
+      "date": "NEW",
+      "text": "パターンオーダー受付開始。鷲・虎・龍の柄と47都道府県の地名を選んで、税込11万円から",
+      "href": "pattern.html"
+    },
+    {
+      "date": "販売中",
+      "text": "ICHI初のオリジナルスカジャン「鵺（ぬえ）」。黒の別珍に背中一面の刺繍",
+      "href": "works-nue-japan.html"
+    }
+  ]
 }
