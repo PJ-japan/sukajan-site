@@ -374,6 +374,14 @@ PAGES = {
         crumbs=[("プライバシーポリシー", "privacy.html")],
         unlisted=True,
     ),
+    # 特定商取引法に基づく表記。ナビには出さず、フッターと申し込みフォームから辿る
+    "tokushoho": dict(
+        title="特定商取引法に基づく表記｜合同会社ICHI（スカジャン絵師 横地広海知）",
+        desc="当ウェブサイトからお申し込みいただくスカジャンの制作・販売について、販売事業者、価格、お支払い方法と時期、お渡しの時期、キャンセル・返品の条件を記載しています。",
+        nav="特定商取引法に基づく表記",
+        crumbs=[("特定商取引法に基づく表記", "tokushoho.html")],
+        unlisted=True,
+    ),
     "estimate": dict(
         title="スカジャン自動見積もり｜オリジナル・OEMの概算がその場で出ます｜横地広海知",
         desc="オリジナルスカジャンのオーダーメイド、スカジャンOEM・ブランド別注の概算をその場で計算します。着数・ボディ・刺繍箇所・色数を選ぶだけ。公開している目安価格にもとづいた金額が、メールアドレスの入力なしで出ます。",
@@ -548,7 +556,7 @@ for _w in WORKS:
 
 
 PAGE_ORDER = ["index", "about", "interview", "design", "order", "oem", "process",
-              "works", "works2", "works-aoi-karakusa", "pattern", "recruit", "press", "brief", "spec", "access", "estimate", "contact", "privacy"]
+              "works", "works2", "works-aoi-karakusa", "pattern", "recruit", "press", "brief", "spec", "access", "estimate", "contact", "privacy", "tokushoho"]
 
 # 事例の個別ページを末尾に足す（ナビには出ない。sitemap には載る）
 PAGE_ORDER += [n for n in PAGES if n.startswith("works-") and n not in PAGE_ORDER]
@@ -817,7 +825,7 @@ SHELL = """<!DOCTYPE html>
     </div>
   </div>
   <div class="foot__legal">
-    <a href="privacy.html">プライバシーポリシー</a>　運営：合同会社ICHI
+    <a href="privacy.html">プライバシーポリシー</a>　<a href="tokushoho.html">特定商取引法に基づく表記</a>　運営：合同会社ICHI
     <span class="foot__copy">&copy; {year} ICHI / Hiromichi Yokochi &mdash; 柄・写真・文章の無断転載を禁じます</span>
   </div>
 </footer>
