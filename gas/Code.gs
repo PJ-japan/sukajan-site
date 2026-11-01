@@ -35,6 +35,15 @@ const SECRET     = 'm5u0-yxSl-ByIk';   // build.py の FORM_SECRET と同じ文�
 const NOTIFY_TO  = 'info@ichi-pj.com';   // 通知メールの宛先。空にすると送りません
 const AUTO_REPLY = true;                 // 送信者へ受付メールを自動で返すか
 const REPLY_NAME = 'スカジャン絵師 横地広海知 / 合同会社ICHI';
+
+/* パターンオーダー（pattern.html）の支払い先。オンラインストア（Square）の商品ページ。
+   受付メールにはここにある URL だけを載せる。サイトから URL を受け取って載せると、
+   このスクリプトが任意の宛先に任意のリンクを送る踏み台になるため、キーだけ受け取る。
+   pattern.html の PAY_LINKS と同じ URL にすること。 */
+const PATTERN_PAY = {
+  bring:  'https://ichi-dobuita.square.site/product/-/FLR5OR6S25JT6FXB7VHHZQ52',  // 【ジャケット持込】110,000円（税込）
+  velvet: 'https://ichi-dobuita.square.site/product/-/HH5ER3UDES7SGUDM4RN4GYI5'   // 【オリジナル別珍】132,000円（税込）
+};
 // =========================================================================
 
 const HEADERS = [
@@ -461,8 +470,12 @@ function handleContact_(body) {
     a.msg || '', a.source || '', body.ua || ''
   ]));
 
+  // パターンオーダーは受付メールが別（支払い先を載せる）
+  if (AUTO_REPLY && a.email && a.kind === 'パターンオーダー') {
+    sendMail_(patternReply_(a));
+  }
   // 送信者への受付メール。金額は書かない（自動見積りはしない）
-  if (AUTO_REPLY && a.email) {
+  else if (AUTO_REPLY && a.email) {
     sendMail_({
       to: a.email,
       name: REPLY_NAME,
@@ -513,6 +526,52 @@ function handleContact_(body) {
     });
   }
   return done_();
+}
+
+/* パターンオーダーの受付メール。持ち込み・別珍の黒は支払い先の商品ページを載せる。
+   購入代行・カスタム製作は金額が決まらないので、後日の案内とする。 */
+function patternReply_(a) {
+  const pay = Object.prototype.hasOwnProperty.call(PATTERN_PAY, a.jacket) ? PATTERN_PAY[a.jacket] : '';
+  const payLines = pay ? [
+    '■ お支払い',
+    '下のオンラインストア（Square）のページでカートに入れ、お支払いください。',
+    'お支払いの際は、このお申し込みと同じお名前とメールアドレスをご入力ください。',
+    pay,
+    '',
+    'お支払いが済むまで、ご注文は確定しません。',
+    a.jacket === 'bring'
+      ? 'お持ち込みのジャケットは、刺繍できるかどうかを確認してから作業に入ります。刺繍できずご返却となった場合、代金は全額お返しします。'
+      : ''
+  ] : [
+    '■ お支払い',
+    'ジャケットの仕様をうかがって金額を確定したうえで、1営業日以内にお支払い方法をご案内します。'
+  ];
+  return {
+    to: a.email,
+    name: REPLY_NAME,
+    replyTo: NOTIFY_TO,
+    subject: 'パターンオーダーのお申し込みを承りました｜スカジャン絵師 横地広海知',
+    body: [
+      (a.name || '') + ' 様',
+      '',
+      'パターンオーダースカジャンのお申し込みをいただきありがとうございます。以下の内容で承りました。',
+      '',
+      '──────────────',
+      a.msg || '（選んだ内容なし）',
+      '──────────────',
+      ''
+    ].concat(payLines, [
+      '',
+      'お渡しまで4ヶ月程度（繁忙期は最大10ヶ月程度）かかります。',
+      '販売条件: https://hiromichiyokochi.com/tokushoho.html',
+      '',
+      '※ このメールは自動送信です。ご返信いただければ担当に届きます。',
+      '',
+      REPLY_NAME,
+      '神奈川県横須賀市本町3-11-7 アイ\'s ビル 1F',
+      'https://hiromichiyokochi.com/'
+    ]).join('\n')
+  };
 }
 
 /* 英語ページからの問い合わせ。日本語の自動返信を海外の方に送らないよう、

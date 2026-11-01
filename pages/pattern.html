@@ -236,6 +236,7 @@
 
   /* ------------------------------------------------------------------
      支払い先。ICHI ドブ板本店のオンラインストア（Square）の商品ページ。
+     受付メールにも載せる。そちらは gas/Code.gs の PATTERN_PAY が定義元なので、両方揃える。
      送信に成功したあと、選んだジャケットのリンクをボタンで出す。
      空のあいだはボタンを出さず、「担当からご案内」とだけ出す。
      購入代行・カスタム製作は金額が決まらないので、ここには置かない。
@@ -571,6 +572,7 @@
     if(s.jacket.v === "velvet") sel.push("サイズ: " + $("l_size").value);
     return {
       form: "contact", kind: "パターンオーダー",
+      jacket: s.jacket.v,   // 受付メールの支払い先は GAS 側がこのキーで引く
       name: $("l_name").value.trim(), email: $("l_email").value.trim(),
       tel: $("l_tel").value.trim(), source: $("l_source").value,
       sel: sel,
