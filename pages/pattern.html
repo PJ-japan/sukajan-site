@@ -6,7 +6,7 @@
     <span class="en">PATTERN<br>ORDER</span>
     <span class="sub">パターンオーダースカジャン — 鷲・虎・龍の柄と地名を選んで、一着を仕立てます</span>
   </h1>
-  <p class="lead hero__lead">胸と背中の柄を鷲・虎・龍から選び、背中に入れる文字を「JAPAN」と47都道府県から選びます。ジャケットはお持ち込みか、別珍の黒から。選んだ組み合わせはその場で画面に描き出され、金額もそのまま出ます。</p>
+  <p class="lead hero__lead">胸と背中の柄を鷲・虎・龍から選び、背中に入れる文字を「JAPAN」「YOKOSUKA」と47都道府県から選びます。ジャケットはお持ち込みか、別珍の黒から。選んだ組み合わせはその場で画面に描き出され、金額もそのまま出ます。</p>
   <div class="btns">
     <a class="btn btn--solid" href="#builder">柄を選ぶ</a>
     <a class="btn btn--ghost" href="order.html">柄から描き起こすフルオーダーはこちら</a>
@@ -22,7 +22,7 @@
     <div class="band__main">
       <h2>選べるのは、<br>柄・文字・ジャケットの3つです</h2>
       <p class="lead">柄はスカジャンの定番である<strong>鷲・虎・龍</strong>を、横地広海知がこのパターンオーダーのために描き下ろしました。右胸・左胸は3つの柄から、背中は虎を2種類にした4つの柄から、好きなものを選べます。組み合わせは36通りです。</p>
-      <p class="lead">背中には<strong>「JAPAN」か、47都道府県のどれか</strong>を文字で入れます。文字の形は3種類からお選びください。地元の名前を背負う、スーベニアジャケット本来の着方です。</p>
+      <p class="lead">背中には<strong>「JAPAN」、スカジャン発祥の地の「YOKOSUKA」、47都道府県のどれか</strong>を文字で入れます。文字の形は3種類からお選びください。地元の名前を背負う、スーベニアジャケット本来の着方です。</p>
       <div class="rows">
         <div class="row">
           <div><h3>柄</h3></div>
@@ -30,7 +30,7 @@
         </div>
         <div class="row">
           <div><h3>文字</h3></div>
-          <div><p>「JAPAN」または47都道府県の名前。文字の形は3種類</p></div>
+          <div><p>「JAPAN」「YOKOSUKA」または47都道府県の名前。文字の形は3種類</p></div>
         </div>
         <div class="row">
           <div><h3>ジャケット</h3></div>
@@ -271,7 +271,7 @@
       <details><summary>ジャケットの送料は誰が負担しますか</summary><p>お持ち込みのジャケットをお送りいただく送料と、刺繍できずにご返却する場合の送料は、お客様のご負担です。完成品をお届けする送料も別途かかります。</p></details>
       <details><summary>お店で販売するために注文できますか</summary><p>パターンオーダーは、ご自身で着用する個人のお客様に限ったサービスのため、販売・商用目的ではお受けできません。お店やブランドでの製作は<a class="link" href="oem.html">OEM</a>でご相談ください。</p></details>
       <details><summary>ジャケットを用意していないのですが</summary><p>別珍の黒（中綿なし）を22,000円（税込）でご用意しています。ほかの色や素材をご希望の場合は、こちらで購入して手配するか（22,000円〜）、ジャケットそのものをカスタムでお作りします（22,000円〜）。</p></details>
-      <details><summary>文字を自分の好きな言葉にできますか</summary><p>パターンオーダーでは「JAPAN」と47都道府県からお選びいただきます。ほかの地名や言葉を入れたい場合は、<a class="link" href="order.html">フルオーダー</a>でお受けします。</p></details>
+      <details><summary>文字を自分の好きな言葉にできますか</summary><p>パターンオーダーでは「JAPAN」「YOKOSUKA」と47都道府県からお選びいただきます。ほかの地名や言葉を入れたい場合は、<a class="link" href="order.html">フルオーダー</a>でお受けします。</p></details>
     </div>
   </div>
 </section>
@@ -371,7 +371,8 @@
     { v:"sans",   ja:"シンプル", desc:"飾りのない、すっきりした太い文字",
       canvas:'800 %dpx Archivo,"Helvetica Neue",Arial,sans-serif' }
   ];
-  const PLACES = [["japan","JAPAN","JAPAN"]].concat([
+  /* JAPAN と、スカジャン発祥の地の YOKOSUKA を先頭に置き、そのあとに47都道府県 */
+  const PLACES = [["japan","JAPAN","JAPAN"],["yokosuka","横須賀","YOKOSUKA"]].concat([
     ["hokkaido","北海道","HOKKAIDO"],["aomori","青森","AOMORI"],["iwate","岩手","IWATE"],
     ["miyagi","宮城","MIYAGI"],["akita","秋田","AKITA"],["yamagata","山形","YAMAGATA"],
     ["fukushima","福島","FUKUSHIMA"],["ibaraki","茨城","IBARAKI"],["tochigi","栃木","TOCHIGI"],
