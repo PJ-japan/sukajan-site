@@ -21,12 +21,12 @@
     </div>
     <div class="band__main">
       <h2>選べるのは、<br>柄・文字・ジャケットの3つです</h2>
-      <p class="lead">柄はスカジャンの定番である<strong>鷲・虎・龍</strong>を、横地広海知がこのパターンオーダーのために描き下ろしました。右胸・左胸・背中のそれぞれに、3つの柄から好きなものを選べます。組み合わせは27通りです。</p>
+      <p class="lead">柄はスカジャンの定番である<strong>鷲・虎・龍</strong>を、横地広海知がこのパターンオーダーのために描き下ろしました。右胸・左胸は3つの柄から、背中は虎を2種類にした4つの柄から、好きなものを選べます。組み合わせは36通りです。</p>
       <p class="lead">背中には<strong>「JAPAN」か、47都道府県のどれか</strong>を文字で入れます。文字の形は3種類からお選びください。地元の名前を背負う、スーベニアジャケット本来の着方です。</p>
       <div class="rows">
         <div class="row">
           <div><h3>柄</h3></div>
-          <div><p>右胸・左胸・背中に、それぞれ鷲・虎・龍のいずれか</p></div>
+          <div><p>右胸・左胸・背中に、それぞれ鷲・虎・龍のいずれか（背中の虎は2種類）</p></div>
         </div>
         <div class="row">
           <div><h3>文字</h3></div>
@@ -325,7 +325,7 @@
        body/front.png  body/back.png        ボディ（1300×1000、背景透過）
        chest-r/{eagle,tiger,dragon}.png     右胸の柄（背景透過）
        chest-l/{eagle,tiger,dragon}.png     左胸の柄（背景透過）
-       back/{eagle,tiger,dragon}.png        背中の柄（背景透過）
+       back/{eagle,tiger,tiger-rock,dragon}.png  背中の柄（背景透過）
        text/{script,slab,sans}/{地名}.png   文字（背景透過。地名は PLACES の v）
      柄と文字は、下の BOX の枠に収まるよう縦横比を保って縮小される。
      枠は画像に対する % で、[左, 上, 幅, 高さ]。
@@ -353,6 +353,13 @@
     { v:"eagle",  ja:"鷲" },
     { v:"tiger",  ja:"虎" },
     { v:"dragon", ja:"龍" }
+  ];
+  /* 背中だけ虎が2種類。back/tiger-rock.png が岩に座る虎 */
+  const BACKS = [
+    { v:"eagle",      ja:"鷲" },
+    { v:"tiger",      ja:"虎（竹と富士）" },
+    { v:"tiger-rock", ja:"虎（岩）" },
+    { v:"dragon",     ja:"龍" }
   ];
   /* 文字の形。書体の名前（筆記体・ラウンドスラブ・サンセリフ）を知らない人にも
      分かる呼び名にしている。canvas は文字画像が無いあいだの代わりの書体 */
@@ -442,7 +449,7 @@
   }
   chips("chestR", MOTIFS, "tiger");
   chips("chestL", MOTIFS, "dragon");
-  chips("back", MOTIFS, "eagle");
+  chips("back", BACKS, "eagle");
   chips("font", FONTS);
   chips("jacket", JACKETS);
   $("po_place").innerHTML = PLACES.map(function(p){
@@ -460,7 +467,7 @@
   function state(){
     return {
       chestR: find(MOTIFS, pick("chestR")), chestL: find(MOTIFS, pick("chestL")),
-      back: find(MOTIFS, pick("back")), font: find(FONTS, pick("font")),
+      back: find(BACKS, pick("back")), font: find(FONTS, pick("font")),
       place: find(PLACES, $("po_place").value), jacket: find(JACKETS, pick("jacket"))
     };
   }
