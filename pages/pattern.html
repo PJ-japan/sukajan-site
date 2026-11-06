@@ -6,7 +6,7 @@
     <span class="en">PATTERN<br>ORDER</span>
     <span class="sub">パターンオーダースカジャン — 鷲・虎・龍の柄と地名を選んで、一着を仕立てます</span>
   </h1>
-  <p class="lead hero__lead">胸と背中の柄を鷲・虎・龍・ドクロなどから選び、背中に入れる文字を「JAPAN」「YOKOSUKA」と47都道府県から選びます。ジャケットはお持ち込みか、別珍の黒から。選んだ組み合わせはその場で画面に描き出され、金額もそのまま出ます。</p>
+  <p class="lead hero__lead">胸と背中の柄を鷲・虎・龍・スカルなどから選び、背中に入れる文字を「JAPAN」「YOKOSUKA」と47都道府県から選びます。ジャケットはお持ち込みか、別珍の黒から。選んだ組み合わせはその場で画面に描き出され、金額もそのまま出ます。</p>
   <div class="btns">
     <a class="btn btn--solid" href="#builder">柄を選ぶ</a>
     <a class="btn btn--ghost" href="order.html">柄から描き起こすフルオーダーはこちら</a>
@@ -21,12 +21,12 @@
     </div>
     <div class="band__main">
       <h2>選べるのは、<br>柄・文字・ジャケットの3つです</h2>
-      <p class="lead">柄はスカジャンの定番である<strong>鷲・虎・龍</strong>に、<strong>虎の顔・ドクロ・ドクロとヘビ</strong>を加え、横地広海知がこのパターンオーダーのために描き下ろしました。右胸・左胸・背中のそれぞれに5つの柄から好きなものを選べます（背中の虎は2種類）。組み合わせは125通りです。</p>
+      <p class="lead">柄はスカジャンの定番である<strong>鷲・虎・龍</strong>に、<strong>虎の顔・スカル・スカルとヘビ</strong>を加え、横地広海知がこのパターンオーダーのために描き下ろしました。右胸・左胸・背中のそれぞれに5つの柄から好きなものを選べます（背中の虎は2種類）。組み合わせは125通りです。</p>
       <p class="lead">背中には<strong>「JAPAN」、スカジャン発祥の地の「YOKOSUKA」、47都道府県のどれか</strong>を文字で入れます。文字の形は3種類からお選びください。地元の名前を背負う、スーベニアジャケット本来の着方です。</p>
       <div class="rows">
         <div class="row">
           <div><h3>柄</h3></div>
-          <div><p>右胸・左胸は鷲・虎・龍・虎の顔・ドクロ、背中は鷲・虎（竹と富士）・虎（岩）・龍・ドクロとヘビから</p></div>
+          <div><p>右胸・左胸は鷲・虎・龍・虎の顔・スカル、背中は鷲・虎（竹と富士）・虎（岩）・龍・スカルとヘビから</p></div>
         </div>
         <div class="row">
           <div><h3>文字</h3></div>
@@ -44,7 +44,8 @@
 </section>
 
 <div class="panel">
-  <section class="band rise" id="builder">
+  <!-- 縦に長いので .rise を付けない。スクロール連動の表示が終わらず、スマホで白っぽく残る -->
+  <section class="band" id="builder">
     <div class="band__grid">
       <div class="band__aside">
         <p class="tag"><span class="tag__en">BUILD YOURS</span><span class="tag__ja">組み合わせる</span></p>
@@ -160,7 +161,7 @@
   </section>
 </div>
 
-<section class="band rise">
+<section class="band">
   <div class="band__grid">
     <div class="band__aside">
       <p class="tag"><span class="tag__en">ORDER</span><span class="tag__ja">お申し込み</span></p>
@@ -354,7 +355,7 @@
     { v:"tiger",  ja:"虎" },
     { v:"dragon", ja:"龍" },
     { v:"tiger-head", ja:"虎（顔）" },
-    { v:"skull",  ja:"ドクロ" }
+    { v:"skull",  ja:"スカル", scale:0.9 }   // scale: 枠に対する大きさ（既定 1）
   ];
   /* 背中だけ虎が2種類。back/tiger-rock.png が岩に座る虎 */
   const BACKS = [
@@ -362,7 +363,7 @@
     { v:"tiger",      ja:"虎（竹と富士）" },
     { v:"tiger-rock", ja:"虎（岩）" },
     { v:"dragon",     ja:"龍" },
-    { v:"skull-snake", ja:"ドクロとヘビ" }
+    { v:"skull-snake", ja:"スカルとヘビ" }
   ];
   /* 文字の形。書体の名前（筆記体・ラウンドスラブ・サンセリフ）を知らない人にも
      分かる呼び名にしている。canvas は文字画像が無いあいだの代わりの書体 */
@@ -507,6 +508,8 @@
   document.querySelector(".po__view").addEventListener("dragstart", e => e.preventDefault());
 
   function px(box){ return [box[0] * W / 100, box[1] * H / 100, box[2] * W / 100, box[3] * H / 100]; }
+  /* 枠を中心を保ったまま k 倍にする */
+  const shrink = (r, k) => [r[0] + r[2] * (1 - k) / 2, r[1] + r[3] * (1 - k) / 2, r[2] * k, r[3] * k];
   function fit(ctx, im, r){
     const k = Math.min(r[2] / im.naturalWidth, r[3] / im.naturalHeight);
     const w = im.naturalWidth * k, h = im.naturalHeight * k;
@@ -558,11 +561,11 @@
   function draw(side, s){
     const my = ++seq[side];
     const layers = side === "front"
-      ? [ { box:BOX.chestR, src:IMG + "chest-r/" + s.chestR.v + ".png", label:s.chestR.ja + "（右胸）" },
-          { box:BOX.chestL, src:IMG + "chest-l/" + s.chestL.v + ".png", label:s.chestL.ja + "（左胸）" } ]
+      ? [ { box:BOX.chestR, src:IMG + "chest-r/" + s.chestR.v + ".png", label:s.chestR.ja + "（右胸）", scale:s.chestR.scale },
+          { box:BOX.chestL, src:IMG + "chest-l/" + s.chestL.v + ".png", label:s.chestL.ja + "（左胸）", scale:s.chestL.scale } ]
       : [ { box:BOX.font[s.font.v], src:IMG + "text/" + s.font.v + "/" + s.place.v + ".png",
             label:word(s.place, s.font), font:s.font.canvas, accent:true },
-          { box:BOX.back, src:IMG + "back/" + s.back.v + ".png", label:s.back.ja + "（背中）" } ];
+          { box:BOX.back, src:IMG + "back/" + s.back.v + ".png", label:s.back.ja + "（背中）", scale:s.back.scale } ];
     Promise.all([load(IMG + "body/" + side + ".png")].concat(layers.map(l => load(l.src))))
       .then(function(ims){
         if(my !== seq[side]) return;   // 連打で古い描画が後から被らないように
@@ -574,7 +577,7 @@
           let any = false;
           layers.forEach(function(l, i){
             const im = ims[i + 1], r = px(l.box);
-            if(im){ fit(ctx, im, r); any = true; }
+            if(im){ fit(ctx, im, shrink(r, l.scale || 1)); any = true; }
             else placeholder(ctx, r, l.label, l.font || JP, l.accent);
           });
           if(any) watermark(ctx);
